@@ -7,6 +7,12 @@ function nf_begin($dir)
 {
 	global $nf_www_dir;
 	global $nf_dir;
+	global $nf_cfg_sql_enabled;
+	global $nf_cfg_sql_hostname;
+	global $nf_cfg_sql_username;
+	global $nf_cfg_sql_password;
+	global $nf_cfg_sql_database;
+	
 	$nf_www_dir = $dir;
 	$nf_dir = __DIR__;
 	
@@ -16,6 +22,12 @@ function nf_begin($dir)
 		$uri = $uri_part;
 	}
 	nf_handle_uri($uri);
+	
+	if($nf_cfg_sql_enabled) {
+		if(!nf_sql_connect($nf_cfg_sql_hostname, $nf_cfg_sql_username, $nf_cfg_sql_password, $nf_cfg_sql_database)) {
+			nf_error(7);
+		}
+	}
 }
 
 /**
@@ -40,6 +52,7 @@ function nf_error($num)
 		case 4: $error = nf_t('Controller class does not have the right name'); break;
 		case 5: $error = nf_t('Action does not exist'); break;
 		case 6: $error = nf_t('Action requires parameters not given'); break;
+		case 7: $error = nf_t('Failed to connect to SQL database'); break;
 	}
 	
 	//TODO, hook?
@@ -134,4 +147,26 @@ function nf_begin_page($controllername, $actionname)
 		}
 	}
 	call_user_func_array(array($controller, $functionname), $args);
+}
+
+/**
+ * Connect to the SQL database.
+ */
+function nf_sql_connect($host, $user, $pass, $db)
+{
+	global $nf_sql;
+	if($nf_sql) {
+		return false;
+	}
+	$nf_sql = new mysqli($host, $user, $pass, $db);
+	return $nf_sql->connect_errno == 0;
+}
+
+/**
+ * Perform a query on the SQL database.
+ */
+function nf_sql_query($query)
+{
+	global $nf_sql;
+	return $nf_sql->query($query);
 }

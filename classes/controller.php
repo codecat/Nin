@@ -21,4 +21,11 @@ class Controller
 		include($nf_www_dir . '/' . $nf_cfg_path_views . '/' . $folder . '/' . $view . '.php');
 		return ob_get_clean();
 	}
+	
+	function findAll($modelname)
+	{
+		$tablename = $modelname::tableName();
+		$res = nf_query('SELECT * FROM `' . $tablename . '`');
+		print_r($res);
+	}
 }
