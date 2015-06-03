@@ -42,7 +42,7 @@ function nf_t($str)
 /**
  * Function that is called for all handled errors.
  */
-function nf_error($num)
+function nf_error($num, $details = '')
 {
 	$error = nf_t('Unknown');
 	switch($num) {
@@ -53,6 +53,9 @@ function nf_error($num)
 		case 5: $error = nf_t('Action does not exist'); break;
 		case 6: $error = nf_t('Action requires parameters not given'); break;
 		case 7: $error = nf_t('Failed to connect to SQL database'); break;
+	}
+	if($details != '') {
+		$error .= ' (Details: "' . $details . '")';
 	}
 	
 	//TODO, hook?
@@ -67,6 +70,9 @@ function nf_handle_uri($uri)
 {
 	global $nf_cfg_regex_controllers;
 	global $nf_cfg_regex_actions;
+	global $nf_cfg_path_base;
+	
+	$uri = substr($uri, strlen($nf_cfg_path_base));
 	
 	$parts = array();
 	$token = strtok($uri, '/');
@@ -112,20 +118,20 @@ function nf_begin_page($controllername, $actionname)
 	if(file_exists($filename)) {
 		include($filename);
 	} else {
-		nf_error(3);
+		nf_error(3, $filename);
 		return;
 	}
 	
 	$classname = ucfirst($controllername) . 'Controller';
 	if(!class_exists($classname)) {
-		nf_error(4);
+		nf_error(4, $classname);
 		return;
 	}
 	$controller = new $classname;
 	
 	$functionname = 'action' . ucfirst($actionname);
 	if(!method_exists($controller, $functionname)) {
-		nf_error(5);
+		nf_error(5, $functionname);
 		return;
 	}
 	
@@ -135,13 +141,13 @@ function nf_begin_page($controllername, $actionname)
 	$params = $m->getParameters();
 	$args = array();
 	foreach($params as $param) {
-		if(isset($_REQUEST[$param->name])) {
-			$args[] = $_REQUEST[$param->name];
+		if(isset($_REQUEST[$param->getName()])) {
+			$args[] = $_REQUEST[$param->getName()];
 		} else {
 			if($param->isDefaultValueAvailable()) {
 				$args[] = $param->getDefaultValue();
 			} else {
-				nf_error(6);
+				nf_error(6, $param->getName());
 				return;
 			}
 		}

@@ -2,6 +2,7 @@
 
 // Configurable parameters:
 	// Paths to places
+	$nf_cfg_path_base = '/';
 	$nf_cfg_path_controllers = 'controllers';
 	$nf_cfg_path_views = 'views';
 	$nf_cfg_path_models = 'models';
