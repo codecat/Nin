@@ -4,14 +4,14 @@ class Controller
 {
 	public $layout = 'views/layout.php';
 	
-	function render($view, $options)
+	function render($view, $options = array())
 	{
 		global $nf_www_dir;
 		$content = $this->renderPartial($view, $options);
 		include($nf_www_dir . '/' . $this->layout);
 	}
 	
-	function renderPartial($view, $options)
+	function renderPartial($view, $options = array())
 	{
 		global $nf_www_dir;
 		global $nf_cfg_path_views;
