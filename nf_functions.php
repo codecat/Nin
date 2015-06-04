@@ -250,3 +250,22 @@ function nf_sql_escape($str)
 	global $nf_sql;
 	return $nf_sql->real_escape_string($str);
 }
+
+/**
+ * Encoding the given mixed-type object for a SQL query.
+ */
+function nf_sql_encode($o)
+{
+	if(is_string($o)) {
+		return "'" . nf_sql_escape($o) . "'";
+	}
+	
+	if(is_numeric($o)) {
+		if(is_float($o)) {
+			return floatval($o);
+		}
+		return intval($o);
+	}
+	
+	return $o;
+}

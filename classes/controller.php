@@ -22,17 +22,4 @@ class Controller
 		include($nf_www_dir . '/' . $nf_cfg['paths']['views'] . '/' . $folder . '/' . $view . '.php');
 		return ob_get_clean();
 	}
-	
-	function findAll($modelname)
-	{
-		$tablename = $modelname::tableName();
-		$res = nf_sql_query('SELECT * FROM `' . $tablename . '`');
-		$ret = array();
-		while($row = $res->fetch_assoc()) {
-			$obj = new $modelname;
-			$obj->parameters = $row;
-			$ret[] = $obj;
-		}
-		return $ret;
-	}
 }
