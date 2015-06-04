@@ -3,18 +3,24 @@
 /*
  * Begin the framework.
  */
-function nf_begin($dir)
+function nf_begin($dir, $options = array())
 {
 	global $nf_www_dir;
 	global $nf_dir;
-	global $nf_cfg_sql_enabled;
-	global $nf_cfg_sql_hostname;
-	global $nf_cfg_sql_username;
-	global $nf_cfg_sql_password;
-	global $nf_cfg_sql_database;
+	global $nf_cfg;
+	
+	nf_init_config($options);
 	
 	$nf_www_dir = $dir;
 	$nf_dir = __DIR__;
+	
+	nf_init_autoloader();
+	
+	if($nf_cfg['sql']['enabled']) {
+		if(!nf_sql_connect($nf_cfg['sql']['hostname'], $nf_cfg['sql']['username'], $nf_cfg['sql']['password'], $nf_cfg['sql']['database'])) {
+			nf_error(7);
+		}
+	}
 	
 	$uri = $_SERVER['REQUEST_URI'];
 	$uri_part = strstr($uri, '?', true);
@@ -22,12 +28,66 @@ function nf_begin($dir)
 		$uri = $uri_part;
 	}
 	nf_handle_uri($uri);
-	
-	if($nf_cfg_sql_enabled) {
-		if(!nf_sql_connect($nf_cfg_sql_hostname, $nf_cfg_sql_username, $nf_cfg_sql_password, $nf_cfg_sql_database)) {
-			nf_error(7);
+}
+
+/**
+ * Called by nf_begin() to merge the given options with $nf_cfg.
+ */
+function nf_init_config($options)
+{
+	global $nf_cfg;
+	foreach($options as $k => $v) {
+		if(!isset($nf_cfg[$k])) {
+			$nf_cfg[$k] = $v;
+			continue;
 		}
+		$nf_cfg[$k] = array_merge($nf_cfg[$k], $v);
 	}
+}
+
+/**
+ * Used by nf_autoload() to find an appropriate filename for the class.
+ */
+function nf_autoload_find($path, $classname)
+{
+	$test = $path . $classname . '.php';
+	if(file_exists($test)) return $test;
+	
+	$test = $path . ucfirst($classname) . '.php';
+	if(file_exists($test)) return $test;
+	
+	$test = $path . strtolower($classname) . '.php';
+	if(file_exists($test)) return $test;
+	
+	return false;
+}
+
+/**
+ * __autload() implementation.
+ */
+function nf_autoload($classname)
+{
+	global $nf_www_dir;
+	global $nf_cfg;
+	
+	// Look for models
+	$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . '/', $classname);
+	if($filename !== false) {
+		include($filename);
+	}
+	
+	// If couldn't be found at all
+	if($filename === false) {
+		nf_error(8, $classname);
+	}
+}
+
+/**
+ * Initialize the autoloader.
+ */
+function nf_init_autoloader()
+{
+	spl_autoload_register('nf_autoload');
 }
 
 /**
@@ -53,6 +113,7 @@ function nf_error($num, $details = '')
 		case 5: $error = nf_t('Action does not exist'); break;
 		case 6: $error = nf_t('Action requires parameters not given'); break;
 		case 7: $error = nf_t('Failed to connect to SQL database'); break;
+		case 8: $error = nf_t('Class could not be found'); break;
 	}
 	if($details != '') {
 		$error .= ' (Details: "' . $details . '")';
@@ -68,11 +129,9 @@ function nf_error($num, $details = '')
  */
 function nf_handle_uri($uri)
 {
-	global $nf_cfg_regex_controllers;
-	global $nf_cfg_regex_actions;
-	global $nf_cfg_path_base;
+	global $nf_cfg;
 	
-	$uri = substr($uri, strlen($nf_cfg_path_base));
+	$uri = substr($uri, strlen($nf_cfg['paths']['base']));
 	
 	$parts = array();
 	$token = strtok($uri, '/');
@@ -88,7 +147,7 @@ function nf_handle_uri($uri)
 	
 	if($partcount >= 1) {
 		$controller = strtolower($parts[0]);
-		if(!preg_match($nf_cfg_regex_controllers, $controller)) {
+		if(!preg_match($nf_cfg['validation']['regex_controllers'], $controller)) {
 			nf_error(1);
 			return;
 		}
@@ -96,7 +155,7 @@ function nf_handle_uri($uri)
 	
 	if($partcount >= 2) {
 		$action = strtolower($parts[1]);
-		if(!preg_match($nf_cfg_regex_actions, $action)) {
+		if(!preg_match($nf_cfg['validation']['regex_actions'], $action)) {
 			nf_error(2);
 			return;
 		}
@@ -112,9 +171,9 @@ function nf_handle_uri($uri)
 function nf_begin_page($controllername, $actionname)
 {
 	global $nf_www_dir;
-	global $nf_cfg_path_controllers;
+	global $nf_cfg;
 	
-	$filename = $nf_www_dir . '/' . $nf_cfg_path_controllers . '/' . $controllername . '.php';
+	$filename = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . '/' . $controllername . '.php';
 	if(file_exists($filename)) {
 		include($filename);
 	} else {

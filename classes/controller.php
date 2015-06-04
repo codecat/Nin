@@ -14,18 +14,19 @@ class Controller
 	function renderPartial($view, $options = array())
 	{
 		global $nf_www_dir;
-		global $nf_cfg_path_views;
+		global $nf_cfg;
+		
 		extract($options);
 		$folder = strtolower(substr(get_class($this), 0, -strlen(__CLASS__)));
 		ob_start();
-		include($nf_www_dir . '/' . $nf_cfg_path_views . '/' . $folder . '/' . $view . '.php');
+		include($nf_www_dir . '/' . $nf_cfg['paths']['views'] . '/' . $folder . '/' . $view . '.php');
 		return ob_get_clean();
 	}
 	
 	function findAll($modelname)
 	{
 		$tablename = $modelname::tableName();
-		$res = nf_query('SELECT * FROM `' . $tablename . '`');
+		$res = nf_sql_query('SELECT * FROM `' . $tablename . '`');
 		print_r($res);
 	}
 }

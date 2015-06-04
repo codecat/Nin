@@ -1,22 +1,30 @@
 <?php
 
-// Configurable parameters:
+// Configurable parameters (pass array to nf_begin() to merge this)
+$nf_cfg = array(
 	// Paths to places
-	$nf_cfg_path_base = '/';
-	$nf_cfg_path_controllers = 'controllers';
-	$nf_cfg_path_views = 'views';
-	$nf_cfg_path_models = 'models';
+	'paths' => array(
+		'base' => '/',
+		'controllers' => 'controllers',
+		'views' => 'views',
+		'models' => 'models'
+	),
 	
 	// Validation regexes
-	$nf_cfg_regex_controllers = '/^[a-z0-9\\-_]+$/';
-	$nf_cfg_regex_actions = '/^[a-z0-9_]+$/';
+	'validation' => array(
+		'regex_controllers' => '/^[a-z0-9\\-_]+$/',
+		'regex_actions' => '/^[a-z0-9_]+$/'
+	),
 	
 	// SQL information
-	$nf_cfg_sql_enabled = false;
-	$nf_cfg_sql_hostname = 'localhost';
-	$nf_cfg_sql_username = '';
-	$nf_cfg_sql_password = '';
-	$nf_cfg_sql_database = '';
+	'sql' => array(
+		'enabled' => false,
+		'hostname' => 'localhost',
+		'username' => '',
+		'password' => '',
+		'database' => ''
+	)
+);
 // End of configurable parameters
 
 // Runtime paths to framework and content
