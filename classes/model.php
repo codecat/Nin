@@ -82,6 +82,18 @@ class Model
 		return nf_sql_query($query) !== false;
 	}
 	
+	public function remove()
+	{
+		if(!$this->_loaded) {
+			return false;
+		}
+		$tablename = static::tablename();
+		$pk_col = static::findPrimaryKey();
+		$pk = $this->_data[$pk_col];
+		$query = 'DELETE FROM `' . $tablename . '` WHERE `' . $pk_col . '`=' . nf_sql_encode($pk);
+		return nf_sql_query($query) !== false;
+	}
+	
 	public function __get($name)
 	{
 		if(isset($this->_data[$name])) {
