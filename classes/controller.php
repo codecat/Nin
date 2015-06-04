@@ -27,6 +27,12 @@ class Controller
 	{
 		$tablename = $modelname::tableName();
 		$res = nf_sql_query('SELECT * FROM `' . $tablename . '`');
-		print_r($res);
+		$ret = array();
+		while($row = $res->fetch_assoc()) {
+			$obj = new $modelname;
+			$obj->parameters = $row;
+			$ret[] = $obj;
+		}
+		return $ret;
 	}
 }

@@ -114,6 +114,8 @@ function nf_error($num, $details = '')
 		case 6: $error = nf_t('Action requires parameters not given'); break;
 		case 7: $error = nf_t('Failed to connect to SQL database'); break;
 		case 8: $error = nf_t('Class could not be found'); break;
+		case 9: $error = nf_t('Table does not have a primary key'); break;
+		case 10: $error = nf_t('SQL query failed'); break;
 	}
 	if($details != '') {
 		$error .= ' (Details: "' . $details . '")';
@@ -233,5 +235,18 @@ function nf_sql_connect($host, $user, $pass, $db)
 function nf_sql_query($query)
 {
 	global $nf_sql;
-	return $nf_sql->query($query);
+	$ret = $nf_sql->query($query);
+	if($ret === false) {
+		nf_error(10, 'Error was: ' . $nf_sql->error . ' - Query was: ' . $query);
+	}
+	return $ret;
+}
+
+/**
+ * Escape the given string for SQL queries.
+ */
+function nf_sql_escape($str)
+{
+	global $nf_sql;
+	return $nf_sql->real_escape_string($str);
 }
