@@ -95,8 +95,10 @@ class Model
 		$functionname = 'set' . ucfirst($name);
 		if(method_exists($this, $functionname)) {
 			$this->$functionname($value);
+			return;
 		}
 		
+		$found = false;
 		foreach($this->_data as $k => $v) {
 			if($k === $name) {
 				if($v != $this->_data[$k]) {
@@ -105,8 +107,13 @@ class Model
 						$this->_changed[] = $k;
 					}
 				}
+				$found = true;
 				break;
 			}
+		}
+		
+		if(!$found) {
+			$this->_data[$name] = $value;
 		}
 	}
 	
