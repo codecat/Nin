@@ -98,22 +98,9 @@ class Model
 			return;
 		}
 		
-		$found = false;
-		foreach($this->_data as $k => $v) {
-			if($k === $name) {
-				if($v != $this->_data[$k]) {
-					$this->_data[$k] = $v;
-					if(!in_array($k, $this->_changed)) {
-						$this->_changed[] = $k;
-					}
-				}
-				$found = true;
-				break;
-			}
-		}
-		
-		if(!$found) {
-			$this->_data[$name] = $value;
+		$this->_data[$name] = $value;
+		if(!in_array($name, $this->_changed)) {
+			$this->_changed[] = $name;
 		}
 	}
 	
