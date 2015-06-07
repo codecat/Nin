@@ -1,0 +1,9 @@
+# Enable rewriting URLs
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /index.php [L,QSA]
+
+# Uncomment this to enable PHP errors
+#php_flag display_startup_errors on
+#php_flag display_errors on
+#php_flag html_errors on
