@@ -11,6 +11,11 @@ $nf_cfg = array(
 		'components' => 'components'
 	),
 	
+	// Routing configuration
+	'routing' => array(
+		'rules' => array()
+	),
+	
 	// Validation regexes
 	'validation' => array(
 		'regex_controllers' => '/^[a-z0-9\\-_]+$/',

@@ -140,6 +140,7 @@ function nf_handle_uri($uri)
 	global $nf_cfg;
 	
 	$uri = substr($uri, strlen($nf_cfg['paths']['base']));
+	$uri = nf_handle_routing_rules($uri);
 	
 	$parts = array();
 	$token = strtok($uri, '/');
@@ -170,6 +171,33 @@ function nf_handle_uri($uri)
 	}
 	
 	nf_begin_page($controller, $action);
+}
+
+/**
+ * Handle the REQUEST_URI (without the URL params) bsaed on the custom routing rules.
+ * This returns true if there's a handled routing rule, or false if not.
+ * This gets called from nf_handle_uri().
+ */
+function nf_handle_routing_rules($uri)
+{
+	global $nf_cfg;
+	
+	foreach($nf_cfg['routing']['rules'] as $regex => $route) {
+		$matches = false;
+		if(preg_match($regex, $uri, $matches)) {
+			$keys = array();
+			foreach($matches as $k => $v) {
+				if(is_string($k)) {
+					$keys[$k] = $v;
+				}
+			}
+			$_GET = array_merge($_GET, $keys);
+			$_REQUEST = array_merge($_REQUEST, $keys);
+			return $route;
+		}
+	}
+	
+	return $uri;
 }
 
 /**
