@@ -39,3 +39,5 @@ $nf_sql = false;
 include('nf_functions.php');
 include('classes/controller.php');
 include('classes/model.php');
+include('classes/nin.php');
+include('classes/html.php');
