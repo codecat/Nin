@@ -7,7 +7,8 @@ $nf_cfg = array(
 		'base' => '/',
 		'controllers' => 'controllers',
 		'views' => 'views',
-		'models' => 'models'
+		'models' => 'models',
+		'components' => 'components'
 	),
 	
 	// Validation regexes
