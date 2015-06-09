@@ -153,9 +153,8 @@ function nf_error_routing($num, $details = '')
 		if($uri !== $nf_uri) {
 			$nf_uri = $uri;
 			nf_handle_uri($nf_uri);
+			return;
 		}
-		nf_error($num, $details);
-		return;
 	}
 	
 	nf_error($num, $details);
