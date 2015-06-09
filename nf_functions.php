@@ -7,6 +7,7 @@ function nf_begin($dir, $options = array())
 {
 	global $nf_www_dir;
 	global $nf_dir;
+	global $nf_uri;
 	global $nf_cfg;
 	
 	nf_init_config($options);
@@ -22,12 +23,12 @@ function nf_begin($dir, $options = array())
 		}
 	}
 	
-	$uri = $_SERVER['REQUEST_URI'];
-	$uri_part = strstr($uri, '?', true);
+	$nf_uri = $_SERVER['REQUEST_URI'];
+	$uri_part = strstr($nf_uri, '?', true);
 	if($uri_part) {
-		$uri = $uri_part;
+		$nf_uri = $uri_part;
 	}
-	nf_handle_uri($uri);
+	nf_handle_uri($nf_uri);
 }
 
 /**
@@ -128,7 +129,36 @@ function nf_error($num, $details = '')
 	}
 	
 	//TODO, hook?
-	echo 'nf error: ' . $error;
+	echo 'nf error: ' . $error . '<br>';
+}
+
+/**
+ * Error in resolving the routing path. This can be a fallback.
+ * Called from routing functions such as nf_handle_uri() and nf_begin_page().
+ */
+function nf_error_routing($num, $details = '')
+{
+	global $nf_cfg;
+	global $nf_uri;
+	global $nf_uri_fallback;
+	
+	if($nf_uri_fallback) {
+		nf_error($num, $details);
+		return;
+	}
+	$nf_uri_fallback = true;
+	
+	if(!$nf_cfg['routing']['preferRules']) {
+		$uri = nf_handle_routing_rules($nf_uri);
+		if($uri !== $nf_uri) {
+			$nf_uri = $uri;
+			nf_handle_uri($nf_uri);
+		}
+		nf_error($num, $details);
+		return;
+	}
+	
+	nf_error($num, $details);
 }
 
 /**
@@ -138,9 +168,12 @@ function nf_error($num, $details = '')
 function nf_handle_uri($uri)
 {
 	global $nf_cfg;
+	global $nf_uri;
 	
-	$uri = substr($uri, strlen($nf_cfg['paths']['base']));
-	$uri = nf_handle_routing_rules($uri);
+	$nf_uri = $uri = substr($uri, strlen($nf_cfg['paths']['base'])-1);
+	if($nf_cfg['routing']['preferRules']) {
+		$nf_uri = $uri = nf_handle_routing_rules($uri);
+	}
 	
 	$parts = array();
 	$token = strtok($uri, '/');
@@ -157,7 +190,7 @@ function nf_handle_uri($uri)
 	if($partcount >= 1) {
 		$controller = strtolower($parts[0]);
 		if(!preg_match($nf_cfg['validation']['regex_controllers'], $controller)) {
-			nf_error(1);
+			nf_error_routing(1);
 			return;
 		}
 	}
@@ -165,7 +198,7 @@ function nf_handle_uri($uri)
 	if($partcount >= 2) {
 		$action = strtolower($parts[1]);
 		if(!preg_match($nf_cfg['validation']['regex_actions'], $action)) {
-			nf_error(2);
+			nf_error_routing(2);
 			return;
 		}
 	}
@@ -213,20 +246,20 @@ function nf_begin_page($controllername, $actionname)
 	if(file_exists($filename)) {
 		include($filename);
 	} else {
-		nf_error(3, $filename);
+		nf_error_routing(3, $filename);
 		return;
 	}
 	
 	$classname = ucfirst($controllername) . 'Controller';
 	if(!class_exists($classname)) {
-		nf_error(4, $classname);
+		nf_error_routing(4, $classname);
 		return;
 	}
 	$controller = new $classname;
 	
 	$functionname = 'action' . ucfirst($actionname);
 	if(!method_exists($controller, $functionname)) {
-		nf_error(5, $functionname);
+		nf_error_routing(5, $functionname);
 		return;
 	}
 	

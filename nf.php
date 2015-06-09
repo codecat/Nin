@@ -13,6 +13,7 @@ $nf_cfg = array(
 	
 	// Routing configuration
 	'routing' => array(
+		'preferRules' => true,
 		'rules' => array()
 	),
 	
@@ -36,6 +37,8 @@ $nf_cfg = array(
 // Runtime paths to framework and content
 $nf_dir = '';
 $nf_www_dir = '';
+$nf_uri = '';
+$nf_uri_fallback = false;
 
 // Runtime SQL variables
 $nf_sql = false;
