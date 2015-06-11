@@ -31,6 +31,63 @@ class Model
 		return false;
 	}
 	
+	public static function findByAttributes($attributes)
+	{
+		$class = get_called_class();
+		$tablename = static::tablename();
+		$query = 'SELECT * FROM `' . $tablename . '` ';
+		if(count($attributes) > 0) {
+			$query .= 'WHERE ';
+			$firstAnd = false;
+			foreach($attributes as $k => $v) {
+				if($firstAnd) {
+					$query .= 'AND ';
+				}
+				$firstAnd = true;
+				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
+			}
+		}
+		$query .= 'LIMIT 0,1';
+		$res = nf_sql_query($query);
+		if($res !== false) {
+			$row = $res->fetch_assoc();
+			if($row) {
+				$ret = new $class();
+				$ret->loadRow($row);
+				return $ret;
+			}
+		}
+		return false;
+	}
+	
+	public static function findAllByAttributes($attributes)
+	{
+		$class = get_called_class();
+		$tablename = static::tablename();
+		$query = 'SELECT * FROM `' . $tablename . '` ';
+		if(count($attributes) > 0) {
+			$query .= 'WHERE ';
+			$firstAnd = false;
+			foreach($attributes as $k => $v) {
+				if($firstAnd) {
+					$query .= 'AND ';
+				}
+				$firstAnd = true;
+				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
+			}
+		}
+		$ret = array();
+		$res = nf_sql_query($query);
+		if($res !== false) {
+			while($row = $res->fetch_assoc()) {
+				$obj = new $class();
+				$obj->loadRow($res->fetch_assoc());
+				$ret[] = $obj;
+			}
+		}
+		return $ret;
+	}
+	
 	public static function findAll()
 	{
 		$class = get_called_class();
