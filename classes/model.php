@@ -189,26 +189,39 @@ class Model
 	
 	public function __get($name)
 	{
+		// Test relations
 		$relations = $this->relations();
 		foreach($relations as $k => $v) {
 			if($name == $k) {
 				return $this->lookupRelation($k, $v);
 			}
 		}
+		
+		// Test getters
+		$functionname = 'get' . ucfirst($name);
+		if(method_exists($this, $functionname)) {
+			return $this->$functionname();
+		}
+		
+		// Test columns
 		if(isset($this->_data[$name])) {
 			return $this->_data[$name];
 		}
+		
+		// Nothing found
 		return null;
 	}
 	
 	public function __set($name, $value)
 	{
+		// Test setters
 		$functionname = 'set' . ucfirst($name);
 		if(method_exists($this, $functionname)) {
 			$this->$functionname($value);
 			return;
 		}
 		
+		// Test columns
 		$this->_data[$name] = $value;
 		if(!in_array($name, $this->_changed)) {
 			$this->_changed[] = $name;
