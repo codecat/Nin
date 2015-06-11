@@ -30,9 +30,12 @@ class Model
 		$tablename = static::tablename();
 		$res = nf_sql_query('SELECT * FROM `' . $tablename . '` WHERE `' . static::findPrimaryKey() . '`=' . nf_sql_encode($pk));
 		if($res !== false) {
-			$ret = new $class();
-			$ret->loadRow($res->fetch_assoc());
-			return $ret;
+			$row = $res->fetch_assoc();
+			if($row) {
+				$ret = new $class();
+				$ret->loadRow($row);
+				return $ret;
+			}
 		}
 		return false;
 	}
@@ -100,10 +103,12 @@ class Model
 		$tablename = static::tablename();
 		$res = nf_sql_query('SELECT * FROM `' . $tablename . '`');
 		$ret = array();
-		while($row = $res->fetch_assoc()) {
-			$obj = new $class();
-			$obj->loadRow($row);
-			$ret[] = $obj;
+		if($res !== false) {
+			while($row = $res->fetch_assoc()) {
+				$obj = new $class();
+				$obj->loadRow($row);
+				$ret[] = $obj;
+			}
 		}
 		return $ret;
 	}
