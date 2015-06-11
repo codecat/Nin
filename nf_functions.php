@@ -309,6 +309,15 @@ function nf_sql_query($query)
 }
 
 /**
+ * Return the inserted ID.
+ */
+function nf_sql_insertid()
+{
+	global $nf_sql;
+	return $nf_sql->insert_id;
+}
+
+/**
  * Escape the given string for SQL queries.
  */
 function nf_sql_escape($str)

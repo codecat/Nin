@@ -127,6 +127,7 @@ class Model
 		$query .= ') VALUES(' . rtrim($values, ',') . ')';
 		$res = nf_sql_query($query);
 		if($res !== false) {
+			$this->_data[$pk_col] = nf_sql_insertid();
 			$this->_loaded = true;
 			return true;
 		}
