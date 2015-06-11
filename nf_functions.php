@@ -75,18 +75,18 @@ function nf_autoload($classname)
 	$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . '/', $classname);
 	if($filename !== false) {
 		include($filename);
+		return;
 	}
 	
 	// Look for components
 	$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['components'] . '/', $classname);
 	if($filename !== false) {
 		include($filename);
+		return;
 	}
 	
 	// If couldn't be found at all
-	if($filename === false) {
-		nf_error(8, $classname);
-	}
+	nf_error(8, $classname);
 }
 
 /**
