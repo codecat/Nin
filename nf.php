@@ -44,6 +44,7 @@ $nf_uri_fallback = false;
 $nf_sql = false;
 
 // Include dependencies
+include('nf_define.php');
 include('nf_functions.php');
 include('classes/controller.php');
 include('classes/model.php');

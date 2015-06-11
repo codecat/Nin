@@ -5,6 +5,12 @@ class Model
 	public $_data = array();
 	public $_changed = array();
 	public $_loaded = false;
+	public $_relationalrows = array();
+	
+	public function relations()
+	{
+		return array();
+	}
 	
 	public static function findPrimaryKey()
 	{
@@ -81,7 +87,7 @@ class Model
 		if($res !== false) {
 			while($row = $res->fetch_assoc()) {
 				$obj = new $class();
-				$obj->loadRow($res->fetch_assoc());
+				$obj->loadRow($row);
 				$ret[] = $obj;
 			}
 		}
@@ -151,8 +157,44 @@ class Model
 		return nf_sql_query($query) !== false;
 	}
 	
+	protected function lookupRelation($k, $v)
+	{
+		if(isset($this->_relationalrows[$k])) {
+			return $this->_relationalrows[$k];
+		}
+		$obj = false;
+		
+		$pk_col = static::findPrimaryKey();
+		$pk = $this->_data[$pk_col];
+		
+		if($v[0] == BELONGS_TO) {
+			$their_classname = $v[1];
+			$my_column = $v[2];
+			$obj = $their_classname::findByPk($this->$my_column);
+			
+		} elseif($v[0] == HAS_MANY) {
+			$their_classname = $v[1];
+			$their_column = $v[2];
+			$obj = $their_classname::findAllByAttributes(array($their_column => $pk));
+			
+		} elseif($v[0] == HAS_ONE) {
+			$their_classname = $v[1];
+			$their_column = $v[2];
+			$obj = $their_classname::findByAttributes(array($their_column => $pk));
+		}
+		
+		$this->_relationalrows[$k] = $obj;
+		return $obj;
+	}
+	
 	public function __get($name)
 	{
+		$relations = $this->relations();
+		foreach($relations as $k => $v) {
+			if($name == $k) {
+				return $this->lookupRelation($k, $v);
+			}
+		}
 		if(isset($this->_data[$name])) {
 			return $this->_data[$name];
 		}
