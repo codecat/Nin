@@ -69,6 +69,7 @@ function nf_autoload_find($path, $classname)
 function nf_autoload($classname)
 {
 	global $nf_www_dir;
+	global $nf_dir;
 	global $nf_cfg;
 	
 	// Look for models
@@ -80,6 +81,13 @@ function nf_autoload($classname)
 	
 	// Look for components
 	$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['components'] . '/', $classname);
+	if($filename !== false) {
+		include($filename);
+		return;
+	}
+	
+	// Look for internal validators
+	$filename = nf_autoload_find($nf_dir . '/classes/validators/', $classname);
 	if($filename !== false) {
 		include($filename);
 		return;

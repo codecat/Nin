@@ -6,8 +6,14 @@ class Model
 	public $_changed = array();
 	public $_loaded = false;
 	public $_relationalrows = array();
+	public $_errors = array();
 	
 	public function relations()
+	{
+		return array();
+	}
+	
+	public function rules()
 	{
 		return array();
 	}
@@ -253,5 +259,35 @@ class Model
 	public function setAttributes($params)
 	{
 		$this->setParameters($params);
+	}
+	
+	public function validate()
+	{
+		$rules = $this->rules();
+		$allok = true;
+		$this->_errors = array();
+		foreach($rules as $rule) {
+			$keys = explode(',', $rule[0]);
+			$rulekeys = array_keys($rule);
+			$validatorname = 'null';
+			$validatorvalue = null;
+			if(is_int($rulekeys[1])) {
+				$validatorname = $rule[1];
+			} else {
+				$validatorname = $rulekeys[1];
+				$validatorvalue = $rule[$rulekeys[1]];
+			}
+			$validatorclassname = ucfirst($validatorname) . 'Validator';
+			$validator = new $validatorclassname();
+			$validator->model = $this;
+			$validator->keys = $keys;
+			$validator->value = $validatorvalue;
+			$validator->arguments = array_slice($rule, 2);
+			if(!$validator->validate()) {
+				$allok = false;
+				$this->_errors[] = $validator->error;
+			}
+		}
+		return $allok;
 	}
 }
