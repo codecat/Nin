@@ -249,4 +249,9 @@ class Model
 	{
 		$this->_data = $params;
 	}
+	
+	public function setAttributes($params)
+	{
+		$this->setParameters($params);
+	}
 }
