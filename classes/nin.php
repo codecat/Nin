@@ -31,9 +31,19 @@ class Nin
 		$_SESSION[Nin::$session_prefix . $key] = $value;
 	}
 	
+	public static function unsetsession($key)
+	{
+		unset($_SESSION[Nin::$session_prefix . $key]);
+	}
+	
 	public static function setuid($uid)
 	{
 		Nin::setsession('user_id', $uid);
+	}
+	
+	public static function unsetuid()
+	{
+		Nin::unsetsession('user_id');
 	}
 	
 	public static function uid()
