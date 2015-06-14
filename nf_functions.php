@@ -10,6 +10,8 @@ function nf_begin($dir, $options = array())
 	global $nf_uri;
 	global $nf_cfg;
 	
+	session_start();
+	
 	nf_init_config($options);
 	
 	$nf_www_dir = $dir;
