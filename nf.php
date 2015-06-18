@@ -51,3 +51,4 @@ include('classes/model.php');
 include('classes/nin.php');
 include('classes/html.php');
 include('classes/validator.php');
+include('classes/log.php');
