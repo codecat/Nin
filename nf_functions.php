@@ -191,8 +191,8 @@ function nf_handle_uri($uri)
 		$token = strtok('/');
 	}
 	
-	$controller = 'index';
-	$action = 'index';
+	$controller = $nf_cfg['index']['controller'];
+	$action = $nf_cfg['index']['action'];
 	
 	$partcount = count($parts);
 	
