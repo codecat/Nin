@@ -72,6 +72,24 @@ class Model
 		}
 		return $class::findAllByQuery($query);
 	}
+
+	public static function countByAttributes($attributes)
+	{
+		$class = get_called_class();
+		$query = 'SELECT COUNT(*) AS c FROM `' . static::tablename() . '` ';
+		if(count($attributes) > 0) {
+			$query .= 'WHERE ';
+			$firstAnd = false;
+			foreach($attributes as $k => $v) {
+				if($firstAnd) {
+					$query .= 'AND ';
+				}
+				$firstAnd = true;
+				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
+			}
+		}
+		return $class::countByQuery($query);
+	}
 	
 	public static function findAll()
 	{
@@ -119,6 +137,13 @@ class Model
 			}
 		}
 		return $ret;
+	}
+
+	public static function countByQuery($query)
+	{
+		$res = nf_sql_query($query);
+		$row = $res->fetch_assoc();
+		return intval($row['c']);
 	}
 	
 	public function insert()
