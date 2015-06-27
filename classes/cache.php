@@ -32,6 +32,28 @@ class Cache
 	}
 
 	/**
+	 * Clear the entire cache.
+	 */
+	public static function clear()
+	{
+		if(Cache::$skip) {
+			return;
+		}
+		apc_clear_cache('user');
+	}
+
+	/**
+	 * Delete a specific key in the cache.
+	 */
+	public static function delete($key)
+	{
+		if(Cache::$skip) {
+			return;
+		}
+		apc_delete($key);
+	}
+
+	/**
 	 * Get a cache value. If it doesn't exist, it will set the
 	 * value by using the $cb anonymous function. The return value
 	 * of that function will be the new cached value. $ttl is used
