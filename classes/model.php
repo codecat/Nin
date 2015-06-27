@@ -139,9 +139,15 @@ class Model
 		return $ret;
 	}
 
-	public static function countByQuery($query)
+	public static function countByQuery($query, $params = false)
 	{
-		$res = nf_sql_query($query);
+		$q = $query;
+		if($params !== false) {
+			foreach($params as $k => $v) {
+				$q = str_replace($k, nf_sql_encode($v), $q);
+			}
+		}
+		$res = nf_sql_query($q);
 		$row = $res->fetch_assoc();
 		return intval($row['c']);
 	}
