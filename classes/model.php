@@ -242,7 +242,7 @@ class Model
 		}
 	}
 	
-	public function _isset($name)
+	public function __isset($name)
 	{
 		return isset($this->_data[$name]);
 	}
