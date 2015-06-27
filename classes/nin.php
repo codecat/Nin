@@ -122,4 +122,12 @@ class Nin
 			return $timeCalc;
 		}
 	}
+
+	public static function multiple($count, $verb, $verbs)
+	{
+		if($count == 1) {
+			return $count . ' ' . $verb;
+		}
+		return $count . ' ' . $verbs;
+	}
 }
