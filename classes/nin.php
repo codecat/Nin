@@ -4,6 +4,8 @@ class Nin
 {
 	public static $user_class = 'User';
 	public static $session_prefix = 'nin_';
+	public static $date_format = 'M jS';
+	public static $date_format_year = ', Y';
 	
 	public static $current_user = null;
 	
@@ -66,11 +68,22 @@ class Nin
 		return $user;
 	}
 
+	public static function timeFormat($epoch)
+	{
+		$ret = date(Nin::$date_format, intval($epoch));
+		if(date('Y') != date('Y', $epoch)) {
+			return $ret .= date(Nin::$date_format_year, $epoch);
+		}
+		return $ret;
+	}
+
 	public static function timeAgo($oldTime, $tags = true)
 	{
 		$timeCalc = 0;
+		$strOldTime = $oldTime;
 		if(preg_match("/^[0-9]+$/", $oldTime)) {
 			$timeCalc = time() - intval($oldTime);
+			$strOldTime = Nin::timeFormat($oldTime);
 		} else {
 			$timeCalc = time() - strtotime($oldTime);
 		}
@@ -104,7 +117,7 @@ class Nin
 			$timeCalc = $days . " day" . ($days != 1 ? "s" : "") . " ago";
 		}
 		if($tags) {
-			return "<span title=\"" . $oldTime . "\">" . $timeCalc . "</span>";
+			return "<span title=\"" . $strOldTime . "\">" . $timeCalc . "</span>";
 		} else {
 			return $timeCalc;
 		}
