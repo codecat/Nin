@@ -58,3 +58,4 @@ include('classes/nin.php');
 include('classes/html.php');
 include('classes/validator.php');
 include('classes/log.php');
+include('classes/cache.php');
