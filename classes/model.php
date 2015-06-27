@@ -33,24 +33,13 @@ class Model
 	public static function findByPk($pk)
 	{
 		$class = get_called_class();
-		$tablename = static::tablename();
-		$res = nf_sql_query('SELECT * FROM `' . $tablename . '` WHERE `' . static::findPrimaryKey() . '`=' . nf_sql_encode($pk));
-		if($res !== false) {
-			$row = $res->fetch_assoc();
-			if($row) {
-				$ret = new $class();
-				$ret->loadRow($row);
-				return $ret;
-			}
-		}
-		return false;
+		return $class::findByQuery('SELECT * FROM `' . static::tablename() . '` WHERE `' . static::findPrimaryKey() . '`=' . nf_sql_encode($pk));
 	}
 	
 	public static function findByAttributes($attributes)
 	{
 		$class = get_called_class();
-		$tablename = static::tablename();
-		$query = 'SELECT * FROM `' . $tablename . '` ';
+		$query = 'SELECT * FROM `' . static::tablename() . '` ';
 		if(count($attributes) > 0) {
 			$query .= 'WHERE ';
 			$firstAnd = false;
@@ -63,23 +52,13 @@ class Model
 			}
 		}
 		$query .= 'LIMIT 0,1';
-		$res = nf_sql_query($query);
-		if($res !== false) {
-			$row = $res->fetch_assoc();
-			if($row) {
-				$ret = new $class();
-				$ret->loadRow($row);
-				return $ret;
-			}
-		}
-		return false;
+		return $class::findByQuery($query);
 	}
 	
 	public static function findAllByAttributes($attributes)
 	{
 		$class = get_called_class();
-		$tablename = static::tablename();
-		$query = 'SELECT * FROM `' . $tablename . '` ';
+		$query = 'SELECT * FROM `' . static::tablename() . '` ';
 		if(count($attributes) > 0) {
 			$query .= 'WHERE ';
 			$firstAnd = false;
@@ -91,23 +70,46 @@ class Model
 				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
 			}
 		}
-		$ret = array();
-		$res = nf_sql_query($query);
-		if($res !== false) {
-			while($row = $res->fetch_assoc()) {
-				$obj = new $class();
-				$obj->loadRow($row);
-				$ret[] = $obj;
-			}
-		}
-		return $ret;
+		return $class::findAllByQuery($query);
 	}
 	
 	public static function findAll()
 	{
 		$class = get_called_class();
-		$tablename = static::tablename();
-		$res = nf_sql_query('SELECT * FROM `' . $tablename . '`');
+		return $class::findAllByQuery('SELECT * FROM `' . static::tablename() . '`');
+	}
+
+	public static function findByQuery($query, $params = false)
+	{
+		$q = $query;
+		if($params !== false) {
+			foreach($params as $k => $v) {
+				$q = str_replace($k, nf_sql_encode($v), $q);
+			}
+		}
+		$class = get_called_class();
+		$res = nf_sql_query($q);
+		if($res !== false) {
+			$row = $res->fetch_assoc();
+			if($row) {
+				$ret = new $class();
+				$ret->loadRow($row);
+				return $ret;
+			}
+		}
+		return false;
+	}
+
+	public static function findAllByQuery($query, $params = false)
+	{
+		$q = $query;
+		if($params !== false) {
+			foreach($params as $k => $v) {
+				$q = str_replace($k, nf_sql_encode($v), $q);
+			}
+		}
+		$class = get_called_class();
+		$res = nf_sql_query($q);
 		$ret = array();
 		if($res !== false) {
 			while($row = $res->fetch_assoc()) {
