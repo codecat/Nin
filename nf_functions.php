@@ -267,6 +267,14 @@ function nf_begin_page($controllername, $actionname)
 	$controller = new $classname;
 	
 	$functionname = 'action' . ucfirst($actionname);
+
+	$retbefore = $controller->beforeAction($actionname);
+	if($retbefore === false) {
+		return;
+	} else {
+		$functionname = 'action' . ucfirst($retbefore);
+	}
+
 	if(!method_exists($controller, $functionname)) {
 		nf_error_routing(5, $functionname);
 		return;

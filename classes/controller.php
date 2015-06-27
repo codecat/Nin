@@ -3,6 +3,11 @@
 class Controller
 {
 	public $layout = 'views/layout.php';
+
+	public function beforeAction($action)
+	{
+		return $action;
+	}
 	
 	public function render($view, $options = array())
 	{
