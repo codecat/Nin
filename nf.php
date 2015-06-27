@@ -17,6 +17,12 @@ $nf_cfg = array(
 		'rules' => array()
 	),
 	
+	// Index pages
+	'index' => array(
+		'controller' => 'index',
+		'action' => 'index'
+	),
+	
 	// Validation regexes
 	'validation' => array(
 		'regex_controllers' => '/^[a-z0-9\\-_]+$/',
