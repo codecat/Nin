@@ -2,11 +2,16 @@
 
 class Cache
 {
+	public static $skip = false;
+
 	/**
 	 * Set a cache value with the given ttl in seconds.
 	 */
 	public static function set($key, $value, $ttl = 0)
 	{
+		if(Cache::$skip) {
+			return;
+		}
 		apc_store($key, $value, $ttl);
 	}
 
@@ -15,6 +20,9 @@ class Cache
 	 */
 	public static function get($key)
 	{
+		if(Cache::$skip) {
+			return null;
+		}
 		$ok = false;
 		$ret = apc_fetch($key, $ok);
 		if(!$ok) {
@@ -39,6 +47,9 @@ class Cache
 	 */
 	public static function take($key, $ttl, $cb)
 	{
+		if(Cache::$skip) {
+			return $cb();
+		}
 		$ok = false;
 		$ret = apc_fetch($key, $ok);
 		if(!$ok) {
