@@ -123,10 +123,16 @@ class Nin
 		}
 	}
 
-	public static function multiple($count, $verb, $verbs)
+	public static function multiple($count, $verb, $verbs, $verbonly = false)
 	{
 		if($count == 1) {
+			if($verbonly) {
+				return $verb;
+			}
 			return $count . ' ' . $verb;
+		}
+		if($verbonly) {
+			return $verbs;
 		}
 		return $count . ' ' . $verbs;
 	}
