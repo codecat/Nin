@@ -3,6 +3,7 @@
 class Cache
 {
 	public static $skip = false;
+	public static $prefix = 'nin_';
 
 	/**
 	 * Set a cache value with the given ttl in seconds.
@@ -12,7 +13,7 @@ class Cache
 		if(Cache::$skip) {
 			return;
 		}
-		apc_store($key, $value, $ttl);
+		apc_store(Cache::$prefix . $key, $value, $ttl);
 	}
 
 	/**
@@ -24,7 +25,7 @@ class Cache
 			return null;
 		}
 		$ok = false;
-		$ret = apc_fetch($key, $ok);
+		$ret = apc_fetch(Cache::$prefix . $key, $ok);
 		if(!$ok) {
 			return null;
 		}
@@ -50,7 +51,7 @@ class Cache
 		if(Cache::$skip) {
 			return;
 		}
-		apc_delete($key);
+		apc_delete(Cache::$prefix . $key);
 	}
 
 	/**
@@ -73,10 +74,10 @@ class Cache
 			return $cb();
 		}
 		$ok = false;
-		$ret = apc_fetch($key, $ok);
+		$ret = apc_fetch(Cache::$prefix . $key, $ok);
 		if(!$ok) {
 			$ret = $cb();
-			apc_store($key, $ret, $ttl);
+			apc_store(Cache::$prefix . $key, $ret, $ttl);
 		}
 		return $ret;
 	}
