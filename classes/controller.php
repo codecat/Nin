@@ -3,16 +3,41 @@
 class Controller
 {
 	public $layout = 'views/layout.php';
+	public $files_css = array();
+	public $files_js = array();
 
 	public function beforeAction($action)
 	{
 		return $action;
+	}
+
+	public function registerCSS($filename)
+	{
+		$this->files_css[] = $filename;
+	}
+
+	public function registerJS($filename)
+	{
+		$this->files_js[] = $filename;
+	}
+
+	public function getHead()
+	{
+		$ret = '';
+		foreach($this->files_css as $filename) {
+			$ret .= "<link rel=\"stylesheet\" href=\"" . $filename . "\">\n";
+		}
+		foreach($this->files_js as $filename) {
+			$ret .= "<script src=\"" . $filename . "\"></script>\n";
+		}
+		return $ret;
 	}
 	
 	public function render($view, $options = array())
 	{
 		global $nf_www_dir;
 		$content = $this->renderPartial($view, $options);
+		$head = $this->getHead();
 		include($nf_www_dir . '/' . $this->layout);
 	}
 	
