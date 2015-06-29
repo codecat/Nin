@@ -66,7 +66,7 @@ function nf_autoload_find($path, $classname)
 }
 
 /**
- * __autload() implementation.
+ * __autoload() implementation.
  */
 function nf_autoload($classname)
 {
@@ -250,17 +250,19 @@ function nf_begin_page($controllername, $actionname)
 {
 	global $nf_www_dir;
 	global $nf_cfg;
-	
+
 	$filename = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . '/' . $controllername . '.php';
+	$classname = ucfirst($controllername) . 'Controller';
 	if(file_exists($filename)) {
-		include($filename);
+		if(!class_exists($classname, false)) {
+			include($filename);
+		}
 	} else {
 		nf_error_routing(3, $filename);
 		return;
 	}
 	
-	$classname = ucfirst($controllername) . 'Controller';
-	if(!class_exists($classname)) {
+	if(!class_exists($classname, false)) {
 		nf_error_routing(4, $classname);
 		return;
 	}
