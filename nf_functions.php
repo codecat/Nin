@@ -235,7 +235,13 @@ function nf_handle_routing_rules($uri)
 			}
 			$_GET = array_merge($_GET, $keys);
 			$_REQUEST = array_merge($_REQUEST, $keys);
-			return $route;
+			$ret = $route;
+			if(strstr($ret, '$')) {
+				foreach($matches as $k => $v) {
+					$ret = str_replace('$' . $k, $v, $ret);
+				}
+			}
+			return $ret;
 		}
 	}
 	
