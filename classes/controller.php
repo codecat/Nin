@@ -11,6 +11,11 @@ class Controller
 		return $action;
 	}
 
+	public function displayError($error)
+	{
+		$this->render('/error', array('error' => $error));
+	}
+
 	public function registerCSS($filename)
 	{
 		$this->files_css[] = $filename;
