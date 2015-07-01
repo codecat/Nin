@@ -6,7 +6,11 @@ class MatchValidator extends Validator
 	{
 		$allok = true;
 		foreach($this->keys as $key) {
-			$result = preg_match($this->value, $this->model->$key);
+			$v = $this->model->$key;
+			if(empty($v)) {
+				continue;
+			}
+			$result = preg_match($this->value, $v);
 			if($result === false) {
 				throw new Exception('Wrong regex pattern for key ' . $key);
 			} elseif($result === 0) {
