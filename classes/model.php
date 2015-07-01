@@ -286,7 +286,7 @@ class Model
 	
 	public function setParameters($params)
 	{
-		$this->_data = $params;
+		$this->_data = array_merge($this->_data, $params);
 	}
 	
 	public function setAttributes($params)
