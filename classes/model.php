@@ -178,10 +178,13 @@ class Model
 		if(!$this->_loaded) {
 			return $this->insert();
 		}
+		if(count($this->_changed) == 0) {
+			return true;
+		}
 		$tablename = static::tablename();
 		$query = 'UPDATE `' . $tablename . '` SET ';
-		foreach($this->_changed as $k) {
-			$query .= '`' . $k . '`=' . nf_sql_encode($this->_data[$k]) . ',';
+		foreach($this->_changed as $k => $v) {
+			$query .= '`' . $k . '`=' . nf_sql_encode($v) . ',';
 		}
 		$query = rtrim($query, ',');
 		$pk_col = static::findPrimaryKey();
