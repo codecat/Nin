@@ -235,7 +235,7 @@ class Model
 			$their_classname = $v[1];
 			$their_column = $v[2];
 			$options = array();
-			if(count($v >= 4)) {
+			if(count($v) >= 4) {
 				$options = $v[3];
 			}
 			$obj = $their_classname::findAllByAttributes(array($their_column => $pk), $options);
