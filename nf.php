@@ -36,7 +36,10 @@ $nf_cfg = array(
 		'username' => '',
 		'password' => '',
 		'database' => ''
-	)
+	),
+
+	// Additional parameters
+	'params' => array()
 );
 // End of configurable parameters
 

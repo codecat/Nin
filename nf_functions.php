@@ -370,3 +370,12 @@ function nf_sql_encode($o)
 	
 	return $o;
 }
+
+/**
+ * Return the parameter from $nf_cfg
+ */
+function nf_param($key)
+{
+	global $nf_cfg;
+	return $nf_cfg['params'][$key];
+}
