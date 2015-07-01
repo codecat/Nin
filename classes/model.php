@@ -55,7 +55,7 @@ class Model
 		return $class::findByQuery($query);
 	}
 	
-	public static function findAllByAttributes($attributes)
+	public static function findAllByAttributes($attributes, $options = array())
 	{
 		$class = get_called_class();
 		$query = 'SELECT * FROM `' . static::tablename() . '` ';
@@ -70,7 +70,12 @@ class Model
 				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
 			}
 		}
-		return $class::findAllByQuery($query);
+		if(count($options) > 0) {
+			if(isset($options['order'])) {
+				$query .= 'ORDER BY `' . static::findPrimaryKey() . '` ' . strtoupper($options['order']);
+			}
+		}
+		return $class::findAllByQuery($query, false, $options);
 	}
 
 	public static function countByAttributes($attributes)
@@ -91,10 +96,16 @@ class Model
 		return $class::countByQuery($query);
 	}
 	
-	public static function findAll()
+	public static function findAll($options = array())
 	{
 		$class = get_called_class();
-		return $class::findAllByQuery('SELECT * FROM `' . static::tablename() . '`');
+		$query = 'SELECT * FROM `' . static::tablename() . '`';
+		if(count($options) > 0) {
+			if(isset($options['order'])) {
+				$query .= ' ORDER BY `' . static::findPrimaryKey() . '` ' . strtoupper($options['order']);
+			}
+		}
+		return $class::findAllByQuery($query, false, $options);
 	}
 
 	public static function findByQuery($query, $params = false)
@@ -118,7 +129,7 @@ class Model
 		return false;
 	}
 
-	public static function findAllByQuery($query, $params = false)
+	public static function findAllByQuery($query, $params = false, $options = array())
 	{
 		$q = $query;
 		if($params !== false) {
@@ -223,7 +234,11 @@ class Model
 		} elseif($v[0] == HAS_MANY) {
 			$their_classname = $v[1];
 			$their_column = $v[2];
-			$obj = $their_classname::findAllByAttributes(array($their_column => $pk));
+			$options = array();
+			if(count($v >= 4)) {
+				$options = $v[3];
+			}
+			$obj = $their_classname::findAllByAttributes(array($their_column => $pk), $options);
 			
 		} elseif($v[0] == HAS_ONE) {
 			$their_classname = $v[1];
