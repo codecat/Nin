@@ -6,6 +6,15 @@ By relying on PHP 5.4 features, we can achieve some of the effects of Yii 2 whil
 
 Nin uses an MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
 
+## Quick start
+You can use the Nin CLI interface with `nfc.php`. It allows you to create a simple skeleton website, with a default layout using [Foundation](http://foundation.zurb.com/).
+
+```
+$ git clone https://github.com/AngeloG/Nin.git
+$ cd Nin
+$ ./nfc.php create /var/www/html
+```
+
 ## A very basic example
 Let's say you own `example.com` and you want to put a Nin site on there. Just clone Nin anywhere on the server, and create an `index.php` with the following lines:
 
