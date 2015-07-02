@@ -1,6 +1,6 @@
 <?php
 
-define('NF_VERSION', '1.00');
+define('NF_VERSION', '1.0.0');
 
 define('BELONGS_TO', 1);
 define('HAS_MANY', 2);
