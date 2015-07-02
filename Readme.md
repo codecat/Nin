@@ -15,6 +15,13 @@ $ cd Nin
 $ ./nfc.php create /var/www/html
 ```
 
+## Using Composer
+Quickly get started with Nin by installing the dependency via Composer. You can find the package [on Packagist](https://packagist.org/packages/angelog/nin). Install it by running:
+
+```
+$ composer require angelog/nin
+```
+
 ## A very basic example
 Let's say you own `example.com` and you want to put a Nin site on there. Just clone Nin anywhere on the server, and create an `index.php` with the following lines:
 
