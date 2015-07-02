@@ -1,0 +1,14 @@
+{
+    "name": "angelog/nin",
+    "version": "1.0.0",
+    "description": "A minimalistic PHP framework based on some of the ideas of Yii 1 and 2.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Angelo Geels",
+            "email": "spansjh@gmail.com"
+        }
+    ],
+    "require": {}
+}
