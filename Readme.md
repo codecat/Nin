@@ -20,6 +20,15 @@ Quickly get started with Nin by installing the dependency via Composer. You can 
 
 ```
 $ composer require angelog/nin
+$ cp vendor/angelog/nin/.htaccess .
+```
+
+Then create `index.php`:
+
+```PHP
+<?php
+include('vendor/angelog/nin/nf.php');
+nf_begin(__DIR__);
 ```
 
 # A very basic example
