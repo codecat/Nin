@@ -42,8 +42,13 @@ class Controller
 	{
 		global $nf_www_dir;
 		$content = $this->renderPartial($view, $options);
-		$head = $this->getHead();
-		include($nf_www_dir . '/' . $this->layout);
+		$fnmlayout = $nf_www_dir . '/' . $this->layout;
+		if(file_exists($fnmlayout)) {
+			$head = $this->getHead();
+			include($fnmlayout);
+		} else {
+			echo $content;
+		}
 	}
 	
 	public function renderPartial($view, $options = array())
