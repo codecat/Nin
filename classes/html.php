@@ -37,6 +37,16 @@ class Html
 		), $options));
 	}
 
+	public static function activeTextarea($model, $key, $options = array())
+	{
+		$ret = Html::maketag('textarea', true, array_merge(array(
+			'name' => get_class($model) . '[' . $key . ']'
+		), $options));
+		$ret .= $model->$key;
+		$ret .= '</textarea>';
+		return $ret;
+	}
+
 	public static function activeRadio($model, $key, $values = array(), $options = array())
 	{
 		$ret = '';
