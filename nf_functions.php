@@ -16,6 +16,19 @@ function nf_begin($dir, $options = array())
 	
 	$nf_www_dir = $dir;
 	$nf_dir = __DIR__;
+
+	if(!isset($nf_cfg['no_htaccess']) && !file_exists($dir . '/.htaccess')) {
+		echo '<b>Warning:</b> .htaccess does not exist.';
+		$ok = copy(__DIR__ . '/.htaccess', $dir . '/.htaccess');
+		if($ok) {
+			echo ' Nin was able to create it automatically for you. Refresh for it to take effect.<br>';
+		} else {
+			echo ' Nin was <b>NOT</b> able to automatically create the file.';
+			echo ' Please copy it manually from: <code>' . __DIR__ . '/.htaccess</code><br>';
+		}
+		echo ' To ignore this warning and stop this behavior, set \'no_htaccess\' in the config to true.';
+		return;
+	}
 	
 	nf_init_autoloader();
 	
