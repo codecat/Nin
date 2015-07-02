@@ -304,7 +304,9 @@ class Model
 	
 	public function setParameters($params)
 	{
-		$this->_data = array_merge($this->_data, $params);
+		foreach($params as $k => $v) {
+			$this->$k = $v;
+		}
 	}
 	
 	public function setAttributes($params)
