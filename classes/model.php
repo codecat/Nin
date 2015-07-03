@@ -304,8 +304,45 @@ class Model
 	
 	public function setParameters($params)
 	{
-		foreach($params as $k => $v) {
-			$this->$k = $v;
+		global $nf_cfg;
+
+		$rules = $this->rules();
+
+		if($nf_cfg['validation']['parameters_exclusive']) {
+			// go through each rule
+			foreach($rules as $rule) {
+				$keys = explode(',', $rule[0]);
+				if($rule[1] === 'unsafe') {
+					continue;
+				}
+				// go through each key of the rule and apply parameters for that key
+				foreach($keys as $key) {
+					$key = trim($key);
+					if(isset($params[$key])) {
+						$this->$key = $params[$key];
+					}
+				}
+			}
+		} else {
+			foreach($params as $k => $v) {
+				$unsafe = false;
+				// find unsafe rules and check if the key is found
+				foreach($rules as $rule) {
+					$keys = explode(',', $rule[0]);
+					if($rule[1] !== 'unsafe') {
+						continue;
+					}
+					if(array_search($k, $keys) === false) {
+						continue;
+					}
+					$unsafe = true;
+					break;
+				}
+				// apply if found to be "safe"
+				if(!$unsafe) {
+					$this->$k = $v;
+				}
+			}
 		}
 	}
 	

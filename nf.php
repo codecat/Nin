@@ -23,10 +23,11 @@ $nf_cfg = array(
 		'action' => 'index'
 	),
 	
-	// Validation regexes
+	// Validation
 	'validation' => array(
 		'regex_controllers' => '/^[a-z0-9\\-_]+$/',
-		'regex_actions' => '/^[a-z0-9_]+$/'
+		'regex_actions' => '/^[a-z0-9_]+$/',
+		'parameters_exclusive' => true,
 	),
 	
 	// SQL information
