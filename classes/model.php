@@ -162,9 +162,20 @@ class Model
 		$row = $res->fetch_assoc();
 		return intval($row['c']);
 	}
+
+	public function beforeInsert()
+	{
+		$this->beforeSave();
+	}
+
+	public function afterInsert()
+	{
+		$this->afterSave();
+	}
 	
 	public function insert()
 	{
+		$this->beforeInsert();
 		$tablename = static::tablename();
 		$pk_col = static::findPrimaryKey();
 		$query = 'INSERT INTO `' . $tablename . '` (';
@@ -179,6 +190,7 @@ class Model
 		if($res !== false) {
 			$this->_data[$pk_col] = nf_sql_insertid();
 			$this->_loaded = true;
+			$this->afterInsert();
 			return true;
 		}
 		return false;
