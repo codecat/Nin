@@ -183,6 +183,14 @@ class Model
 		}
 		return false;
 	}
+
+	public function beforeSave()
+	{
+	}
+
+	public function afterSave()
+	{
+	}
 	
 	public function save()
 	{
@@ -192,6 +200,7 @@ class Model
 		if(count($this->_changed) == 0) {
 			return true;
 		}
+		$this->beforeSave();
 		$tablename = static::tablename();
 		$query = 'UPDATE `' . $tablename . '` SET ';
 		foreach($this->_changed as $k) {
@@ -201,7 +210,11 @@ class Model
 		$pk_col = static::findPrimaryKey();
 		$pk = $this->_data[$pk_col];
 		$query .= ' WHERE `' . $pk_col . '`=' . nf_sql_encode($pk);
-		return nf_sql_query($query) !== false;
+		if(nf_sql_query($query) !== false) {
+			$this->afterSave();
+			return true;
+		}
+		return false;
 	}
 	
 	public function remove()
