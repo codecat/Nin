@@ -337,7 +337,8 @@ class Model
 			// go through each rule
 			foreach($rules as $rule) {
 				$keys = explode(',', $rule[0]);
-				if($rule[1] === 'unsafe') {
+				$rulekeys = array_keys($rule);
+				if($rule[$rulekeys[1]] === 'unsafe') {
 					continue;
 				}
 				// go through each key of the rule and apply parameters for that key
@@ -354,7 +355,8 @@ class Model
 				// find unsafe rules and check if the key is found
 				foreach($rules as $rule) {
 					$keys = explode(',', $rule[0]);
-					if($rule[1] !== 'unsafe') {
+					$rulekeys = array_keys($rule);
+					if($rule[$rulekeys[1]] !== 'unsafe') {
 						continue;
 					}
 					if(array_search($k, $keys) === false) {
