@@ -310,9 +310,11 @@ class Model
 		}
 		
 		// Test columns
-		$this->_data[$name] = $value;
-		if(!in_array($name, $this->_changed)) {
-			$this->_changed[] = $name;
+		if($this->_data[$name] !== $value) {
+			$this->_data[$name] = $value;
+			if(!in_array($name, $this->_changed)) {
+				$this->_changed[] = $name;
+			}
 		}
 	}
 	
