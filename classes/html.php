@@ -101,15 +101,20 @@ class Html
 		return $ret;
 	}
 
-	public static function activeCheck($model, $key, $options = array(), $on = '1')
+	public static function activeCheck($model, $key, $options = array(), $on = '1', $off = '0')
 	{
 		$checked = '';
 		if($model->$key == $on) {
 			$checked = 'checked';
 		}
-		return Html::maketag('input', true, array_merge(array(
+		$fieldname = get_class($model) . '[' . $key . ']';
+		return Html::maketag('input', true, array(
+			'type' => 'hidden',
+			'name' => $fieldname,
+			'value' => $off,
+		)) . Html::maketag('input', true, array_merge(array(
 			'type' => 'checkbox',
-			'name' => get_class($model) . '[' . $key . ']',
+			'name' => $fieldname,
 			'value' => $on,
 			$checked
 		), $options));
