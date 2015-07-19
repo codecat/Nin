@@ -382,7 +382,7 @@ function nf_sql_encode($o)
 	
 	if(is_numeric($o)) {
 		if(is_float($o)) {
-			return floatval($o);
+			return str_replace(',', '.', strval(floatval($o)));
 		}
 		return intval($o);
 	}
