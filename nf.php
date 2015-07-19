@@ -39,6 +39,11 @@ $nf_cfg = array(
 		'database' => ''
 	),
 
+	// Error hooking
+	'error' => array(
+		'hook' => false
+	),
+
 	// Additional parameters
 	'params' => array()
 );

@@ -134,6 +134,8 @@ function nf_t($str)
  */
 function nf_error($num, $details = '')
 {
+	global $nf_cfg;
+
 	$error = nf_t('Unknown');
 	switch($num) {
 		case 1: $error = nf_t('Invalid controller name'); break;
@@ -151,8 +153,12 @@ function nf_error($num, $details = '')
 		$error .= ' (Details: "' . $details . '")';
 	}
 	
-	//TODO, hook?
-	echo 'nf error: ' . $error . '<br>';
+	if($nf_cfg['error']['hook'] !== false) {
+		$hook = $nf_cfg['error']['hook'];
+		$hook($error);
+	} else {
+		echo 'nf error: ' . $error . '<br>';
+	}
 }
 
 /**
