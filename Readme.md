@@ -2,7 +2,7 @@
 Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. It stands for "No It's Not", a play on Yii's "Yes It Is".
 
 # How does it work?
-By relying on PHP 5.4 features, we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
+By relying on PHP 5.4 features (HHVM also works), we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
 
 Nin uses an MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
 
@@ -29,6 +29,14 @@ Then create `index.php`:
 <?php
 include('vendor/angelog/nin/nf.php');
 nf_begin(__DIR__);
+```
+
+**Note:** For Nginx, you do not have to copy the `.htaccess` file. Instead, copy the contents inside of `nginx.conf`, and paste them inside the `server { }` block. You should also pass `no_htaccess` in `nf_begin`, like so:
+
+```PHP
+nf_begin(__DIR__, array(
+  'no_htaccess' => true
+));
 ```
 
 # A very basic example
