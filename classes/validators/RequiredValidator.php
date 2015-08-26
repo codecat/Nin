@@ -12,6 +12,6 @@ class RequiredValidator extends Validator
 				$allok = false;
 			}
 		}
-		return true;
+		return $allok;
 	}
 }
