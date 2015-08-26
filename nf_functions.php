@@ -43,6 +43,12 @@ function nf_begin($dir, $options = array())
 	if($uri_part) {
 		$nf_uri = $uri_part;
 	}
+	
+	$rethookuri = nf_hook('uri', array($nf_uri));
+	if($rethookuri !== null) {
+		$nf_uri = $rethookuri;
+	}
+	
 	nf_handle_uri($nf_uri);
 }
 
@@ -153,6 +159,7 @@ function nf_error($num, $details = '')
 		$error .= ' (Details: "' . $details . '")';
 	}
 	
+	//TODO: Deprecate this and use nf_hook() for this!
 	if($nf_cfg['error']['hook'] !== false) {
 		$hook = $nf_cfg['error']['hook'];
 		$hook($error);
@@ -268,6 +275,25 @@ function nf_handle_routing_rules($uri)
 }
 
 /**
+ * Call a hook set in the config with the given name and parameters.
+ */
+function nf_hook($name, $params = array())
+{
+	global $nf_cfg;
+
+	if(!isset($nf_cfg['hooks'])) {
+		return null;
+	}
+
+	if(!isset($nf_cfg['hooks'][$name])) {
+		return null;
+	}
+
+	$fn = $nf_cfg['hooks'][$name];
+	return $fn($params);
+}
+
+/**
  * Begin the given page by controller name and action name.
  * This gets called from nf_handle_uri().
  */
@@ -294,6 +320,16 @@ function nf_begin_page($controllername, $actionname)
 	$controller = new $classname;
 	
 	$functionname = 'action' . ucfirst($actionname);
+
+	$retbeforehookmod = false;
+	$retbeforehook = nf_hook('before-action', array($actionname));
+	if($retbeforehook !== null) {
+		if($retbeforehook === false) {
+			return;
+		} else {
+			$functionname = 'action' . ucfirst($retbeforehook);
+		}
+	}
 
 	$retbefore = $controller->beforeAction($actionname);
 	if($retbefore === false) {
