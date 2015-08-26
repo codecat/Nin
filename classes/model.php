@@ -387,6 +387,9 @@ class Model
 		$this->_errors = array();
 		foreach($rules as $rule) {
 			$keys = explode(',', $rule[0]);
+			for($i = 0; $i < count($keys); $i++) {
+				$keys[$i] = trim($keys[$i]);
+			}
 			$rulekeys = array_keys($rule);
 			$validatorname = 'null';
 			$validatorvalue = null;
