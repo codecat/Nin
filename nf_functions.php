@@ -17,16 +17,18 @@ function nf_begin($dir, $options = array())
 	$nf_www_dir = $dir;
 	$nf_dir = __DIR__;
 
+	nf_i18n_init();
+
 	if(!isset($nf_cfg['no_htaccess']) && !file_exists($dir . '/.htaccess')) {
-		echo '<b>Warning:</b> .htaccess does not exist.';
+		echo '<b>' . nf_t('Warning:') . '</b> ' . nf_t('.htaccess does not exist.');
 		$ok = copy(__DIR__ . '/.htaccess', $dir . '/.htaccess');
 		if($ok) {
-			echo ' Nin was able to create it automatically for you. Refresh for it to take effect.<br>';
+			echo ' ' . nf_t('Nin was able to create it automatically for you. Refresh for it to take effect.') . '<br>';
 		} else {
-			echo ' Nin was <b>NOT</b> able to automatically create the file.';
-			echo ' Please copy it manually from: <code>' . __DIR__ . '/.htaccess</code><br>';
+			echo ' ' . nf_t('Nin was not able to automatically create the file.');
+			echo ' ' . nf_t('Please copy it manually from:') . ' <code>' . __DIR__ . '/.htaccess</code><br>';
 		}
-		echo ' To ignore this warning and stop this behavior, set \'no_htaccess\' in the config to true.';
+		echo ' ' . nf_t('To ignore this warning and stop this behavior, set \'no_htaccess\' in the config to true.');
 		return;
 	}
 	
@@ -65,6 +67,37 @@ function nf_init_config($options)
 		}
 		$nf_cfg[$k] = array_merge($nf_cfg[$k], $v);
 	}
+}
+
+/**
+ * Loads the language files for the currently active language.
+ */
+function nf_i18n_init()
+{
+	global $nf_www_dir;
+	global $nf_i18n;
+	global $nf_cfg;
+
+	$lang = Nin::language();
+
+	$nf_i18n = array();
+	nf_i18n_loadtable(__DIR__ . '/' . $nf_cfg['paths']['i18n'] . '/' . $lang . '.php');
+	nf_i18n_loadtable($nf_www_dir . '/' . $nf_cfg['paths']['i18n'] . '/' . $lang . '.php');
+}
+
+/**
+ * Load a translation table from the given path.
+ */
+function nf_i18n_loadtable($path)
+{
+	global $nf_i18n;
+
+	if(!file_exists($path)) {
+		return;
+	}
+
+	$table = include($path);
+	$nf_i18n = array_merge($nf_i18n, $table);
 }
 
 /**
@@ -129,9 +162,18 @@ function nf_init_autoloader()
 /**
  * Translate a string.
  */
-function nf_t($str)
+function nf_t($str, $params = array())
 {
-	//TODO
+	global $nf_i18n;
+
+	$ret = $nf_i18n[$str];
+	if($ret !== null) {
+		foreach($params as $k => $v) {
+			$ret = str_replace($k, $v, $ret);
+		}
+		return $ret;
+	}
+
 	return $str;
 }
 
@@ -156,7 +198,7 @@ function nf_error($num, $details = '')
 		case 10: $error = nf_t('SQL query failed'); break;
 	}
 	if($details != '') {
-		$error .= ' (Details: "' . $details . '")';
+		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
 	}
 	
 	//TODO: Deprecate this and use nf_hook() for this!
@@ -164,7 +206,7 @@ function nf_error($num, $details = '')
 		$hook = $nf_cfg['error']['hook'];
 		$hook($error);
 	} else {
-		echo 'nf error: ' . $error . '<br>';
+		echo nf_t('nf error:') . ' ' . $error . '<br>';
 	}
 }
 
@@ -384,7 +426,7 @@ function nf_sql_query($query)
 	global $nf_sql;
 	$ret = $nf_sql->query($query);
 	if($ret === false) {
-		nf_error(10, 'Error was: ' . $nf_sql->error . ' - Query was: ' . $query);
+		nf_error(10, nf_t('Error was:') . ' ' . $nf_sql->error . ' - ' . nf_t('Query was:') . ' ' . $query);
 	}
 	return $ret;
 }

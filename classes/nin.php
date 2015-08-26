@@ -68,6 +68,31 @@ class Nin
 		return $user;
 	}
 
+	public static function setlanguage($language)
+	{
+		global $nf_cfg;
+
+		foreach($nf_cfg['i18n']['languages'] as $lang) {
+			if($lang == $language) {
+				Nin::setsession('language', $language);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static function language()
+	{
+		$ret = Nin::getsession('language');
+		if($ret !== false) {
+			return $ret;
+		}
+
+		global $nf_cfg;
+		return $nf_cfg['i18n']['language'];
+	}
+
 	public static function timeFormat($epoch)
 	{
 		$ret = date(Nin::$date_format, intval($epoch));

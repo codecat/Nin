@@ -10,7 +10,7 @@ class UniqueValidator extends Validator
 			$count = $this->model->countByAttributes(array($key => $value));
 			if($count > 0) {
 				$allok = false;
-				$this->error .= "$key must be unique.\n";
+				$this->error .= nf_t('$key must be unique.', array('$key' => $key)) . "\n";
 			}
 		}
 		return $allok;

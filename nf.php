@@ -8,7 +8,8 @@ $nf_cfg = array(
 		'controllers' => 'controllers',
 		'views' => 'views',
 		'models' => 'models',
-		'components' => 'components'
+		'components' => 'components',
+		'i18n' => 'i18n'
 	),
 	
 	// Routing configuration
@@ -47,6 +48,12 @@ $nf_cfg = array(
 	// Hooks
 	'hooks' => array(),
 
+	// Internationalization
+	'i18n' => array(
+		'languages' => array('en-US'),
+		'language' => 'en-US'
+	),
+
 	// Additional parameters
 	'params' => array()
 );
@@ -60,6 +67,9 @@ $nf_uri_fallback = false;
 
 // Runtime SQL variables
 $nf_sql = false;
+
+// Internationalization cache
+$nf_i18n = array();
 
 // Include dependencies
 include('nf_define.php');
