@@ -44,6 +44,9 @@ $nf_cfg = array(
 		'hook' => false
 	),
 
+	// Hooks
+	'hooks' => array(),
+
 	// Additional parameters
 	'params' => array()
 );
