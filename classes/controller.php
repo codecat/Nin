@@ -3,6 +3,7 @@
 class Controller
 {
 	public $layout = 'views/layout.php';
+	public $uri_parts = array();
 	public $files_css = array();
 	public $files_js = array();
 

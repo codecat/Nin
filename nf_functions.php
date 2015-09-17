@@ -388,7 +388,7 @@ function nf_handle_uri($uri)
 		}
 	}
 	
-	nf_begin_page($controller, $action);
+	nf_begin_page($controller, $action, $parts);
 }
 
 /**
@@ -447,7 +447,7 @@ function nf_hook($name, $params = array())
  * Begin the given page by controller name and action name.
  * This gets called from nf_handle_uri().
  */
-function nf_begin_page($controllername, $actionname)
+function nf_begin_page($controllername, $actionname, $parts)
 {
 	global $nf_www_dir;
 	global $nf_cfg;
@@ -468,6 +468,7 @@ function nf_begin_page($controllername, $actionname)
 		return;
 	}
 	$controller = new $classname;
+	$controller->uri_parts = $parts;
 	
 	$functionname = 'action' . ucfirst($actionname);
 
