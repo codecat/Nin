@@ -54,6 +54,11 @@ $nf_cfg = array(
 		'language' => 'en-US'
 	),
 
+	// Debugging
+	'debug' => array(
+		'enabled' => true,
+	),
+
 	// Additional parameters
 	'params' => array()
 );
