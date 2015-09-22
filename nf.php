@@ -37,7 +37,8 @@ $nf_cfg = array(
 		'hostname' => 'localhost',
 		'username' => '',
 		'password' => '',
-		'database' => ''
+		'database' => '',
+		'encoding' => 'utf8'
 	),
 
 	// Error hooking

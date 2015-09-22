@@ -45,7 +45,12 @@ function nf_begin($dir, $options = array())
 	nf_init_autoloader();
 	
 	if($nf_cfg['sql']['enabled']) {
-		if(!nf_sql_connect($nf_cfg['sql']['hostname'], $nf_cfg['sql']['username'], $nf_cfg['sql']['password'], $nf_cfg['sql']['database'])) {
+		if(!nf_sql_connect(
+			$nf_cfg['sql']['hostname'],
+			$nf_cfg['sql']['username'],
+			$nf_cfg['sql']['password'],
+			$nf_cfg['sql']['database'],
+			$nf_cfg['sql']['encoding'])) {
 			nf_error(7);
 		}
 	}
@@ -517,13 +522,14 @@ function nf_begin_page($controllername, $actionname, $parts)
 /**
  * Connect to the SQL database.
  */
-function nf_sql_connect($host, $user, $pass, $db)
+function nf_sql_connect($host, $user, $pass, $db, $encoding)
 {
 	global $nf_sql;
 	if($nf_sql) {
 		return false;
 	}
 	$nf_sql = new mysqli($host, $user, $pass, $db);
+	$nf_sql->set_charset($encoding);
 	return $nf_sql->connect_errno == 0;
 }
 
