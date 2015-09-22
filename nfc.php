@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Nin from CLI 
+ * Nin from CLI
  */
 
 include('nf.php');
@@ -66,8 +66,8 @@ function actionCreate($args)
 		return;
 	}
 
-	nf_xcopy('skeleton', $args[0], array('skeleton/index.php'));
-	$index = file_get_contents('skeleton/index.php');
+	nf_xcopy(realpath(dirname(__FILE__)). '/skeleton', $args[0], array('skeleton/index.php'));
+	$index = file_get_contents(realpath(dirname(__FILE__)).'/skeleton/index.php');
 	$index = str_replace('/*NF_PHP*/', '\'' . addslashes(__DIR__ . '/nf.php') . '\'', $index);
 	file_put_contents($args[0] . '/index.php', $index);
 
