@@ -4,11 +4,13 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ /index.php [L,QSA]
 
 # Disallow common paths
-RedirectMatch 403 ^/controllers/.*$
-RedirectMatch 403 ^/components/.*$
-RedirectMatch 403 ^/models/.*$
-RedirectMatch 403 ^/views/.*$
-RedirectMatch 403 ^/logs/.*$
+RedirectMatch 403 ^/controllers/.*\.php$
+RedirectMatch 403 ^/components/.*\.php$
+RedirectMatch 403 ^/models/.*\.php$
+RedirectMatch 403 ^/views/.*\.php$
+RedirectMatch 403 ^/i18n/.*\.php$
+RedirectMatch 403 ^/validators/.*\.php$
+RedirectMatch 403 ^/logs/.*\.log$
 
 # Uncomment this to enable PHP errors
 #php_flag display_startup_errors on
