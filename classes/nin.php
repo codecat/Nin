@@ -112,34 +112,32 @@ class Nin
 		} else {
 			$timeCalc = time() - strtotime($oldTime);
 		}
-		$timeType = "s";
+
+		$timeType = 's';
 		if($timeCalc >= 60) {
-			$timeType = "m";
+			$timeType = 'm';
 		}
 		if($timeCalc >= (60*60)) {
-			$timeType = "h";
+			$timeType = 'h';
 		}
 		if($timeCalc >= (60*60*24)) {
-			$timeType = "d";
+			$timeType = 'd';
 		}
+
 		if($timeType == "s") {
-			if($timeCalc == 1) {
-				$timeCalc .= " second ago";
-			} else {
-				$timeCalc .= " seconds ago";
-			}
+			$timeCalc = Nin::multiple($timeCalc, nf_t('second'), nf_t('seconds')) . ' ' . nf_t('ago');
 		}
 		if($timeType == "m") {
 			$mins = round($timeCalc/60);
-			$timeCalc = $mins . " minute" . ($mins != 1 ? "s" : "") . " ago";
+			$timeCalc = Nin::multiple($mins, nf_t('minute'), nf_t('minutes')) . ' ' . nf_t('ago');
 		}
 		if($timeType == "h") {
 			$hrs = round($timeCalc/60/60);
-			$timeCalc = $hrs . " hour" . ($hrs != 1 ? "s" : "") . " ago";
+			$timeCalc = Nin::multiple($hrs, nf_t('hour'), nf_t('hours')) . ' ' . nf_t('ago');
 		}
 		if($timeType == "d") {
 			$days = round($timeCalc/60/60/24);
-			$timeCalc = $days . " day" . ($days != 1 ? "s" : "") . " ago";
+			$timeCalc = Nin::multiple($days, nf_t('day'), nf_t('days')) . ' ' . nf_t('ago');
 		}
 		if($tags) {
 			return "<span title=\"" . $strOldTime . "\">" . $timeCalc . "</span>";

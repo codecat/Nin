@@ -32,4 +32,15 @@ return array(
 	'$key is longer than $max characters.' => '$key is langer dan $max tekens.',
 	'$key must be unique.' => '$key moet uniek zijn.',
 	'$key is required.' => '$key is verplicht.',
+
+	// Nin::timeAgo()
+	'second' => 'seconde',
+	'seconds' => 'seconden',
+	'minute' => 'minuut',
+	'minutes' => 'minuten',
+	'hour' => 'uur',
+	'hours' => 'uur',
+	'day' => 'dag',
+	'days' => 'dagen',
+	'ago' => 'geleden',
 );
