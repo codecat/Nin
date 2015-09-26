@@ -142,19 +142,20 @@ function nf_autoload($classname)
 	global $nf_cfg;
 	global $nf_module;
 
-	$hasModule = $nf_module != '/';
+	$parse = explode('/', trim($nf_module, '/'));
+	$paths = array('/');
+	$pathStart = '/';
+	for($i=0; $i<count($parse); $i++) {
+		if(empty($parse[$i])) {
+			continue;
+		}
+		$paths[] = $pathStart . $parse[$i] . '/';
+		$pathStart .= $parse[$i] . '/';
+	}
 	
 	// Look for models
-	$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . '/', $classname);
-	if($filename !== false) {
-		include($filename);
-		return;
-	}
-
-	// If a module is set
-	if($hasModule) {
-		// Look for models in a module subfolder
-		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . $nf_module, $classname);
+	foreach($paths as $module) {
+		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . $module, $classname);
 		if($filename !== false) {
 			include($filename);
 			return;
@@ -162,16 +163,8 @@ function nf_autoload($classname)
 	}
 	
 	// Look for components
-	$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['components'] . '/', $classname);
-	if($filename !== false) {
-		include($filename);
-		return;
-	}
-
-	// If a module is set
-	if($hasModule) {
-		// Look for components in a module subfolder
-		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['components'] . $nf_module, $classname);
+	foreach($paths as $module) {
+		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['components'] . $module, $classname);
 		if($filename !== false) {
 			include($filename);
 			return;
@@ -183,6 +176,15 @@ function nf_autoload($classname)
 	if($filename !== false) {
 		include($filename);
 		return;
+	}
+
+	// Look for user validators
+	foreach($paths as $module) {
+		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['validators'] . $module, $classname);
+		if($filename !== false) {
+			include($filename);
+			return;
+		}
 	}
 	
 	// If couldn't be found at all

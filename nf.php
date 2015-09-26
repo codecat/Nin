@@ -9,7 +9,8 @@ $nf_cfg = array(
 		'views' => 'views',
 		'models' => 'models',
 		'components' => 'components',
-		'i18n' => 'i18n'
+		'i18n' => 'i18n',
+		'validators' => 'validators',
 	),
 	
 	// Routing configuration
