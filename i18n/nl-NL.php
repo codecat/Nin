@@ -21,6 +21,7 @@ return array(
 	'Class could not be found' => 'Class kon niet gevonden worden',
 	'Table does not have a primary key' => 'Tabel heeft geen primaire sleutel',
 	'SQL query failed' => 'SQL query mislukt',
+	'ListView tried to render without a provider' => 'ListView probeerde te renderen zonder provider',
 	'Details:' => 'Details:',
 	'nf error:' => 'nf fout:',
 	'Error was:' => 'Error was:',

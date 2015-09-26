@@ -54,8 +54,6 @@ class Controller
 	
 	public function renderPartial($view, $options = array())
 	{
-		extract($options);
-		
 		global $nf_www_dir;
 		global $nf_cfg;
 		global $nf_module;
@@ -69,6 +67,7 @@ class Controller
 		}
 		
 		ob_start();
+		extract($options);
 		include($inc_path);
 		return ob_get_clean();
 	}

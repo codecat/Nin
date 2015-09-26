@@ -72,6 +72,7 @@ $nf_www_dir = '';
 $nf_uri = '';
 $nf_uri_fallback = false;
 $nf_module = '';
+$nf_current_controllername = '';
 
 // Runtime SQL variables
 $nf_sql = false;
@@ -89,3 +90,7 @@ include('classes/html.php');
 include('classes/validator.php');
 include('classes/log.php');
 include('classes/cache.php');
+include('classes/listview.php');
+include('classes/provider.php');
+include('classes/providers/ArrayProvider.php');
+include('classes/providers/QueryProvider.php');

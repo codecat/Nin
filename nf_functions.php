@@ -236,6 +236,7 @@ function nf_error($num, $details = '')
 		case 8: $error = nf_t('Class could not be found'); break;
 		case 9: $error = nf_t('Table does not have a primary key'); break;
 		case 10: $error = nf_t('SQL query failed'); break;
+		case 11: $error = nf_t('ListView tried to render without a provider'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
@@ -490,11 +491,14 @@ function nf_begin_page($controllername, $actionname, $parts)
 	global $nf_www_dir;
 	global $nf_cfg;
 	global $nf_module;
+	global $nf_current_controllername;
 
 	if(!preg_match($nf_cfg['validation']['regex_controllers'], $controllername)) {
 		nf_error_routing(1);
 		return;
 	}
+
+	$nf_current_controllername = $controllername;
 
 	if(!preg_match($nf_cfg['validation']['regex_actions'], $actionname)) {
 		nf_error_routing(2);
