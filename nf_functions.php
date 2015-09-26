@@ -500,15 +500,15 @@ function nf_begin_page($controllername, $actionname, $parts)
 	}
 
 	$folder = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $nf_module;
-	$filename = $folder . ucfirst($controllername) . '.php';
+	$filename = $folder . $controllername . '.php';
 	$classname = ucfirst($controllername) . 'Controller';
 	if(file_exists($filename)) {
 		if(!class_exists($classname, false)) {
 			include($filename);
 		}
 	} else {
-		// Check old way of lowercase controller filename
-		$filename_lower = $folder . $controllername . '.php';
+		// Maybe it exists with ucfirst
+		$filename_lower = $folder . ucfirst($controllername) . '.php';
 		if(file_exists($filename_lower)) {
 			if(!class_exists($classname, false)) {
 				include($filename_lower);
