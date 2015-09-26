@@ -140,6 +140,9 @@ function nf_autoload($classname)
 	global $nf_www_dir;
 	global $nf_dir;
 	global $nf_cfg;
+	global $nf_module;
+
+	$hasModule = $nf_module != '/';
 	
 	// Look for models
 	$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . '/', $classname);
@@ -147,12 +150,32 @@ function nf_autoload($classname)
 		include($filename);
 		return;
 	}
+
+	// If a module is set
+	if($hasModule) {
+		// Look for models in a module subfolder
+		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . $nf_module, $classname);
+		if($filename !== false) {
+			include($filename);
+			return;
+		}
+	}
 	
 	// Look for components
 	$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['components'] . '/', $classname);
 	if($filename !== false) {
 		include($filename);
 		return;
+	}
+
+	// If a module is set
+	if($hasModule) {
+		// Look for components in a module subfolder
+		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['components'] . $nf_module, $classname);
+		if($filename !== false) {
+			include($filename);
+			return;
+		}
 	}
 	
 	// Look for internal validators
