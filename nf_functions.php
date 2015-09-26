@@ -409,15 +409,15 @@ function nf_handle_uri($uri)
 		// Check if the part is a folder (that means there's a module)
 		if(is_dir($nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $module . $part)) {
 			// It is, so append this to the module path
-			$module .= $part . '/';
+			$module .= strtolower($part) . '/';
 			continue;
 		}
 
 		//Otherwise, it /should/ exist as a controller
-		$controller = $part;
+		$controller = strtolower($part);
 		// And, if it exists, the part that comes after that as the action
 		if($i + 1 != $partcount) {
-			$action = $parts[$i + 1];
+			$action = strtolower($parts[$i + 1]);
 		}
 		// Now get ready to begin the page
 		break;
@@ -499,7 +499,8 @@ function nf_begin_page($controllername, $actionname, $parts)
 		return;
 	}
 
-	$filename = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $nf_module . $controllername . '.php';
+	$folder = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $nf_module;
+	$filename = $folder . $controllername . '.php';
 	$classname = ucfirst($controllername) . 'Controller';
 	if(file_exists($filename)) {
 		if(!class_exists($classname, false)) {
