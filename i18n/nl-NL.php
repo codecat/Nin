@@ -13,7 +13,7 @@ return array(
 	'Unknown' => 'Onbekend',
 	'Invalid controller name' => 'Invalide controller naam',
 	'Invalid action name' => 'Invalide actie naam',
-	'Controller does not exist' => 'Controller bestaat niet',
+	'Controller or module does not exist' => 'Controller of module bestaat niet',
 	'Controller class does not have the right name' => 'Class van de controller heeft geen juiste naam',
 	'Action does not exist' => 'Actie bestaat niet',
 	'Action requires parameters not given' => 'Actie heeft parameters nodig die niet gegeven zijn',

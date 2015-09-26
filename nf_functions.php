@@ -203,7 +203,7 @@ function nf_error($num, $details = '')
 	switch($num) {
 		case 1: $error = nf_t('Invalid controller name'); break;
 		case 2: $error = nf_t('Invalid action name'); break;
-		case 3: $error = nf_t('Controller does not exist'); break;
+		case 3: $error = nf_t('Controller or module does not exist'); break;
 		case 4: $error = nf_t('Controller class does not have the right name'); break;
 		case 5: $error = nf_t('Action does not exist'); break;
 		case 6: $error = nf_t('Action requires parameters not given'); break;
@@ -359,6 +359,8 @@ function nf_handle_uri($uri)
 {
 	global $nf_cfg;
 	global $nf_uri;
+	global $nf_www_dir;
+	global $nf_module;
 	
 	$nf_uri = $uri = substr($uri, strlen($nf_cfg['paths']['base'])-1);
 	if($nf_cfg['routing']['preferRules']) {
@@ -372,27 +374,33 @@ function nf_handle_uri($uri)
 		$token = strtok('/');
 	}
 	
+	$module = '/';
 	$controller = $nf_cfg['index']['controller'];
 	$action = $nf_cfg['index']['action'];
 	
 	$partcount = count($parts);
-	
-	if($partcount >= 1) {
-		$controller = strtolower($parts[0]);
-		if(!preg_match($nf_cfg['validation']['regex_controllers'], $controller)) {
-			nf_error_routing(1);
-			return;
+
+	for($i=0; $i<$partcount; $i++) {
+		$part = $parts[$i];
+		
+		// Check if the part is a folder (that means there's a module)
+		if(is_dir($nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $module . $part)) {
+			// It is, so append this to the module path
+			$module .= $part . '/';
+			continue;
 		}
+
+		//Otherwise, it /should/ exist as a controller
+		$controller = $part;
+		// And, if it exists, the part that comes after that as the action
+		if($i + 1 != $partcount) {
+			$action = $parts[$i + 1];
+		}
+		// Now get ready to begin the page
+		break;
 	}
 	
-	if($partcount >= 2) {
-		$action = strtolower($parts[1]);
-		if(!preg_match($nf_cfg['validation']['regex_actions'], $action)) {
-			nf_error_routing(2);
-			return;
-		}
-	}
-	
+	$nf_module = $module;
 	nf_begin_page($controller, $action, $parts);
 }
 
@@ -456,8 +464,19 @@ function nf_begin_page($controllername, $actionname, $parts)
 {
 	global $nf_www_dir;
 	global $nf_cfg;
+	global $nf_module;
 
-	$filename = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . '/' . $controllername . '.php';
+	if(!preg_match($nf_cfg['validation']['regex_controllers'], $controllername)) {
+		nf_error_routing(1);
+		return;
+	}
+
+	if(!preg_match($nf_cfg['validation']['regex_actions'], $actionname)) {
+		nf_error_routing(2);
+		return;
+	}
+
+	$filename = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $nf_module . $controllername . '.php';
 	$classname = ucfirst($controllername) . 'Controller';
 	if(file_exists($filename)) {
 		if(!class_exists($classname, false)) {

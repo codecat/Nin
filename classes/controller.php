@@ -58,13 +58,14 @@ class Controller
 		
 		global $nf_www_dir;
 		global $nf_cfg;
+		global $nf_module;
 		
 		$inc_folder = strtolower(substr(get_class($this), 0, -strlen(__CLASS__)));
 		$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'];
 		if($view[0] == '/') {
 			$inc_path .= $view . '.php';
 		} else {
-			$inc_path .= '/' . $inc_folder . '/' . $view . '.php';
+			$inc_path .= $nf_module . $inc_folder . '/' . $view . '.php';
 		}
 		
 		ob_start();

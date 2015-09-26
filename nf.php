@@ -70,6 +70,7 @@ $nf_dir = '';
 $nf_www_dir = '';
 $nf_uri = '';
 $nf_uri_fallback = false;
+$nf_module = '';
 
 // Runtime SQL variables
 $nf_sql = false;
