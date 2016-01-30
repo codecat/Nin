@@ -72,7 +72,13 @@ class Model
 		}
 		if(count($options) > 0) {
 			if(isset($options['order'])) {
-				$query .= 'ORDER BY `' . static::findPrimaryKey() . '` ' . strtoupper($options['order']);
+				$orderBy = '';
+				if(isset($options['orderby'])) {
+					$orderBy = $options['orderby'];
+				} else {
+					$orderBy = static::findPrimaryKey();
+				}
+				$query .= 'ORDER BY `' . $orderBy . '` ' . strtoupper($options['order']);
 			}
 		}
 		return $class::findAllByQuery($query, false, $options);
