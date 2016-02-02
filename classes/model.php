@@ -18,10 +18,18 @@ class Model
 		return array();
 	}
 	
+	public static function queryTablename($name)
+	{
+		if (strstr($name, '.')) {
+			return $name;
+		}
+		return '`' . $name . '`';
+	}
+	
 	public static function findPrimaryKey()
 	{
 		$tablename = static::tablename();
-		$res = nf_sql_query('SHOW KEYS FROM `' . $tablename . '` WHERE Key_name = \'PRIMARY\'');
+		$res = nf_sql_query('SHOW KEYS FROM ' . static::queryTablename($tablename) . '` WHERE Key_name = \'PRIMARY\'');
 		$row = $res->fetch_assoc();
 		if($row !== null) {
 			return $row['Column_name'];
@@ -33,13 +41,13 @@ class Model
 	public static function findByPk($pk)
 	{
 		$class = get_called_class();
-		return $class::findByQuery('SELECT * FROM `' . static::tablename() . '` WHERE `' . static::findPrimaryKey() . '`=' . nf_sql_encode($pk));
+		return $class::findByQuery('SELECT * FROM ' . static::queryTablename(static::tablename()) . ' WHERE `' . static::findPrimaryKey() . '`=' . nf_sql_encode($pk));
 	}
 	
 	public static function findByAttributes($attributes)
 	{
 		$class = get_called_class();
-		$query = 'SELECT * FROM `' . static::tablename() . '` ';
+		$query = 'SELECT * FROM ' . static::queryTablename(static::tablename()) . ' ';
 		if(count($attributes) > 0) {
 			$query .= 'WHERE ';
 			$firstAnd = false;
@@ -58,7 +66,7 @@ class Model
 	public static function findAllByAttributes($attributes, $options = array())
 	{
 		$class = get_called_class();
-		$query = 'SELECT * FROM `' . static::tablename() . '` ';
+		$query = 'SELECT * FROM ' . static::queryTablename(static::tablename()) . ' ';
 		if(count($attributes) > 0) {
 			$query .= 'WHERE ';
 			$firstAnd = false;
@@ -87,7 +95,7 @@ class Model
 	public static function countByAttributes($attributes)
 	{
 		$class = get_called_class();
-		$query = 'SELECT COUNT(*) AS c FROM `' . static::tablename() . '` ';
+		$query = 'SELECT COUNT(*) AS c FROM ' . static::queryTablename(static::tablename()) . ' ';
 		if(count($attributes) > 0) {
 			$query .= 'WHERE ';
 			$firstAnd = false;
@@ -105,7 +113,7 @@ class Model
 	public static function findAll($options = array())
 	{
 		$class = get_called_class();
-		$query = 'SELECT * FROM `' . static::tablename() . '`';
+		$query = 'SELECT * FROM ' . static::queryTablename(static::tablename());
 		if(count($options) > 0) {
 			if(isset($options['order'])) {
 				$query .= ' ORDER BY `' . static::findPrimaryKey() . '` ' . strtoupper($options['order']);
@@ -184,7 +192,7 @@ class Model
 		$this->beforeInsert();
 		$tablename = static::tablename();
 		$pk_col = static::findPrimaryKey();
-		$query = 'INSERT INTO `' . $tablename . '` (';
+		$query = 'INSERT INTO ' . static::queryTablename($tablename) . ' (';
 		$values = '';
 		foreach($this->_data as $k => $v) {
 			$query .= '`' . $k . '`,';
@@ -220,7 +228,7 @@ class Model
 		}
 		$this->beforeSave();
 		$tablename = static::tablename();
-		$query = 'UPDATE `' . $tablename . '` SET ';
+		$query = 'UPDATE ' . static::queryTablename($tablename) . ' SET ';
 		foreach($this->_changed as $k) {
 			$query .= '`' . $k . '`=' . nf_sql_encode($this->_data[$k]) . ',';
 		}
@@ -243,7 +251,7 @@ class Model
 		$tablename = static::tablename();
 		$pk_col = static::findPrimaryKey();
 		$pk = $this->_data[$pk_col];
-		$query = 'DELETE FROM `' . $tablename . '` WHERE `' . $pk_col . '`=' . nf_sql_encode($pk);
+		$query = 'DELETE FROM ' . static::queryTablename($tablename) . ' WHERE `' . $pk_col . '`=' . nf_sql_encode($pk);
 		return nf_sql_query($query) !== false;
 	}
 	
