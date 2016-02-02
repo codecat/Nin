@@ -29,7 +29,7 @@ class Model
 	public static function findPrimaryKey()
 	{
 		$tablename = static::tablename();
-		$res = nf_sql_query('SHOW KEYS FROM ' . static::queryTablename($tablename) . '` WHERE Key_name = \'PRIMARY\'');
+		$res = nf_sql_query('SHOW KEYS FROM ' . static::queryTablename($tablename) . ' WHERE Key_name = \'PRIMARY\'');
 		$row = $res->fetch_assoc();
 		if($row !== null) {
 			return $row['Column_name'];
