@@ -78,17 +78,7 @@ class Model
 				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
 			}
 		}
-		if(count($options) > 0) {
-			if(isset($options['order'])) {
-				$orderBy = '';
-				if(isset($options['orderby'])) {
-					$orderBy = $options['orderby'];
-				} else {
-					$orderBy = static::findPrimaryKey();
-				}
-				$query .= 'ORDER BY `' . $orderBy . '` ' . strtoupper($options['order']);
-			}
-		}
+		$query .= static::queryOptions($options);
 		return $class::findAllByQuery($query, false, $options);
 	}
 
@@ -114,12 +104,37 @@ class Model
 	{
 		$class = get_called_class();
 		$query = 'SELECT * FROM ' . static::queryTablename(static::tablename());
-		if(count($options) > 0) {
-			if(isset($options['order'])) {
-				$query .= ' ORDER BY `' . static::findPrimaryKey() . '` ' . strtoupper($options['order']);
+		$query .= static::queryOptions($options);
+		return $class::findAllByQuery($query, false, $options);
+	}
+	
+	public static function queryOptions($options)
+	{
+		if(count($options) == 0) {
+			return '';
+		}
+		$ret = '';
+		if(isset($options['group'])) {
+			$ret .= ' GROUP BY `' . $options['group'] . '`';
+		}
+		if(isset($options['order'])) {
+			$orderby = '';
+			if(isset($options['orderby'])) {
+				$orderby = $options['orderby'];
+			} else {
+				$orderby = static::findPrimaryKey();
+			}
+			$ret .= ' ORDER BY `' . $orderby . '` ' . strtoupper($options['order']);
+		}
+		if(isset($options['limit'])) {
+			$l = $options['limit'];
+			if(is_int($l)) {
+				$ret .= ' LIMIT 0,' . $l;
+			} elseif(is_array($l)) {
+				$ret .= ' LIMIT ' . intval($l[0]) . ',' . intval($l[1]);
 			}
 		}
-		return $class::findAllByQuery($query, false, $options);
+		return $ret;
 	}
 
 	public static function findByQuery($query, $params = false)
