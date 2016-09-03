@@ -188,7 +188,7 @@ function nf_autoload($classname)
 	}
 	
 	// If couldn't be found at all
-	nf_error(8, $classname);
+	//nf_error(8, $classname);
 }
 
 /**
