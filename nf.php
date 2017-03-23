@@ -81,7 +81,7 @@ $nf_sql = false;
 $nf_i18n = array();
 
 // Include dependencies
-include('nf_define.php');
+include('functions/define.php');
 include('functions/autoloader.php');
 include('functions/begin.php');
 include('functions/error.php');
