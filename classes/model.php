@@ -7,17 +7,17 @@ class Model
 	public $_loaded = false;
 	public $_relationalrows = array();
 	public $_errors = array();
-	
+
 	public function relations()
 	{
 		return array();
 	}
-	
+
 	public function rules()
 	{
 		return array();
 	}
-	
+
 	public static function queryTablename($name)
 	{
 		if (strstr($name, '.')) {
@@ -25,7 +25,7 @@ class Model
 		}
 		return '`' . $name . '`';
 	}
-	
+
 	public static function findPrimaryKey()
 	{
 		$tablename = static::tablename();
@@ -37,13 +37,13 @@ class Model
 		nf_error(9, $tablename);
 		return false;
 	}
-	
+
 	public static function findByPk($pk)
 	{
 		$class = get_called_class();
 		return $class::findByQuery('SELECT * FROM ' . static::queryTablename(static::tablename()) . ' WHERE `' . static::findPrimaryKey() . '`=' . nf_sql_encode($pk));
 	}
-	
+
 	public static function findByAttributes($attributes)
 	{
 		$class = get_called_class();
@@ -62,7 +62,7 @@ class Model
 		$query .= 'LIMIT 0,1';
 		return $class::findByQuery($query);
 	}
-	
+
 	public static function findAllByAttributes($attributes, $options = array())
 	{
 		$class = get_called_class();
@@ -99,7 +99,7 @@ class Model
 		}
 		return $class::countByQuery($query);
 	}
-	
+
 	public static function findAll($options = array())
 	{
 		$class = get_called_class();
@@ -107,7 +107,7 @@ class Model
 		$query .= static::queryOptions($options);
 		return $class::findAllByQuery($query, false, $options);
 	}
-	
+
 	public static function queryOptions($options)
 	{
 		if(count($options) == 0) {
@@ -201,7 +201,7 @@ class Model
 	{
 		$this->afterSave();
 	}
-	
+
 	public function insert()
 	{
 		$this->beforeInsert();
@@ -232,7 +232,7 @@ class Model
 	public function afterSave()
 	{
 	}
-	
+
 	public function save()
 	{
 		if(!$this->_loaded) {
@@ -257,7 +257,7 @@ class Model
 		}
 		return false;
 	}
-	
+
 	public function remove()
 	{
 		if(!$this->_loaded) {
@@ -269,22 +269,22 @@ class Model
 		$query = 'DELETE FROM ' . static::queryTablename($tablename) . ' WHERE `' . $pk_col . '`=' . nf_sql_encode($pk);
 		return nf_sql_query($query) !== false;
 	}
-	
+
 	protected function lookupRelation($k, $v)
 	{
 		if(isset($this->_relationalrows[$k])) {
 			return $this->_relationalrows[$k];
 		}
 		$obj = false;
-		
+
 		$pk_col = static::findPrimaryKey();
 		$pk = $this->_data[$pk_col];
-		
+
 		if($v[0] == BELONGS_TO) {
 			$their_classname = $v[1];
 			$my_column = $v[2];
 			$obj = $their_classname::findByPk($this->$my_column);
-			
+
 		} elseif($v[0] == HAS_MANY) {
 			$their_classname = $v[1];
 			$their_column = $v[2];
@@ -293,17 +293,17 @@ class Model
 				$options = $v[3];
 			}
 			$obj = $their_classname::findAllByAttributes(array($their_column => $pk), $options);
-			
+
 		} elseif($v[0] == HAS_ONE) {
 			$their_classname = $v[1];
 			$their_column = $v[2];
 			$obj = $their_classname::findByAttributes(array($their_column => $pk));
 		}
-		
+
 		$this->_relationalrows[$k] = $obj;
 		return $obj;
 	}
-	
+
 	public function __get($name)
 	{
 		// Test relations
@@ -313,22 +313,22 @@ class Model
 				return $this->lookupRelation($k, $v);
 			}
 		}
-		
+
 		// Test getters
 		$functionname = 'get' . ucfirst($name);
 		if(method_exists($this, $functionname)) {
 			return $this->$functionname();
 		}
-		
+
 		// Test columns
 		if(isset($this->_data[$name])) {
 			return $this->_data[$name];
 		}
-		
+
 		// Nothing found
 		return null;
 	}
-	
+
 	public function __set($name, $value)
 	{
 		// Test setters
@@ -337,7 +337,7 @@ class Model
 			$this->$functionname($value);
 			return;
 		}
-		
+
 		// Test columns
 		if(!isset($this->_data[$name]) || $this->_data[$name] !== $value) {
 			$this->_data[$name] = $value;
@@ -346,18 +346,18 @@ class Model
 			}
 		}
 	}
-	
+
 	public function __isset($name)
 	{
 		return isset($this->_data[$name]);
 	}
-	
+
 	public function loadRow($row)
 	{
 		$this->_data = $row;
 		$this->_loaded = true;
 	}
-	
+
 	public function setParameters($params)
 	{
 		global $nf_cfg;
@@ -403,12 +403,12 @@ class Model
 			}
 		}
 	}
-	
+
 	public function setAttributes($params)
 	{
 		$this->setParameters($params);
 	}
-	
+
 	public function validate()
 	{
 		$rules = $this->rules();

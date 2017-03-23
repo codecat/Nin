@@ -6,9 +6,9 @@ class Nin
 	public static $session_prefix = 'nin_';
 	public static $date_format = 'M jS';
 	public static $date_format_year = ', Y';
-	
+
 	public static $current_user = null;
-	
+
 	public static function randomString($n, $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 	{
 		$len = strlen($characters);
@@ -18,7 +18,7 @@ class Nin
 		}
 		return $ret;
 	}
-	
+
 	public static function getsession($key)
 	{
 		$arrkey = Nin::$session_prefix . $key;
@@ -27,32 +27,32 @@ class Nin
 		}
 		return false;
 	}
-	
+
 	public static function setsession($key, $value)
 	{
 		$_SESSION[Nin::$session_prefix . $key] = $value;
 	}
-	
+
 	public static function unsetsession($key)
 	{
 		unset($_SESSION[Nin::$session_prefix . $key]);
 	}
-	
+
 	public static function setuid($uid)
 	{
 		Nin::setsession('user_id', $uid);
 	}
-	
+
 	public static function unsetuid()
 	{
 		Nin::unsetsession('user_id');
 	}
-	
+
 	public static function uid()
 	{
 		return Nin::getsession('user_id');
 	}
-	
+
 	public static function user()
 	{
 		if(Nin::$current_user !== null) {

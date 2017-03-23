@@ -14,7 +14,7 @@ class Log
 		}
 		return $path;
 	}
-	
+
 	public static function write($key, $str)
 	{
 		$path = Log::check(date('Y-m-d') . '.log');
@@ -22,17 +22,17 @@ class Log
 		fwrite($fp, '[' . date('Y-m-d H:i:s') . '][' . strtoupper($key) . '] ' . $str . "\n");
 		fclose($fp);
 	}
-	
+
 	public static function info($str)
 	{
 		Log::write('info', $str);
 	}
-	
+
 	public static function error($str)
 	{
 		Log::write('error', $str);
 	}
-	
+
 	public static function warning($str)
 	{
 		Log::write('warning', $str);

@@ -13,7 +13,7 @@ class LengthValidator extends Validator
 					$allok = false;
 				}
 			}
-			
+
 			if(isset($this->arguments['max'])) {
 				$max = intval($this->arguments['max']);
 				if(strlen($this->model->$key) > $max) {
