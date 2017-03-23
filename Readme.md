@@ -10,13 +10,13 @@ Nin uses an MVC system, where `Model` and `Controller` are the key classes, and 
 You can use the Nin CLI interface with `nfc.php`. It allows you to create a simple skeleton website, with a default layout using [Foundation](http://foundation.zurb.com/).
 
 ```
-$ git clone https://github.com/AngeloG/Nin.git
+$ git clone https://github.com/codecat/Nin.git
 $ cd Nin
 $ ./nfc.php create /var/www/html
 ```
 
 # Using Composer
-Quickly get started with Nin by installing the dependency via Composer. You can find the package [on Packagist](https://packagist.org/packages/angelog/nin). Install it by running:
+Quickly get started with Nin by installing the dependency via Composer. You can find the package [on Packagist](https://packagist.org/packages/codecat/nin). Install it by running:
 
 ```
 $ composer require angelog/nin

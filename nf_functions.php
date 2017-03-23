@@ -9,13 +9,13 @@ function nf_begin($dir, $options = array())
 	global $nf_dir;
 	global $nf_uri;
 	global $nf_cfg;
-	
+
 	if(session_status() == PHP_SESSION_NONE) {
 		session_start();
 	}
-	
+
 	nf_init_config($options);
-	
+
 	$nf_www_dir = $dir;
 	$nf_dir = __DIR__;
 
@@ -41,9 +41,9 @@ function nf_begin($dir, $options = array())
 		echo ' ' . nf_t('To ignore this warning and stop this behavior, set \'no_htaccess\' in the config to true.');
 		return;
 	}
-	
+
 	nf_init_autoloader();
-	
+
 	if($nf_cfg['sql']['enabled']) {
 		if(!nf_sql_connect(
 			$nf_cfg['sql']['hostname'],
@@ -54,18 +54,18 @@ function nf_begin($dir, $options = array())
 			nf_error(7);
 		}
 	}
-	
+
 	$nf_uri = $_SERVER['REQUEST_URI'];
 	$uri_part = strstr($nf_uri, '?', true);
 	if($uri_part) {
 		$nf_uri = $uri_part;
 	}
-	
+
 	$rethookuri = nf_hook('uri', array($nf_uri));
 	if($rethookuri !== null) {
 		$nf_uri = $rethookuri;
 	}
-	
+
 	nf_handle_uri($nf_uri);
 }
 
@@ -122,13 +122,13 @@ function nf_autoload_find($path, $classname)
 {
 	$test = $path . $classname . '.php';
 	if(file_exists($test)) return $test;
-	
+
 	$test = $path . ucfirst($classname) . '.php';
 	if(file_exists($test)) return $test;
-	
+
 	$test = $path . strtolower($classname) . '.php';
 	if(file_exists($test)) return $test;
-	
+
 	return false;
 }
 
@@ -152,7 +152,7 @@ function nf_autoload($classname)
 		$paths[] = $pathStart . $parse[$i] . '/';
 		$pathStart .= $parse[$i] . '/';
 	}
-	
+
 	// Look for models
 	foreach($paths as $module) {
 		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . $module, $classname);
@@ -161,7 +161,7 @@ function nf_autoload($classname)
 			return;
 		}
 	}
-	
+
 	// Look for components
 	foreach($paths as $module) {
 		$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['components'] . $module, $classname);
@@ -170,7 +170,7 @@ function nf_autoload($classname)
 			return;
 		}
 	}
-	
+
 	// Look for internal validators
 	$filename = nf_autoload_find($nf_dir . '/classes/validators/', $classname);
 	if($filename !== false) {
@@ -186,7 +186,7 @@ function nf_autoload($classname)
 			return;
 		}
 	}
-	
+
 	// If couldn't be found at all
 	//nf_error(8, $classname);
 }
@@ -241,7 +241,7 @@ function nf_error($num, $details = '')
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
 	}
-	
+
 	//TODO: Deprecate this and use nf_hook() for this!
 	if($nf_cfg['error']['hook'] !== false) {
 		$hook = $nf_cfg['error']['hook'];
@@ -260,13 +260,13 @@ function nf_error_routing($num, $details = '')
 	global $nf_cfg;
 	global $nf_uri;
 	global $nf_uri_fallback;
-	
+
 	if($nf_uri_fallback) {
 		nf_error($num, $details);
 		return;
 	}
 	$nf_uri_fallback = true;
-	
+
 	if(!$nf_cfg['routing']['preferRules']) {
 		$uri = nf_handle_routing_rules($nf_uri);
 		if($uri !== $nf_uri) {
@@ -275,7 +275,7 @@ function nf_error_routing($num, $details = '')
 			return;
 		}
 	}
-	
+
 	nf_error($num, $details);
 }
 
@@ -387,28 +387,28 @@ function nf_handle_uri($uri)
 	global $nf_uri;
 	global $nf_www_dir;
 	global $nf_module;
-	
+
 	$nf_uri = $uri = substr($uri, strlen($nf_cfg['paths']['base'])-1);
 	if($nf_cfg['routing']['preferRules']) {
 		$nf_uri = $uri = nf_handle_routing_rules($uri);
 	}
-	
+
 	$parts = array();
 	$token = strtok($uri, '/');
 	while($token !== false) {
 		$parts[] = $token;
 		$token = strtok('/');
 	}
-	
+
 	$module = '/';
 	$controller = $nf_cfg['index']['controller'];
 	$action = $nf_cfg['index']['action'];
-	
+
 	$partcount = count($parts);
 
 	for($i=0; $i<$partcount; $i++) {
 		$part = $parts[$i];
-		
+
 		// Check if the part is a folder (that means there's a module)
 		if(is_dir($nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $module . $part)) {
 			// It is, so append this to the module path
@@ -425,7 +425,7 @@ function nf_handle_uri($uri)
 		// Now get ready to begin the page
 		break;
 	}
-	
+
 	$nf_module = $module;
 	nf_begin_page($controller, $action, $parts);
 }
@@ -438,7 +438,7 @@ function nf_handle_uri($uri)
 function nf_handle_routing_rules($uri)
 {
 	global $nf_cfg;
-	
+
 	foreach($nf_cfg['routing']['rules'] as $regex => $route) {
 		$matches = false;
 		if(preg_match($regex, $uri, $matches)) {
@@ -459,7 +459,7 @@ function nf_handle_routing_rules($uri)
 			return $ret;
 		}
 	}
-	
+
 	return $uri;
 }
 
@@ -524,14 +524,14 @@ function nf_begin_page($controllername, $actionname, $parts)
 			return;
 		}
 	}
-	
+
 	if(!class_exists($classname, false)) {
 		nf_error_routing(4, $classname);
 		return;
 	}
 	$controller = new $classname;
 	$controller->uri_parts = $parts;
-	
+
 	$functionname = 'action' . ucfirst($actionname);
 
 	$retbeforehookmod = false;
@@ -555,10 +555,10 @@ function nf_begin_page($controllername, $actionname, $parts)
 		nf_error_routing(5, $functionname);
 		return;
 	}
-	
+
 	$r = new ReflectionClass($classname);
 	$m = $r->getMethod($functionname);
-	
+
 	$params = $m->getParameters();
 	$args = array();
 	foreach($params as $param) {
@@ -629,14 +629,14 @@ function nf_sql_encode($o)
 	if(is_string($o)) {
 		return "'" . nf_sql_escape($o) . "'";
 	}
-	
+
 	if(is_numeric($o)) {
 		if(is_float($o)) {
 			return str_replace(',', '.', strval(floatval($o)));
 		}
 		return intval($o);
 	}
-	
+
 	return $o;
 }
 
@@ -675,4 +675,4 @@ function nf_xcopy($src, $dst, $ignore = array())
 		}
 	}
 	closedir($dir);
-} 
+}

@@ -12,26 +12,26 @@ $nf_cfg = array(
 		'i18n' => 'i18n',
 		'validators' => 'validators',
 	),
-	
+
 	// Routing configuration
 	'routing' => array(
 		'preferRules' => true,
 		'rules' => array()
 	),
-	
+
 	// Index pages
 	'index' => array(
 		'controller' => 'index',
 		'action' => 'index'
 	),
-	
+
 	// Validation
 	'validation' => array(
 		'regex_controllers' => '/^[a-z0-9\\-_]+$/',
 		'regex_actions' => '/^[a-z0-9_]+$/',
 		'parameters_exclusive' => true,
 	),
-	
+
 	// SQL information
 	'sql' => array(
 		'enabled' => false,
