@@ -82,7 +82,14 @@ $nf_i18n = array();
 
 // Include dependencies
 include('nf_define.php');
-include('nf_functions.php');
+include('functions/autoloader.php');
+include('functions/begin.php');
+include('functions/error.php');
+include('functions/routing.php');
+include('functions/hook.php');
+include('functions/i18n.php');
+include('functions/param.php');
+include('functions/common.php');
 include('classes/controller.php');
 include('classes/model.php');
 include('classes/nin.php');
