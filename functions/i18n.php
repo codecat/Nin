@@ -1,5 +1,8 @@
 <?php
 
+// Internationalization cache
+$nf_i18n = array();
+
 /**
  * Loads the language files for the currently active language.
  */

@@ -1,5 +1,8 @@
 <?php
 
+// Runtime SQL variables
+$nf_sql = false;
+
 /**
  * Connect to the SQL database.
  */

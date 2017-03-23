@@ -74,12 +74,6 @@ $nf_uri_fallback = false;
 $nf_module = '';
 $nf_current_controllername = '';
 
-// Runtime SQL variables
-$nf_sql = false;
-
-// Internationalization cache
-$nf_i18n = array();
-
 // Include dependencies
 include('functions/define.php');
 include('functions/autoloader.php');
