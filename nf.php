@@ -78,6 +78,7 @@ $nf_current_controllername = '';
 // Include dependencies
 include('functions/define.php');
 include('functions/autoloader.php');
+include('functions/assets.php');
 include('functions/begin.php');
 include('functions/error.php');
 include('functions/routing.php');
