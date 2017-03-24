@@ -1,7 +1,8 @@
 <?php
+
 /**
-* Return the URI for the defined assets path
-* File can also be passed to get full URI to it
+* Return the URI for the defined assets path.
+* File can also be passed to get full URI to it.
 */
 function nf_get_asset_uri($file = null) {
 	global $nf_cfg;
