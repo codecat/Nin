@@ -1,4 +1,5 @@
-# What is Nin?
+![](resources/Logo.png)
+
 Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. It stands for "No It's Not", a play on Yii's "Yes It Is".
 
 Nin makes a few promises:
