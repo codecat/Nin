@@ -86,7 +86,7 @@ function nf_php_exception($e)
 	};
 
 	$sl = function($i, $func, $args, $fn, $l) use($gl) {
-		echo '<tr style="background: #fdd;"><td style="border-top: 1px solid #faa;">' . $i . ' - ';
+		echo '<tr style="background: #fdd;"><td style="border-top: 1px solid #faa;">';
 		if($func) {
 			echo htmlentities($func) . '(';
 			for($j = 0; $j < count($args); $j++) {
