@@ -83,6 +83,7 @@ include('functions/routing.php');
 include('functions/hook.php');
 include('functions/i18n.php');
 include('functions/param.php');
+include('functions/sql.php');
 include('functions/common.php');
 include('classes/controller.php');
 include('classes/model.php');
