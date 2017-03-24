@@ -11,6 +11,7 @@ $nf_cfg = array(
 		'components' => 'components',
 		'i18n' => 'i18n',
 		'validators' => 'validators',
+		'assets' => 'assets',
 	),
 
 	// Routing configuration
@@ -77,6 +78,7 @@ $nf_current_controllername = '';
 // Include dependencies
 include('functions/define.php');
 include('functions/autoloader.php');
+include('functions/assets.php');
 include('functions/begin.php');
 include('functions/error.php');
 include('functions/routing.php');
