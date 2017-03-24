@@ -110,6 +110,10 @@ function nf_begin_page($controllername, $actionname, $parts)
 	}
 
 	$folder = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $nf_module;
+	if(!file_exists($folder)) {
+		return;
+	}
+
 	$filename = $folder . $controllername . '.php';
 	$classname = ucfirst($controllername) . 'Controller';
 	if(file_exists($filename)) {
