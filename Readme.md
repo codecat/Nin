@@ -1,8 +1,17 @@
 # What is Nin?
 Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. It stands for "No It's Not", a play on Yii's "Yes It Is".
 
+Nin makes a few promises:
+
+* **Every feature is optional.** You don't need to use views. You don't need to use models. You don't even need to use the controller or routing system.
+* **Sensible configuration defaults.** As a result of the first promise, the entire configuration should make sense to allow for a minimalistic approach in the most common environments.
+* **The API is straight forward.** Everything in the API should be self-explanatory and obvious.
+* **Minimal amount of code required.** To work with the API, there shouldn't be too many lines of code. This helps the minimalism and simplicity of the system.
+
+Anything that breaks these promises should be considered a bug.
+
 # How does it work?
-By relying on PHP 5.4 features (HHVM also works), we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
+By relying on moden PHP features, we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
 
 Nin uses an MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
 
