@@ -1,8 +1,6 @@
 ![](resources/Logo.png)
 
-Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. It stands for "No It's Not", a play on Yii's "Yes It Is".
-
-Nin makes a few promises:
+Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. It stands for "No It's Not", a play on Yii's "Yes It Is". Nin makes a few promises:
 
 * **Every feature is optional.** You don't need to use views. You don't need to use models. You don't even need to use the controller or routing system.
 * **Sensible configuration defaults.** As a result of the first promise, the entire configuration should make sense to allow for a minimalistic approach in the most common environments.
