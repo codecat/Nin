@@ -29,7 +29,7 @@ function nf_begin($dir, $options = array())
 		error_reporting(E_ALL);
 	}
 
-	if(!isset($nf_cfg['no_htaccess']) && !file_exists($dir . '/.htaccess')) {
+	if(!isset($nf_cfg['no_htaccess']) && file_exists($dir . '/controllers') && !file_exists($dir . '/.htaccess')) {
 		echo '<b>' . nf_t('Warning:') . '</b> ' . nf_t('.htaccess does not exist.');
 		$ok = copy(__DIR__ . '/.htaccess', $dir . '/.htaccess');
 		if($ok) {
