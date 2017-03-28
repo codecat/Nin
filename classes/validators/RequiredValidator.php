@@ -1,5 +1,9 @@
 <?php
 
+namespace Nin\Validators;
+
+use Nin\Validator;
+
 class RequiredValidator extends Validator
 {
 	public function validate()

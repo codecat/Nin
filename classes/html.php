@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 class Html
 {
 	public static function encode($str)

@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 class Model
 {
 	public $_data = array();

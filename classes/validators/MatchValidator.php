@@ -1,5 +1,9 @@
 <?php
 
+namespace Nin\Validators;
+
+use Nin\Validator;
+
 class MatchValidator extends Validator
 {
 	public function validate()

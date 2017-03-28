@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 class Nin
 {
 	public static $user_class = 'User';

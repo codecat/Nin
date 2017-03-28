@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 class Controller
 {
 	public $layout = 'views/layout.php';

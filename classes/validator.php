@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 class Validator
 {
 	public $model = null;

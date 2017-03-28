@@ -1,5 +1,7 @@
 <?php
 
+use Nin\Nin;
+
 // Internationalization cache
 $nf_i18n = array();
 

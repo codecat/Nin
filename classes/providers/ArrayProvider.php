@@ -1,5 +1,9 @@
 <?php
 
+namespace Nin\Providers;
+
+use Nin\Provider;
+
 class ArrayProvider extends Provider
 {
 	public $array = array();

@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 abstract class Provider
 {
 	public abstract function begin();

@@ -1,5 +1,9 @@
 <?php
 
+namespace Nin\Providers;
+
+use Nin\Provider;
+
 class QueryProvider extends Provider
 {
 	public $class;

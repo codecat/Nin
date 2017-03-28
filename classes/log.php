@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 class Log
 {
 	public static function check($fnm)

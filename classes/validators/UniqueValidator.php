@@ -1,5 +1,9 @@
 <?php
 
+namespace Nin\Validators;
+
+use Nin\Validator;
+
 class UniqueValidator extends Validator
 {
 	public function validate()

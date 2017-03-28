@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 class Cache
 {
 	public static $skip = false;

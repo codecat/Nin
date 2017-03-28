@@ -1,5 +1,7 @@
 <?php
 
+namespace Nin;
+
 class ListView
 {
 	public $provider = null;
