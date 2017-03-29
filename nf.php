@@ -87,6 +87,7 @@ include('functions/i18n.php');
 include('functions/param.php');
 include('functions/sql.php');
 include('functions/common.php');
+
 include('classes/Controller.php');
 include('classes/Model.php');
 include('classes/Nin.php');
@@ -95,6 +96,16 @@ include('classes/Validator.php');
 include('classes/Log.php');
 include('classes/Cache.php');
 include('classes/ListView.php');
+
 include('classes/Provider.php');
 include('classes/providers/ArrayProvider.php');
 include('classes/providers/QueryProvider.php');
+
+include('classes/database/QueryBuilder.php');
+
+function nf_begin($dir, $options)
+{
+	global $nf_dir;
+	$nf_dir = __DIR__;
+	nf_begin_internal($dir, $options);
+}

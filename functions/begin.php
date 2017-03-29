@@ -3,10 +3,9 @@
 /*
  * Begin the framework.
  */
-function nf_begin($dir, $options = array())
+function nf_begin_internal($dir, $options = array())
 {
 	global $nf_www_dir;
-	global $nf_dir;
 	global $nf_uri;
 	global $nf_cfg;
 
@@ -17,7 +16,6 @@ function nf_begin($dir, $options = array())
 	nf_init_config($options);
 
 	$nf_www_dir = $dir;
-	$nf_dir = __DIR__;
 
 	nf_i18n_init();
 
