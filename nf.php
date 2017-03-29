@@ -98,10 +98,10 @@ include('classes/Cache.php');
 include('classes/ListView.php');
 
 include('classes/Provider.php');
-include('classes/providers/ArrayProvider.php');
-include('classes/providers/QueryProvider.php');
+include('classes/Providers/ArrayProvider.php');
+include('classes/Providers/QueryProvider.php');
 
-include('classes/database/QueryBuilder.php');
+include('classes/Database/QueryBuilder.php');
 
 function nf_begin($dir, $options)
 {
