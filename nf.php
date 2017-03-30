@@ -103,7 +103,7 @@ include('classes/Providers/QueryProvider.php');
 
 include('classes/Database/QueryBuilder.php');
 
-function nf_begin($dir, $options)
+function nf_begin($dir, $options = array())
 {
 	global $nf_dir;
 	$nf_dir = __DIR__;

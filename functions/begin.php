@@ -3,7 +3,7 @@
 /*
  * Begin the framework.
  */
-function nf_begin_internal($dir, $options = array())
+function nf_begin_internal($dir, $options)
 {
 	global $nf_www_dir;
 	global $nf_uri;
