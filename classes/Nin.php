@@ -21,7 +21,7 @@ class Nin
 		return $ret;
 	}
 
-	public static function getsession($key)
+	public static function getSession($key)
 	{
 		$arrkey = Nin::$session_prefix . $key;
 		if(isset($_SESSION[$arrkey])) {
@@ -30,29 +30,29 @@ class Nin
 		return false;
 	}
 
-	public static function setsession($key, $value)
+	public static function setSession($key, $value)
 	{
 		$_SESSION[Nin::$session_prefix . $key] = $value;
 	}
 
-	public static function unsetsession($key)
+	public static function unsetSession($key)
 	{
 		unset($_SESSION[Nin::$session_prefix . $key]);
 	}
 
 	public static function setuid($uid)
 	{
-		Nin::setsession('user_id', $uid);
+		Nin::setSession('user_id', $uid);
 	}
 
 	public static function unsetuid()
 	{
-		Nin::unsetsession('user_id');
+		Nin::unsetSession('user_id');
 	}
 
 	public static function uid()
 	{
-		return Nin::getsession('user_id');
+		return Nin::getSession('user_id');
 	}
 
 	public static function user()
@@ -76,7 +76,7 @@ class Nin
 
 		foreach($nf_cfg['i18n']['languages'] as $lang) {
 			if($lang == $language) {
-				Nin::setsession('language', $language);
+				Nin::setSession('language', $language);
 				return true;
 			}
 		}
@@ -86,7 +86,7 @@ class Nin
 
 	public static function language()
 	{
-		$ret = Nin::getsession('language');
+		$ret = Nin::getSession('language');
 		if($ret !== false) {
 			return $ret;
 		}
