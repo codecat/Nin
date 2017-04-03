@@ -8,6 +8,7 @@ abstract class QueryBuilder
 	protected $method;
 	protected $where;
 	protected $set;
+	protected $insertValues;
 
 	public function __construct($table)
 	{
@@ -71,7 +72,7 @@ abstract class QueryBuilder
 
 	public function values($arr)
 	{
-		//TODO
+		$this->insertValues[] = $arr;
 		return $this;
 	}
 
