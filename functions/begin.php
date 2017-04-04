@@ -30,7 +30,9 @@ function nf_begin_internal($dir, $options)
 		error_reporting(E_ALL);
 	}
 
-	if(!isset($nf_cfg['no_htaccess']) && file_exists($dir . '/controllers') && !file_exists($dir . DIRECTORY_SEPARATOR . '.htaccess')) {
+	$using_controllers = file_exists($dir . DIRECTORY_SEPARATOR . $nf_cfg['paths']['controllers']);
+	$has_htaccess = file_exists($dir . DIRECTORY_SEPARATOR . '.htaccess');
+	if(!isset($nf_cfg['no_htaccess']) && $using_controllers && !$has_htaccess) {
 		echo '<b>' . nf_t('Warning:') . '</b> ' . nf_t('.htaccess does not exist.');
 		$ok = copy($nf_dir . DIRECTORY_SEPARATOR . '.htaccess', $dir . DIRECTORY_SEPARATOR . '.htaccess');
 		if($ok) {

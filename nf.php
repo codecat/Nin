@@ -12,6 +12,7 @@ $nf_cfg = array(
 		'i18n' => 'i18n',
 		'validators' => 'validators',
 		'assets' => 'assets',
+		'logs' => 'logs',
 	),
 
 	// Routing configuration

@@ -7,10 +7,14 @@ class Log
 	public static function check($fnm)
 	{
 		global $nf_www_dir;
-		if(!file_exists($nf_www_dir . '/logs')) {
-			mkdir($nf_www_dir . '/logs');
+		global $nf_cfg;
+
+		$logs_path = $nf_www_dir . DIRECTORY_SEPARATOR . $nf_cfg['paths']['logs'];
+
+		if(!file_exists($logs_path)) {
+			mkdir($logs_path);
 		}
-		$path = $nf_www_dir . '/logs/' . $fnm;
+		$path = $logs_path . DIRECTORY_SEPARATOR . $fnm;
 		if(!file_exists($path)) {
 			touch($path);
 		}
