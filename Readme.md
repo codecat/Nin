@@ -12,30 +12,28 @@ Anything that breaks these promises should be considered a bug.
 # How does it work?
 By relying on moden PHP features, we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
 
-Nin uses an MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
+Nin can be used in various ways. One of those ways is via its MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
 
-# Quick start
-You can use the Nin CLI interface with `nfc.php`. It allows you to create a simple skeleton website, with a default layout using [Foundation](http://foundation.zurb.com/).
-
-```
-$ git clone https://github.com/codecat/Nin.git
-$ cd Nin
-$ ./nfc.php create /var/www/html
-```
-
-# Using Composer
+# Getting started
 Quickly get started with Nin by installing the dependency via Composer. You can find the package [on Packagist](https://packagist.org/packages/codecat/nin). Install it by running:
 
 ```
-$ composer require angelog/nin
-$ cp vendor/angelog/nin/.htaccess .
+$ composer require codecat/nin
+```
+
+You can also just download a release from Github and include Nin from somewhere else if you prefer.
+
+If you plan on using Nin's routing system, make sure you create the necessary `.htaccess` file:
+
+```
+$ cp vendor/codecat/nin/.htaccess .
 ```
 
 Then create `index.php`:
 
 ```PHP
 <?php
-include('vendor/angelog/nin/nf.php');
+include('vendor/codecat/nin/nf.php');
 nf_begin(__DIR__);
 ```
 
@@ -47,12 +45,36 @@ nf_begin(__DIR__, array(
 ));
 ```
 
-# A very basic example
+# The most minimalistic example
+After calling `nf_begin`, you're all set. Since every feature is optional, you can make a page with only a single `index.php` file. For example, to display a list of posts from a table in a MySQL database, your php file could be as small as this:
+
+```PHP
+<?php
+include('vendor/codecat/nin/nf.php');
+nf_begin(__DIR__, array(
+  'mysql' => array(
+    'username' => 'root',
+    'database' => 'nin'
+  )
+));
+
+class Post extends Nin\Model {
+  public static function tablename() { return 'posts'; }
+}
+
+foreach(Post::findAll() as $post) {
+  echo '<b>' . Nin\Html::encode($post->User) . '</b>: ' . Nin\Html::encode($post->Message) . '<br>';
+}
+```
+
+# Using controllers
+**NOTE:** Anything below here in this readme is a WIP and is pending a rewrite.
+
 Let's say you own `example.com` and you want to put a Nin site on there. Just clone Nin anywhere on the server, and create an `index.php` with the following lines:
 
 ```PHP
 <?php
-include('/var/www_nin/nf.php');
+include('vendor/codecat/nin/nf.php');
 nf_begin(__DIR__);
 ```
 
