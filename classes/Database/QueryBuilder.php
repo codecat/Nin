@@ -4,14 +4,16 @@ namespace Nin\Database;
 
 abstract class QueryBuilder
 {
+	protected $context;
 	protected $table = '';
 	protected $method;
 	protected $where;
 	protected $set;
 	protected $insertValues;
 
-	public function __construct($table)
+	public function __construct($context, $table)
 	{
+		$this->context = $context;
 		$this->table = $table;
 		$this->clear();
 	}
@@ -33,6 +35,8 @@ abstract class QueryBuilder
 	public function update() { $this->setMethod('UPDATE'); return $this; }
 	public function insert() { $this->setMethod('INSERT'); return $this; }
 	public function delete() { $this->setMethod('DELETE'); return $this; }
+	public function count() { $this->setMethod('COUNT'); return $this; }
+	public function findpk() { $this->setMethod('FINDPK'); return $this; }
 
 	public function whereAssoc($arr)
 	{
@@ -59,7 +63,7 @@ abstract class QueryBuilder
 		}
 		return $this;
 	}
-	public function set($key, $value)
+	public function set($key, $value = null)
 	{
 		if(is_array($key)) {
 			return $this->setAssoc($key);
@@ -74,6 +78,21 @@ abstract class QueryBuilder
 	{
 		$this->insertValues[] = $arr;
 		return $this;
+	}
+
+	public function execute()
+	{
+		return $this->context->query($this->build());
+	}
+
+	public function executeCount()
+	{
+		$res = $this->context->query($this->build());
+		if($res === false) {
+			return 0;
+		}
+		$row = $res->fetch_assoc();
+		return intval($row['c']);
 	}
 
 	public abstract function build();

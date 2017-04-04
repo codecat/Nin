@@ -6,6 +6,20 @@ use Nin\Database\QueryBuilder;
 
 class MySQL extends QueryBuilder
 {
+	private function encode($o)
+	{
+		if(is_string($o)) {
+			return "'" . $this->context->real_escape_string($o) . "'";
+		} elseif(is_float($o)) {
+			//TODO: This comma to period should be autodetected based on mysql server locale (how?)
+			return str_replace(',', '.', strval(floatval($o)));
+		} elseif(is_numeric($o)) {
+			return intval($o);
+		}
+
+		return $o;
+	}
+
 	private function buildWhere()
 	{
 		if(count($this->where) == 0) {
@@ -28,7 +42,7 @@ class MySQL extends QueryBuilder
 			if($i > 0) {
 				$ret .= ' AND';
 			}
-			$ret .= ' \'' . $key . '\'=' . nf_sql_encode($value);
+			$ret .= ' `' . $key . '`=' . $this->encode($value);
 		}
 
 		return $ret;
@@ -52,7 +66,7 @@ class MySQL extends QueryBuilder
 			if($i > 0) {
 				$query .= ',';
 			}
-			$query .= ' \'' . $set[0] . '\'=' . nf_sql_encode($set[1]);
+			$query .= ' \'' . $set[0] . '\'=' . $this->encode($set[1]);
 		}
 		$query .= $this->buildWhere();
 		return $query . ';';
@@ -88,7 +102,7 @@ class MySQL extends QueryBuilder
 				if($j > 0) {
 					$query .= ',';
 				}
-				$query .= nf_sql_encode($vals[$j]);
+				$query .= $this->encode($vals[$j]);
 			}
 			$query .= ')';
 		}
@@ -102,6 +116,18 @@ class MySQL extends QueryBuilder
 		return $query . ';';
 	}
 
+	private function buildCount()
+	{
+		$query = 'SELECT COUNT(*) AS c FROM ' . $this->table;
+		$query .= $this->buildWhere();
+		return $query . ';';
+	}
+
+	private function buildFindPK()
+	{
+		return 'SHOW KEYS FROM ' . $this->table . ' WHERE Key_name = \'PRIMARY\';';
+	}
+
 	public function build()
 	{
 		if($this->method == '') {
@@ -110,12 +136,16 @@ class MySQL extends QueryBuilder
 
 		if($this->method == 'SELECT') {
 			return $this->buildSelect();
-		} else if ($this->method == 'UPDATE') {
+		} elseif($this->method == 'UPDATE') {
 			return $this->buildUpdate();
-		} else if ($this->method == 'INSERT') {
+		} elseif($this->method == 'INSERT') {
 			return $this->buildInsert();
-		} else if ($this->method == 'DELETE') {
+		} elseif($this->method == 'DELETE') {
 			return $this->buildDelete();
+		} elseif($this->method == 'COUNT') {
+			return $this->buildCount();
+		} elseif($this->method == 'FINDPK') {
+			return $this->buildFindPK();
 		}
 
 		return '';

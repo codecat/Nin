@@ -20,21 +20,15 @@ class Model
 		return array();
 	}
 
-	public static function queryTablename($name)
-	{
-		if (strstr($name, '.')) {
-			return $name;
-		}
-		return '`' . $name . '`';
-	}
-
 	public static function findPrimaryKey()
 	{
 		$tablename = static::tablename();
-		$res = nf_sql_query('SHOW KEYS FROM ' . static::queryTablename($tablename) . ' WHERE Key_name = \'PRIMARY\'');
-		$row = $res->fetch_assoc();
-		if($row !== null) {
-			return $row['Column_name'];
+		$res = nf_db_beginbuild($tablename)->findpk()->execute();
+		if($res !== false) {
+			$row = $res->fetch_assoc();
+			if($row) {
+				return $row['Column_name'];
+			}
 		}
 		nf_error(9, $tablename);
 		return false;
@@ -43,83 +37,68 @@ class Model
 	public static function findByPk($pk)
 	{
 		$class = get_called_class();
-		return $class::findByQuery('SELECT * FROM ' . static::queryTablename(static::tablename()) . ' WHERE `' . static::findPrimaryKey() . '`=' . nf_sql_encode($pk));
+		return $class::findByResult(
+			nf_db_beginbuild(static::tablename())
+				->select()
+				->where(static::findPrimaryKey(), $pk)
+				->execute()
+		);
 	}
 
 	public static function findByAttributes($attributes)
 	{
 		$class = get_called_class();
-		$query = 'SELECT * FROM ' . static::queryTablename(static::tablename()) . ' ';
-		if(count($attributes) > 0) {
-			$query .= 'WHERE ';
-			$firstAnd = false;
-			foreach($attributes as $k => $v) {
-				if($firstAnd) {
-					$query .= 'AND ';
-				}
-				$firstAnd = true;
-				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
-			}
-		}
-		$query .= 'LIMIT 0,1';
-		return $class::findByQuery($query);
+		return $class::findByResult(
+			nf_db_beginbuild(static::tablename())
+				->select()
+				->where($attributes)
+				->execute()
+		);
 	}
 
 	public static function findAllByAttributes($attributes, $options = array())
 	{
 		$class = get_called_class();
-		$query = 'SELECT * FROM ' . static::queryTablename(static::tablename()) . ' ';
-		if(count($attributes) > 0) {
-			$query .= 'WHERE ';
-			$firstAnd = false;
-			foreach($attributes as $k => $v) {
-				if($firstAnd) {
-					$query .= 'AND ';
-				}
-				$firstAnd = true;
-				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
-			}
-		}
-		$query .= static::queryOptions($options);
-		return $class::findAllByQuery($query, false, $options);
+		return $class::findAllByResult(
+			static::queryOptions($options,
+				nf_db_beginbuild(static::tablename())
+					->select()
+					->where($attributes)
+			)->execute()
+		);
 	}
 
 	public static function countByAttributes($attributes)
 	{
-		$class = get_called_class();
-		$query = 'SELECT COUNT(*) AS c FROM ' . static::queryTablename(static::tablename()) . ' ';
-		if(count($attributes) > 0) {
-			$query .= 'WHERE ';
-			$firstAnd = false;
-			foreach($attributes as $k => $v) {
-				if($firstAnd) {
-					$query .= 'AND ';
-				}
-				$firstAnd = true;
-				$query .= '`' . $k . '`=' . nf_sql_encode($v) . ' ';
-			}
-		}
-		return $class::countByQuery($query);
+		return nf_db_beginbuild(static::tablename())
+			->count()
+			->where($attributes)
+			->executeCount();
 	}
 
 	public static function findAll($options = array())
 	{
 		$class = get_called_class();
-		$query = 'SELECT * FROM ' . static::queryTablename(static::tablename());
-		$query .= static::queryOptions($options);
-		return $class::findAllByQuery($query, false, $options);
+		return $class::findAllByResult(
+			static::queryOptions($options,
+				nf_db_beginbuild(static::tablename())
+					->select()
+			)->execute()
+		);
 	}
 
-	public static function queryOptions($options)
+	public static function queryOptions($options, $builder)
 	{
 		if(count($options) == 0) {
-			return '';
+			return $builder;
 		}
-		$ret = '';
 		if(isset($options['group'])) {
-			$ret .= ' GROUP BY `' . $options['group'] . '`';
+			//TODO: Query builder group
+			//$ret .= ' GROUP BY `' . $options['group'] . '`';
 		}
 		if(isset($options['order'])) {
+			//TODO: Query builder orderby
+			/*
 			$orderby = '';
 			if(isset($options['orderby'])) {
 				$orderby = $options['orderby'];
@@ -127,71 +106,50 @@ class Model
 				$orderby = static::findPrimaryKey();
 			}
 			$ret .= ' ORDER BY `' . $orderby . '` ' . strtoupper($options['order']);
+			*/
 		}
 		if(isset($options['limit'])) {
+			//TODO: Query builder limit
+			/*
 			$l = $options['limit'];
 			if(is_int($l)) {
 				$ret .= ' LIMIT 0,' . $l;
 			} elseif(is_array($l)) {
 				$ret .= ' LIMIT ' . intval($l[0]) . ',' . intval($l[1]);
 			}
+			*/
 		}
-		return $ret;
+		return $builder;
 	}
 
-	public static function findByQuery($query, $params = false)
+	public static function findByResult($res)
 	{
-		$q = $query;
-		if($params !== false) {
-			foreach($params as $k => $v) {
-				$q = str_replace($k, nf_sql_encode($v), $q);
-			}
+		if($res === false) {
+			return false;
 		}
-		$class = get_called_class();
-		$res = nf_sql_query($q);
-		if($res !== false) {
-			$row = $res->fetch_assoc();
-			if($row) {
-				$ret = new $class();
-				$ret->loadRow($row);
-				return $ret;
-			}
-		}
-		return false;
-	}
-
-	public static function findAllByQuery($query, $params = false, $options = array())
-	{
-		$q = $query;
-		if($params !== false) {
-			foreach($params as $k => $v) {
-				$q = str_replace($k, nf_sql_encode($v), $q);
-			}
-		}
-		$class = get_called_class();
-		$res = nf_sql_query($q);
-		$ret = array();
-		if($res !== false) {
-			while($row = $res->fetch_assoc()) {
-				$obj = new $class();
-				$obj->loadRow($row);
-				$ret[] = $obj;
-			}
-		}
-		return $ret;
-	}
-
-	public static function countByQuery($query, $params = false)
-	{
-		$q = $query;
-		if($params !== false) {
-			foreach($params as $k => $v) {
-				$q = str_replace($k, nf_sql_encode($v), $q);
-			}
-		}
-		$res = nf_sql_query($q);
 		$row = $res->fetch_assoc();
-		return intval($row['c']);
+		if(!$row) {
+			return false;
+		}
+		$class = get_called_class();
+		$ret = new $class();
+		$ret->loadRow($row);
+		return $ret;
+	}
+
+	public static function findAllByResult($res)
+	{
+		if($res === false) {
+			return array();
+		}
+		$class = get_called_class();
+		$ret = array();
+		while($row = $res->fetch_assoc()) {
+			$obj = new $class();
+			$obj->loadRow($row);
+			$ret[] = $obj;
+		}
+		return $ret;
 	}
 
 	public function beforeInsert()
@@ -207,19 +165,12 @@ class Model
 	public function insert()
 	{
 		$this->beforeInsert();
-		$tablename = static::tablename();
-		$pk_col = static::findPrimaryKey();
-		$query = 'INSERT INTO ' . static::queryTablename($tablename) . ' (';
-		$values = '';
-		foreach($this->_data as $k => $v) {
-			$query .= '`' . $k . '`,';
-			$values .= nf_sql_encode($v) . ',';
-		}
-		$query = rtrim($query, ',');
-		$query .= ') VALUES(' . rtrim($values, ',') . ')';
-		$res = nf_sql_query($query);
+		$res = nf_db_beginbuild(static::tablename())
+			->insert()
+			->values($this->_data)
+			->execute();
 		if($res !== false) {
-			$this->_data[$pk_col] = nf_sql_insertid();
+			$this->_data[static::findPrimaryKey()] = $res->insert_id();
 			$this->_loaded = true;
 			$this->afterInsert();
 			return true;
@@ -244,16 +195,12 @@ class Model
 			return true;
 		}
 		$this->beforeSave();
-		$tablename = static::tablename();
-		$query = 'UPDATE ' . static::queryTablename($tablename) . ' SET ';
-		foreach($this->_changed as $k) {
-			$query .= '`' . $k . '`=' . nf_sql_encode($this->_data[$k]) . ',';
-		}
-		$query = rtrim($query, ',');
-		$pk_col = static::findPrimaryKey();
-		$pk = $this->_data[$pk_col];
-		$query .= ' WHERE `' . $pk_col . '`=' . nf_sql_encode($pk);
-		if(nf_sql_query($query) !== false) {
+		$res = nf_db_beginbuild(static::tablename())
+			->udpate()
+			->set($this->_changed)
+			->execute();
+		if($res !== false) {
+			$this->_changed = array();
 			$this->afterSave();
 			return true;
 		}
@@ -265,11 +212,16 @@ class Model
 		if(!$this->_loaded) {
 			return false;
 		}
-		$tablename = static::tablename();
 		$pk_col = static::findPrimaryKey();
-		$pk = $this->_data[$pk_col];
-		$query = 'DELETE FROM ' . static::queryTablename($tablename) . ' WHERE `' . $pk_col . '`=' . nf_sql_encode($pk);
-		return nf_sql_query($query) !== false;
+		$res = nf_db_beginbuild(static::tablename())
+			->delete()
+			->where($pk_col, $this->_data[$pk_col])
+			->execute();
+		if($res !== false) {
+			$this->_loaded = false;
+			return true;
+		}
+		return false;
 	}
 
 	protected function lookupRelation($k, $v)

@@ -34,17 +34,13 @@ $nf_cfg = array(
 		'parameters_exclusive' => true,
 	),
 
-	// SQL information
+	// Database information
 	'db' => array(
-		'enabled' => false,
-		'hostname' => 'localhost',
-		'username' => '',
-		'password' => '',
-		'database' => '',
-		'encoding' => 'utf8'
+		'class' => 'Dummy',
+		'options' => array(),
 	),
 
-	// Error hooking
+	// Error hooking (TODO: Move this to regular hooks)
 	'error' => array(
 		'hook' => false
 	),
@@ -86,7 +82,7 @@ include('functions/routing.php');
 include('functions/hook.php');
 include('functions/i18n.php');
 include('functions/param.php');
-include('functions/sql.php');
+include('functions/db.php');
 include('functions/common.php');
 
 function nf_begin($dir, $options = array())

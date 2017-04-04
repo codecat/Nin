@@ -15,11 +15,12 @@ function nf_error($num, $details = '')
 		case 4: $error = nf_t('Controller class does not have the right name'); break;
 		case 5: $error = nf_t('Action does not exist'); break;
 		case 6: $error = nf_t('Action requires parameters not given'); break;
-		case 7: $error = nf_t('Failed to connect to SQL database'); break;
+		case 7: $error = nf_t('Failed to connect to database'); break;
 		case 8: $error = nf_t('Class could not be found'); break;
 		case 9: $error = nf_t('Table does not have a primary key'); break;
-		case 10: $error = nf_t('SQL query failed'); break;
+		case 10: $error = nf_t('Database query failed'); break;
 		case 11: $error = nf_t('ListView tried to render without a provider'); break;
+		case 12: $error = nf_t('Database context class does not exist'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';

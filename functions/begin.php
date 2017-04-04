@@ -45,16 +45,7 @@ function nf_begin_internal($dir, $options)
 		return;
 	}
 
-	if($nf_cfg['db']['enabled']) {
-		if(!nf_sql_connect(
-			$nf_cfg['db']['hostname'],
-			$nf_cfg['db']['username'],
-			$nf_cfg['db']['password'],
-			$nf_cfg['db']['database'],
-			$nf_cfg['db']['encoding'])) {
-			nf_error(7);
-		}
-	}
+	nf_db_construct();
 
 	$nf_uri = $_SERVER['REQUEST_URI'];
 	$uri_part = strstr($nf_uri, '?', true);
