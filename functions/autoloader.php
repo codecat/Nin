@@ -37,6 +37,11 @@ function nf_autoload($classname)
 	global $nf_dir;
 	global $nf_cfg;
 	global $nf_module;
+	global $nf_using_controllers;
+
+	if(!$nf_using_controllers && $classname == 'Nin\\Controller') {
+		$nf_using_controllers = true;
+	}
 
 	$parse = explode('/', trim($nf_module, '/'));
 	$paths = array('/');

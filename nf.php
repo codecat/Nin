@@ -71,6 +71,7 @@ $nf_uri = '';
 $nf_uri_fallback = false;
 $nf_module = '';
 $nf_current_controllername = '';
+$nf_using_controllers = false;
 
 // Include dependencies
 include('functions/define.php');

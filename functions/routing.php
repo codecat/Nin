@@ -1,6 +1,33 @@
 <?php
 
 /**
+ * Tests whether the .htaccess file exists.
+ * This gets called from nf_handle_uri().
+ */
+function nf_test_htaccess()
+{
+	global $nf_cfg;
+	global $nf_dir;
+	global $nf_www_dir;
+	global $nf_using_controllers;
+
+	$nf_using_controllers = $nf_using_controllers || file_exists($nf_www_dir . DIRECTORY_SEPARATOR . $nf_cfg['paths']['controllers']);
+	$has_htaccess = file_exists($nf_www_dir . DIRECTORY_SEPARATOR . '.htaccess');
+	if(!isset($nf_cfg['no_htaccess']) && $nf_using_controllers && !$has_htaccess) {
+		echo '<b>' . nf_t('Warning:') . '</b> ' . nf_t('.htaccess does not exist.');
+		$ok = copy($nf_dir . DIRECTORY_SEPARATOR . '.htaccess', $nf_www_dir . DIRECTORY_SEPARATOR . '.htaccess');
+		if($ok) {
+			echo ' ' . nf_t('Nin was able to create it automatically for you. Refresh for it to take effect.') . '<br>';
+		} else {
+			echo ' ' . nf_t('Nin was not able to automatically create the file.');
+			echo ' ' . nf_t('Please copy it manually from:') . ' <code>' . $nf_dir . DIRECTORY_SEPARATOR . '.htaccess</code><br>';
+		}
+		echo ' ' . nf_t('To ignore this warning and stop this behavior, set \'no_htaccess\' in the config to true.');
+		return;
+	}
+}
+
+/**
  * Handle the REQUEST_URI (without the URL params) and invoke the controller/action.
  * This gets called from nf_begin().
  */
@@ -10,6 +37,8 @@ function nf_handle_uri($uri)
 	global $nf_uri;
 	global $nf_www_dir;
 	global $nf_module;
+
+	nf_test_htaccess();
 
 	$nf_uri = $uri = substr($uri, strlen($nf_cfg['paths']['base'])-1);
 	if($nf_cfg['routing']['preferRules']) {
@@ -96,6 +125,7 @@ function nf_begin_page($controllername, $actionname, $parts)
 	global $nf_cfg;
 	global $nf_module;
 	global $nf_current_controllername;
+	global $nf_using_controllers;
 
 	if(!preg_match($nf_cfg['validation']['regex_controllers'], $controllername)) {
 		nf_error_routing(1);
@@ -110,7 +140,7 @@ function nf_begin_page($controllername, $actionname, $parts)
 	}
 
 	$folder = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $nf_module;
-	if(!file_exists($folder)) {
+	if(!file_exists($folder) && !$nf_using_controllers) {
 		return;
 	}
 
