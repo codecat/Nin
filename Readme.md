@@ -68,38 +68,47 @@ foreach(Post::findAll() as $post) {
 ```
 
 # Using controllers
-**NOTE:** Anything below here in this readme is a WIP and is pending a rewrite.
+To use controllers, you can either choose to go the above route in a single file, or you can make multiple files for it. First of all, you will need a `.htaccess` or Nginx configuration to start with, or the routing won't work.
 
-Let's say you own `example.com` and you want to put a Nin site on there. Just clone Nin anywhere on the server, and create an `index.php` with the following lines:
-
-```PHP
-<?php
-include('vendor/codecat/nin/nf.php');
-nf_begin(__DIR__);
-```
-
-And copy over the default `.htaccess` file from the Nin repository. Visiting `example.com` should now give an error, since you didn't create any controllers yet:
-
-```
-nf error: Controller does not exist (Details: "/var/www/html/controllers/index.php")
-```
-
-By default, Nin will use `index/index` as a standard route. Routing works as `controller/action`. What this means, is that you could create `controllers/foo.php`, and put this code in:
+To create controller classes, we will make a folder `controllers` in the same directory as the `index.php` is located. Inside of this folder, we can make a file `IndexController.php`:
 
 ```PHP
 <?php
-class FooController extends Controller
-{
-  public function actionBar()
-  {
-    echo 'Hey!';
+class IndexController extends Controller {
+  public function actionIndex() {
+    echo 'This is the index page!';
   }
 }
 ```
 
-Navigating to `example.com/foo/bar` will now echo `Hey!`. So, to handle the default case of `index/index`, create `controllers/index.php`, make the class `IndexController`, and add the `actionIndex()` function.
+By default, Nin's routing will use `index/index` as the standard route. Routing works as `controller/action`. This means that if you create a controller called `FooController` containing a function `actionBar()`, Nin will be able to instantiate a `FooController` and call `actionBar()` when a user visits `foo/bar`.
 
-You can also do the following inside of an action:
+Note that the use of files for controllers again is optional. It is possible to have a single `index.php` file with controller classes defined inline. You will however need to call an extra function `nf_begin_routing()` for the actual routing to begin.
+
+What follows is a very minimalistic page that supports an index page as well as a `foo/bar` route:
+
+```PHP
+<?php
+include('vendor/codecat/nin/nf.php')
+nf_begin(__DIR__);
+
+class IndexController extends Nin\Controller {
+  public function actionIndex() {
+    echo 'This is the index!';
+  }
+}
+
+class FooController extends Nin\Controller {
+  public function actionBar() {
+    echo 'This is Foo/Bar!';
+  }
+}
+
+nf_begin_routing();
+```
+
+# Using views
+You can also do the following inside of a controller's action function:
 
 ```PHP
 $this->render('foo');
