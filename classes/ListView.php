@@ -13,6 +13,11 @@ class ListView
 	public $total = 0;
 	public $rendered = 0;
 
+	public function __construct($provider)
+	{
+		$this->provider = $provider;
+	}
+
 	public function render($view, $options = array())
 	{
 		if($this->provider === null) {
@@ -74,6 +79,9 @@ class ListView
 	{
 		$qs = $_SERVER['QUERY_STRING'];
 		$qs = preg_replace('/(&?page=[0-9]+|page=[0-9]+&?)/', '', $qs);
+		if($qs == '') {
+			return '?page=' . $page;
+		}
 		return '?' . $qs . '&page=' . $page;
 	}
 

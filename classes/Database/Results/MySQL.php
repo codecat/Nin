@@ -24,4 +24,9 @@ class MySQL extends Result
 	{
 		return $this->insert_id;
 	}
+
+	public function num_rows()
+	{
+		return $this->res->num_rows;
+	}
 }

@@ -10,22 +10,15 @@ class QueryProvider extends Provider
 	public $query;
 	public $result;
 
-	public function __construct($class, $query, $params = false)
+	public function __construct($class, $query)
 	{
-		$q = $query;
-		if($params !== false) {
-			foreach($params as $k => $v) {
-				$q = str_replace($k, nf_sql_encode($v), $q);
-			}
-		}
-
 		$this->class = $class;
-		$this->query = $q;
+		$this->query = $query;
 	}
 
 	public function begin()
 	{
-		$this->result = nf_sql_query($this->query);
+		$this->result = nf_db_context()->query($this->query);
 	}
 
 	public function end()
@@ -34,7 +27,7 @@ class QueryProvider extends Provider
 
 	public function count()
 	{
-		return $this->result->num_rows;
+		return $this->result->num_rows();
 	}
 
 	public function getNext()
