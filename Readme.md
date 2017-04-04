@@ -67,10 +67,12 @@ foreach(Post::findAll() as $post) {
 }
 ```
 
-# Using controllers
-To use controllers, you can either choose to go the above route in a single file, or you can make multiple files for it. First of all, you will need a `.htaccess` or Nginx configuration to start with, or the routing won't work.
+These model classes can also be located in separate files inside of a `models` folder, and they will be autoloaded when they're needed.
 
-To create controller classes, we will make a folder `controllers` in the same directory as the `index.php` is located. Inside of this folder, we can make a file `IndexController.php`:
+# Using controllers
+You have again 2 choices for controllers; single file or multiple files.
+
+To create controller classes, make a folder `controllers` in the same directory as the `index.php` is located. Inside of this folder, we can make a file `IndexController.php`:
 
 ```PHP
 <?php
