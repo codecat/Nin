@@ -34,7 +34,7 @@ $nf_cfg = array(
 	),
 
 	// SQL information
-	'sql' => array(
+	'db' => array(
 		'enabled' => false,
 		'hostname' => 'localhost',
 		'username' => '',
@@ -87,21 +87,6 @@ include('functions/i18n.php');
 include('functions/param.php');
 include('functions/sql.php');
 include('functions/common.php');
-
-include('classes/Controller.php');
-include('classes/Model.php');
-include('classes/Nin.php');
-include('classes/Html.php');
-include('classes/Validator.php');
-include('classes/Log.php');
-include('classes/Cache.php');
-include('classes/ListView.php');
-
-include('classes/Provider.php');
-include('classes/Providers/ArrayProvider.php');
-include('classes/Providers/QueryProvider.php');
-
-include('classes/Database/QueryBuilder.php');
 
 function nf_begin($dir, $options = array())
 {

@@ -114,22 +114,26 @@ function nf_begin_page($controllername, $actionname, $parts)
 		return;
 	}
 
-	$filename = $folder . $controllername . '.php';
 	$classname = ucfirst($controllername) . 'Controller';
-	if(file_exists($filename)) {
-		if(!class_exists($classname, false)) {
+	if(!class_exists($classname, false)) {
+		$filename = $folder . $controllername . '.php';
+		if(file_exists($filename)) {
 			include($filename);
-		}
-	} else {
-		// Maybe it exists with ucfirst
-		$filename_lower = $folder . ucfirst($controllername) . '.php';
-		if(file_exists($filename_lower)) {
-			if(!class_exists($classname, false)) {
-				include($filename_lower);
-			}
 		} else {
-			nf_error_routing(3, $filename);
-			return;
+			// Maybe it's the exact classname
+			$filename_classname = $folder . $classname . '.php';
+			if(file_exists($filename_classname)) {
+				include($filename_classname);
+			} else {
+				// Maybe it exists with ucfirst
+				$filename_lower = $folder . ucfirst($controllername) . '.php';
+				if(file_exists($filename_lower)) {
+					include($filename_lower);
+				} else {
+					nf_error_routing(3, $filename);
+					return;
+				}
+			}
 		}
 	}
 

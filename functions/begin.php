@@ -8,10 +8,13 @@ function nf_begin_internal($dir, $options)
 	global $nf_www_dir;
 	global $nf_uri;
 	global $nf_cfg;
+	global $nf_dir;
 
 	if(session_status() == PHP_SESSION_NONE) {
 		session_start();
 	}
+
+	nf_init_autoloader();
 
 	nf_init_config($options);
 
@@ -27,28 +30,26 @@ function nf_begin_internal($dir, $options)
 		error_reporting(E_ALL);
 	}
 
-	if(!isset($nf_cfg['no_htaccess']) && file_exists($dir . '/controllers') && !file_exists($dir . '/.htaccess')) {
+	if(!isset($nf_cfg['no_htaccess']) && file_exists($dir . '/controllers') && !file_exists($dir . DIRECTORY_SEPARATOR . '.htaccess')) {
 		echo '<b>' . nf_t('Warning:') . '</b> ' . nf_t('.htaccess does not exist.');
-		$ok = copy(__DIR__ . '/.htaccess', $dir . '/.htaccess');
+		$ok = copy($nf_dir . DIRECTORY_SEPARATOR . '.htaccess', $dir . DIRECTORY_SEPARATOR . '.htaccess');
 		if($ok) {
 			echo ' ' . nf_t('Nin was able to create it automatically for you. Refresh for it to take effect.') . '<br>';
 		} else {
 			echo ' ' . nf_t('Nin was not able to automatically create the file.');
-			echo ' ' . nf_t('Please copy it manually from:') . ' <code>' . __DIR__ . '/.htaccess</code><br>';
+			echo ' ' . nf_t('Please copy it manually from:') . ' <code>' . $nf_dir . DIRECTORY_SEPARATOR . '.htaccess</code><br>';
 		}
 		echo ' ' . nf_t('To ignore this warning and stop this behavior, set \'no_htaccess\' in the config to true.');
 		return;
 	}
 
-	nf_init_autoloader();
-
-	if($nf_cfg['sql']['enabled']) {
+	if($nf_cfg['db']['enabled']) {
 		if(!nf_sql_connect(
-			$nf_cfg['sql']['hostname'],
-			$nf_cfg['sql']['username'],
-			$nf_cfg['sql']['password'],
-			$nf_cfg['sql']['database'],
-			$nf_cfg['sql']['encoding'])) {
+			$nf_cfg['db']['hostname'],
+			$nf_cfg['db']['username'],
+			$nf_cfg['db']['password'],
+			$nf_cfg['db']['database'],
+			$nf_cfg['db']['encoding'])) {
 			nf_error(7);
 		}
 	}
