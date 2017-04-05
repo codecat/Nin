@@ -45,11 +45,6 @@ $nf_cfg = array(
 		'options' => array(),
 	),
 
-	// Error hooking (TODO: Move this to regular hooks)
-	'error' => array(
-		'hook' => false
-	),
-
 	// Hooks
 	'hooks' => array(),
 

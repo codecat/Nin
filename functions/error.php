@@ -28,11 +28,7 @@ function nf_error($num, $details = '')
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
 	}
 
-	//TODO: Deprecate this and use nf_hook() for this!
-	if($nf_cfg['error']['hook'] !== false) {
-		$hook = $nf_cfg['error']['hook'];
-		$hook($error);
-	} else {
+	if(nf_hook('error', array($num, $details, $error)) === null) {
 		echo nf_t('nf error:') . ' ' . $error . '<br>';
 	}
 }
