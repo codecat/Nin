@@ -18,6 +18,11 @@ class MySQL extends Context
 			'encoding' => 'utf8'
 		), $options);
 
+		if(!class_exists('mysqli')) {
+			nf_error(14, 'MySQLi');
+			exit;
+		}
+
 		$this->connection = new \mysqli(
 			$options['hostname'],
 			$options['username'],

@@ -13,6 +13,13 @@ class APC extends Cache
 		$options = array_merge(array(
 			'prefix' => 'nin_'
 		), $options);
+
+		if(!function_exists('apc_store')) {
+			nf_error(14, 'APC');
+			exit;
+		}
+
+		$this->prefix = $options['prefix'];
 	}
 
 	public function set($key, $value, $ttl = 0)
@@ -38,16 +45,5 @@ class APC extends Cache
 	public function delete($key)
 	{
 		apc_delete($this->$prefix . $key);
-	}
-
-	public function take($key, $ttl, $cb)
-	{
-		$ok = false;
-		$ret = apc_fetch($this->$prefix . $key, $ok);
-		if(!$ok) {
-			$ret = $cb();
-			apc_store($this->$prefix . $key, $ret, $ttl);
-		}
-		return $ret;
 	}
 }

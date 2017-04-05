@@ -38,14 +38,4 @@ class Dummy extends Cache
 	{
 		unset($this->memory[$key]);
 	}
-
-	public function take($key, $ttl, $cb)
-	{
-		$obj = $this->get($key);
-		if($obj === null) {
-			$obj = $cb();
-			$this->set($key, $obj, $ttl);
-		}
-		return $obj;
-	}
 }

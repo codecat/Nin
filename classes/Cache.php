@@ -38,5 +38,13 @@ abstract class Cache
 	 *     return $foo . $foo;
 	 *   });
 	 */
-	public abstract function take($key, $ttl, $cb);
+	public function take($key, $ttl, $cb)
+	{
+		$obj = $this->get($key);
+		if($obj === null) {
+			$obj = $cb();
+			$this->set($key, $obj, $ttl);
+		}
+		return $obj;
+	}
 }

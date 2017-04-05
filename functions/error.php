@@ -22,6 +22,7 @@ function nf_error($num, $details = '')
 		case 11: $error = nf_t('ListView tried to render without a provider'); break;
 		case 12: $error = nf_t('Database context class does not exist'); break;
 		case 13: $error = nf_t('Cache class does not exist'); break;
+		case 14: $error = nf_t('A required module is not installed'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
