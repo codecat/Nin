@@ -13,6 +13,9 @@ function nf_cache_initialize()
 	if(isset($nf_cfg['apc'])) {
 		$nf_cfg['cache']['class'] = 'APC';
 		$nf_cfg['cache']['options'] = $nf_cfg['apc'];
+	} elseif(isset($nf_cfg['redis'])) {
+		$nf_cfg['cache']['class'] = 'PhpRedis';
+		$nf_cfg['cache']['options'] = $nf_cfg['redis'];
 	}
 
 	$class_name = $nf_cfg['cache']['class'];
