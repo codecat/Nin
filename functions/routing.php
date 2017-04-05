@@ -1,5 +1,8 @@
 <?php
 
+$nf_module = '';
+$nf_current_controllername = '';
+
 /**
  * Tests whether the .htaccess file exists.
  * This gets called from nf_handle_uri().

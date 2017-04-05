@@ -8,7 +8,7 @@ $nf_i18n = array();
 /**
  * Loads the language files for the currently active language.
  */
-function nf_i18n_init()
+function nf_i18n_initialize()
 {
 	global $nf_www_dir;
 	global $nf_i18n;

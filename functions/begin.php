@@ -25,11 +25,9 @@ function nf_begin_internal($dir, $options)
 		session_start();
 	}
 
-	nf_init_config($options);
-
-	//TODO: Consistent naming for these
-	nf_init_autoloader();
-	nf_i18n_init();
+	nf_config_initialize($options);
+	nf_autoloader_initialize();
+	nf_i18n_initialize();
 	nf_db_initialize();
 	nf_cache_initialize();
 
@@ -45,21 +43,6 @@ function nf_begin_internal($dir, $options)
 	}
 
 	nf_handle_uri($nf_uri);
-}
-
-/**
- * Called by nf_begin() to merge the given options with $nf_cfg.
- */
-function nf_init_config($options)
-{
-	global $nf_cfg;
-	foreach($options as $k => $v) {
-		if(!isset($nf_cfg[$k])) {
-			$nf_cfg[$k] = $v;
-			continue;
-		}
-		$nf_cfg[$k] = array_merge($nf_cfg[$k], $v);
-	}
 }
 
 /**

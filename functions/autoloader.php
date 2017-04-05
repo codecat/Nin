@@ -98,7 +98,7 @@ function nf_autoload($classname)
 /**
  * Initialize the autoloader.
  */
-function nf_init_autoloader()
+function nf_autoloader_initialize()
 {
 	spl_autoload_register('nf_autoload');
 }

@@ -23,7 +23,6 @@ function nf_error($num, $details = '')
 		case 12: $error = nf_t('Database context class does not exist'); break;
 		case 13: $error = nf_t('Cache class does not exist'); break;
 		case 14: $error = nf_t('A required module is not installed'); break;
-		case 15: $error = nf_t('Could not connect to Redis server'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
