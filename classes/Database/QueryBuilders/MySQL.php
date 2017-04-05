@@ -67,6 +67,9 @@ class MySQL extends QueryBuilder
 				$query .= ' DESC';
 			}
 		}
+		if($this->limit[0] >= 0 && $this->limit[1] >= 0) {
+			$query .= ' LIMIT ' . $this->limit[0] . ',' . $this->limit[1];
+		}
 		return $query . ';';
 	}
 

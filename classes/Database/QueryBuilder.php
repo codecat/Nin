@@ -10,6 +10,7 @@ abstract class QueryBuilder
 	protected $where;
 	protected $group;
 	protected $orderby;
+	protected $limit;
 	protected $set;
 	protected $insertValues;
 
@@ -26,6 +27,7 @@ abstract class QueryBuilder
 		$this->where = array();
 		$this->group = '';
 		$this->orderby = array();
+		$this->limit = array(-1, -1);
 		$this->set = array();
 		$this->insertValues = array();
 	}
@@ -72,6 +74,16 @@ abstract class QueryBuilder
 		$this->orderby[] = array(
 			$key, $sort
 		);
+		return $this;
+	}
+
+	public function limit($start, $end = null)
+	{
+		if($end === null) {
+			$this->limit = array(0, $start);
+		} else {
+			$this->limit = array($start, $end);
+		}
 		return $this;
 	}
 

@@ -106,15 +106,12 @@ class Model
 			$builder->orderby($orderby, $options['order']);
 		}
 		if(isset($options['limit'])) {
-			//TODO: Query builder limit
-			/*
 			$l = $options['limit'];
 			if(is_int($l)) {
-				$ret .= ' LIMIT 0,' . $l;
+				$builder->limit($l);
 			} elseif(is_array($l)) {
-				$ret .= ' LIMIT ' . intval($l[0]) . ',' . intval($l[1]);
+				$builder->limit(intval($l[0]), intval($l[1]));
 			}
-			*/
 		}
 		return $builder;
 	}
