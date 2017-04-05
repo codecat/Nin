@@ -23,6 +23,7 @@ function nf_error($num, $details = '')
 		case 12: $error = nf_t('Database context class does not exist'); break;
 		case 13: $error = nf_t('Cache class does not exist'); break;
 		case 14: $error = nf_t('A required module is not installed'); break;
+		case 15: $error = nf_t('Could not connect to Redis server'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
@@ -139,7 +140,7 @@ function nf_php_exception($e)
 		}
 	};
 	echo '<table style="margin: 3em;" cellpadding="7" cellspacing="0">';
-	echo '<tr bgcolor="#faa"><td><b>Exception:</b> ' . htmlentities($e->getMessage()) . '</td></tr>';
+	echo '<tr bgcolor="#faa"><td><b>' . get_class($e) . ':</b> ' . htmlentities($e->getMessage()) . '</td></tr>';
 	$trace = $e->getTrace();
 	for($i = 0; $i < count($trace); $i++) {
 		$func = false;
