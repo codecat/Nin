@@ -93,8 +93,7 @@ class Model
 			return $builder;
 		}
 		if(isset($options['group'])) {
-			//TODO: Query builder group
-			//$ret .= ' GROUP BY `' . $options['group'] . '`';
+			$builder->group($options['group']);
 		}
 		if(isset($options['order'])) {
 			//TODO: Query builder orderby

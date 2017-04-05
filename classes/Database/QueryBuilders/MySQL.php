@@ -52,6 +52,9 @@ class MySQL extends QueryBuilder
 	{
 		$query = 'SELECT * FROM ' . $this->table;
 		$query .= $this->buildWhere();
+		if($this->group != '') {
+			$query .= ' GROUP BY `' . $this->group . '`';
+		}
 		return $query . ';';
 	}
 

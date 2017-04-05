@@ -8,6 +8,7 @@ abstract class QueryBuilder
 	protected $table = '';
 	protected $method;
 	protected $where;
+	protected $group;
 	protected $set;
 	protected $insertValues;
 
@@ -53,6 +54,12 @@ abstract class QueryBuilder
 		$this->where[] = array(
 			$key, $value, $oper
 		);
+		return $this;
+	}
+
+	public function group($key)
+	{
+		$this->group = $key;
 		return $this;
 	}
 
