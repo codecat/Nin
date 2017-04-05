@@ -11,7 +11,6 @@ class MySQL extends QueryBuilder
 		if(is_string($o)) {
 			return "'" . $this->context->real_escape_string($o) . "'";
 		} elseif(is_float($o)) {
-			//TODO: This comma to period should be autodetected based on mysql server locale (how?)
 			return str_replace(',', '.', strval(floatval($o)));
 		} elseif(is_numeric($o)) {
 			return intval($o);
