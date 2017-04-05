@@ -40,6 +40,12 @@ $nf_cfg = array(
 		'options' => array(),
 	),
 
+	// Caching information
+	'cache' => array(
+		'class' => 'Dummy',
+		'options' => array(),
+	),
+
 	// Error hooking (TODO: Move this to regular hooks)
 	'error' => array(
 		'hook' => false
@@ -84,6 +90,7 @@ include('functions/hook.php');
 include('functions/i18n.php');
 include('functions/param.php');
 include('functions/db.php');
+include('functions/cache.php');
 include('functions/common.php');
 
 function nf_begin($dir, $options = array())

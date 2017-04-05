@@ -7,7 +7,7 @@ $nf_db_context = false;
  * Creates the database context from the class name given in the configuration.
  * Gets called from nf_begin_internal().
  */
-function nf_db_construct()
+function nf_db_initialize()
 {
 	global $nf_cfg;
 	global $nf_db_context;

@@ -11,17 +11,7 @@ function nf_begin_internal($dir, $options)
 	global $nf_dir;
 	global $nf_using_controllers;
 
-	if(session_status() == PHP_SESSION_NONE) {
-		session_start();
-	}
-
-	nf_init_autoloader();
-
-	nf_init_config($options);
-
 	$nf_www_dir = $dir;
-
-	nf_i18n_init();
 
 	if($nf_cfg['debug']['enabled']) {
 		register_shutdown_function('nf_php_fatal');
@@ -31,7 +21,17 @@ function nf_begin_internal($dir, $options)
 		error_reporting(E_ALL);
 	}
 
-	nf_db_construct();
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+
+	nf_init_config($options);
+
+	//TODO: Consistent naming for these
+	nf_init_autoloader();
+	nf_i18n_init();
+	nf_db_initialize();
+	nf_cache_initialize();
 
 	$nf_uri = $_SERVER['REQUEST_URI'];
 	$uri_part = strstr($nf_uri, '?', true);

@@ -2,59 +2,27 @@
 
 namespace Nin;
 
-class Cache
+abstract class Cache
 {
-	public static $skip = false;
-	public static $prefix = 'nin_';
-
 	/**
 	 * Set a cache value with the given ttl in seconds.
 	 */
-	public static function set($key, $value, $ttl = 0)
-	{
-		if(Cache::$skip) {
-			return;
-		}
-		apc_store(Cache::$prefix . $key, $value, $ttl);
-	}
+	public abstract function set($key, $value, $ttl = 0);
 
 	/**
 	 * Get a cache value. If it doesn't exist, it returns null.
 	 */
-	public static function get($key)
-	{
-		if(Cache::$skip) {
-			return null;
-		}
-		$ok = false;
-		$ret = apc_fetch(Cache::$prefix . $key, $ok);
-		if(!$ok) {
-			return null;
-		}
-		return $ret;
-	}
+	public abstract function get($key);
 
 	/**
 	 * Clear the entire cache.
 	 */
-	public static function clear()
-	{
-		if(Cache::$skip) {
-			return;
-		}
-		apc_clear_cache('user');
-	}
+	public abstract function clear();
 
 	/**
 	 * Delete a specific key in the cache.
 	 */
-	public static function delete($key)
-	{
-		if(Cache::$skip) {
-			return;
-		}
-		apc_delete(Cache::$prefix . $key);
-	}
+	public abstract function delete($key);
 
 	/**
 	 * Get a cache value. If it doesn't exist, it will set the
@@ -70,17 +38,5 @@ class Cache
 	 *     return $foo . $foo;
 	 *   });
 	 */
-	public static function take($key, $ttl, $cb)
-	{
-		if(Cache::$skip) {
-			return $cb();
-		}
-		$ok = false;
-		$ret = apc_fetch(Cache::$prefix . $key, $ok);
-		if(!$ok) {
-			$ret = $cb();
-			apc_store(Cache::$prefix . $key, $ret, $ttl);
-		}
-		return $ret;
-	}
+	public abstract function take($key, $ttl, $cb);
 }
