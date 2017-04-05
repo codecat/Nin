@@ -96,16 +96,14 @@ class Model
 			$builder->group($options['group']);
 		}
 		if(isset($options['order'])) {
-			//TODO: Query builder orderby
-			/*
 			$orderby = '';
 			if(isset($options['orderby'])) {
 				$orderby = $options['orderby'];
 			} else {
 				$orderby = static::findPrimaryKey();
 			}
-			$ret .= ' ORDER BY `' . $orderby . '` ' . strtoupper($options['order']);
-			*/
+			$orderby = $options['orderby'];
+			$builder->orderby($orderby, $options['order']);
 		}
 		if(isset($options['limit'])) {
 			//TODO: Query builder limit

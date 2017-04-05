@@ -9,6 +9,7 @@ abstract class QueryBuilder
 	protected $method;
 	protected $where;
 	protected $group;
+	protected $orderby;
 	protected $set;
 	protected $insertValues;
 
@@ -23,7 +24,10 @@ abstract class QueryBuilder
 	{
 		$this->method = '';
 		$this->where = array();
+		$this->group = '';
+		$this->orderby = array();
 		$this->set = array();
+		$this->insertValues = array();
 	}
 
 	private function setMethod($method)
@@ -60,6 +64,14 @@ abstract class QueryBuilder
 	public function group($key)
 	{
 		$this->group = $key;
+		return $this;
+	}
+
+	public function orderby($key, $sort = 'ASC')
+	{
+		$this->orderby[] = array(
+			$key, $sort
+		);
 		return $this;
 	}
 

@@ -55,6 +55,18 @@ class MySQL extends QueryBuilder
 		if($this->group != '') {
 			$query .= ' GROUP BY `' . $this->group . '`';
 		}
+		for($i = 0; $i < count($this->orderby); $i++) {
+			if($i == 0) {
+				$query .= ' ORDER BY ';
+			} else {
+				$query .= ',';
+			}
+			$order = $this->orderby[$i];
+			$query .= '`' . $order[0] . '`';
+			if(strcasecmp($order[1], 'DESC') == 0) {
+				$query .= ' DESC';
+			}
+		}
 		return $query . ';';
 	}
 

@@ -135,7 +135,11 @@ function nf_php_exception($e)
 		}
 	};
 	echo '<table style="margin: 3em;" cellpadding="7" cellspacing="0">';
-	echo '<tr bgcolor="#faa"><td><b>' . get_class($e) . ':</b> ' . htmlentities($e->getMessage()) . '</td></tr>';
+	echo '<tr bgcolor="#faa"><td><b>' . get_class($e) . ':</b> ' . htmlentities($e->getMessage());
+	if(is_a($e, 'ParseError')) {
+		echo '<br>in <b>' . $e->getFile() . '</b> on line <b>' . $e->getLine() . '</b>';
+	}
+	echo '</td></tr>';
 	$trace = $e->getTrace();
 	for($i = 0; $i < count($trace); $i++) {
 		$func = false;
