@@ -384,7 +384,7 @@ class Model
 				$validatorname = $rulekeys[1];
 				$validatorvalue = $rule[$rulekeys[1]];
 			}
-			$validatorclassname = ucfirst($validatorname) . 'Validator';
+			$validatorclassname = '\\Nin\\Validators\\' . ucfirst($validatorname) . 'Validator';
 			$validator = new $validatorclassname();
 			$validator->model = $this;
 			$validator->keys = $keys;
