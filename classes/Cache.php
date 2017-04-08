@@ -34,7 +34,7 @@ abstract class Cache
 	 *
 	 * Example:
 	 *   $foo = 'bar';
-	 *   $value = Cache::take('some_value', 3600, function() use ($foo) {
+	 *   $value = nf_cache()->take('some_value', 3600, function() use ($foo) {
 	 *     return $foo . $foo;
 	 *   });
 	 */

@@ -107,7 +107,6 @@ class Model
 			} else {
 				$orderby = static::findPrimaryKey();
 			}
-			$orderby = $options['orderby'];
 			$builder->orderby($orderby, $options['order']);
 		}
 		if(isset($options['limit'])) {
@@ -194,9 +193,13 @@ class Model
 			return true;
 		}
 		$this->beforeSave();
+		$changed = array();
+		foreach($this->_changed as $k) {
+			$changed[$k] = $this->_data[$k];
+		}
 		$res = nf_db_beginbuild(static::tablename())
-			->udpate()
-			->set($this->_changed)
+			->update()
+			->set($changed)
 			->execute();
 		if($res !== false) {
 			$this->_changed = array();

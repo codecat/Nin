@@ -83,7 +83,7 @@ class MySQL extends QueryBuilder
 			if($i > 0) {
 				$query .= ',';
 			}
-			$query .= ' \'' . $set[0] . '\'=' . $this->encode($set[1]);
+			$query .= ' `' . $set[0] . '`=' . $this->encode($set[1]);
 		}
 		$query .= $this->buildWhere();
 		return $query . ';';
