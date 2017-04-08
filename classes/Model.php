@@ -87,6 +87,11 @@ class Model
 		);
 	}
 
+	public static function beginQuery()
+	{
+		return new \Nin\Database\ModelQueryBuilder(static::class);
+	}
+
 	public static function queryOptions($options, $builder)
 	{
 		if(count($options) == 0) {
