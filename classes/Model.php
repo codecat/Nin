@@ -197,8 +197,10 @@ class Model
 		foreach($this->_changed as $k) {
 			$changed[$k] = $this->_data[$k];
 		}
+		$pk_col = static::findPrimaryKey();
 		$res = nf_db_beginbuild(static::tablename())
 			->update()
+			->where($pk_col, $this->_data[$pk_col])
 			->set($changed)
 			->execute();
 		if($res !== false) {
