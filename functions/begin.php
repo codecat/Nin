@@ -3,23 +3,15 @@
 /*
  * Begin the framework.
  */
-function nf_begin($dir, $options = array())
+function nf_begin_internal($dir, $options)
 {
 	global $nf_www_dir;
-	global $nf_dir;
 	global $nf_uri;
 	global $nf_cfg;
-
-	if(session_status() == PHP_SESSION_NONE) {
-		session_start();
-	}
-
-	nf_init_config($options);
+	global $nf_dir;
+	global $nf_using_controllers;
 
 	$nf_www_dir = $dir;
-	$nf_dir = __DIR__;
-
-	nf_i18n_init();
 
 	if($nf_cfg['debug']['enabled']) {
 		register_shutdown_function('nf_php_fatal');
@@ -29,31 +21,15 @@ function nf_begin($dir, $options = array())
 		error_reporting(E_ALL);
 	}
 
-	if(!isset($nf_cfg['no_htaccess']) && !file_exists($dir . '/.htaccess')) {
-		echo '<b>' . nf_t('Warning:') . '</b> ' . nf_t('.htaccess does not exist.');
-		$ok = copy(__DIR__ . '/.htaccess', $dir . '/.htaccess');
-		if($ok) {
-			echo ' ' . nf_t('Nin was able to create it automatically for you. Refresh for it to take effect.') . '<br>';
-		} else {
-			echo ' ' . nf_t('Nin was not able to automatically create the file.');
-			echo ' ' . nf_t('Please copy it manually from:') . ' <code>' . __DIR__ . '/.htaccess</code><br>';
-		}
-		echo ' ' . nf_t('To ignore this warning and stop this behavior, set \'no_htaccess\' in the config to true.');
-		return;
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
 	}
 
-	nf_init_autoloader();
-
-	if($nf_cfg['sql']['enabled']) {
-		if(!nf_sql_connect(
-			$nf_cfg['sql']['hostname'],
-			$nf_cfg['sql']['username'],
-			$nf_cfg['sql']['password'],
-			$nf_cfg['sql']['database'],
-			$nf_cfg['sql']['encoding'])) {
-			nf_error(7);
-		}
-	}
+	nf_config_initialize($options);
+	nf_autoloader_initialize();
+	nf_i18n_initialize();
+	nf_db_initialize();
+	nf_cache_initialize();
 
 	$nf_uri = $_SERVER['REQUEST_URI'];
 	$uri_part = strstr($nf_uri, '?', true);
@@ -70,16 +46,11 @@ function nf_begin($dir, $options = array())
 }
 
 /**
- * Called by nf_begin() to merge the given options with $nf_cfg.
+ * Helper function for manually calling controller routing.
+ * This is helpful when writing inline controllers in a single php file.
  */
-function nf_init_config($options)
+function nf_begin_routing()
 {
-	global $nf_cfg;
-	foreach($options as $k => $v) {
-		if(!isset($nf_cfg[$k])) {
-			$nf_cfg[$k] = $v;
-			continue;
-		}
-		$nf_cfg[$k] = array_merge($nf_cfg[$k], $v);
-	}
+	global $nf_uri;
+	nf_handle_uri($nf_uri);
 }

@@ -1,33 +1,39 @@
-# What is Nin?
-Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. It stands for "No It's Not", a play on Yii's "Yes It Is".
+![](resources/Logo.png)
+
+Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. It stands for "No It's Not", a play on Yii's "Yes It Is". Nin makes a few promises:
+
+* **Every feature is optional.** You don't need to use views. You don't need to use models. You don't even need to use the controller or routing system.
+* **Sensible configuration defaults.** As a result of the first promise, the entire configuration should make sense to allow for a minimalistic approach in the most common environments.
+* **The API is straight forward.** Everything in the API should be self-explanatory and obvious.
+* **Minimal amount of code required.** To work with the API, there shouldn't be too many lines of code. This helps the minimalism and simplicity of the system.
+
+Anything that breaks these promises should be considered a bug.
 
 # How does it work?
-By relying on PHP 5.4 features (HHVM also works), we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
+By relying on moden PHP features, we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
 
-Nin uses an MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
+Nin can be used in various ways. One of those ways is via its MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
 
-# Quick start
-You can use the Nin CLI interface with `nfc.php`. It allows you to create a simple skeleton website, with a default layout using [Foundation](http://foundation.zurb.com/).
-
-```
-$ git clone https://github.com/codecat/Nin.git
-$ cd Nin
-$ ./nfc.php create /var/www/html
-```
-
-# Using Composer
+# Getting started
 Quickly get started with Nin by installing the dependency via Composer. You can find the package [on Packagist](https://packagist.org/packages/codecat/nin). Install it by running:
 
 ```
-$ composer require angelog/nin
-$ cp vendor/angelog/nin/.htaccess .
+$ composer require codecat/nin
+```
+
+You can also just download a release from Github and include Nin from somewhere else if you prefer.
+
+If you plan on using Nin's routing system, make sure you create the necessary `.htaccess` file:
+
+```
+$ cp vendor/codecat/nin/.htaccess .
 ```
 
 Then create `index.php`:
 
 ```PHP
 <?php
-include('vendor/angelog/nin/nf.php');
+include('vendor/codecat/nin/nf.php');
 nf_begin(__DIR__);
 ```
 
@@ -39,37 +45,72 @@ nf_begin(__DIR__, array(
 ));
 ```
 
-# A very basic example
-Let's say you own `example.com` and you want to put a Nin site on there. Just clone Nin anywhere on the server, and create an `index.php` with the following lines:
+# The most minimalistic example
+After calling `nf_begin`, you're all set. Since every feature is optional, you can make a page with only a single `index.php` file. For example, to display a list of posts from a table in a MySQL database, your php file could be as small as this:
 
 ```PHP
 <?php
-include('/var/www_nin/nf.php');
-nf_begin(__DIR__);
+include('vendor/codecat/nin/nf.php');
+nf_begin(__DIR__, array(
+  'mysql' => array(
+    'username' => 'root',
+    'database' => 'nin'
+  )
+));
+
+class Post extends Nin\Model {
+  public static function tablename() { return 'posts'; }
+}
+
+foreach(Post::findAll() as $post) {
+  echo '<b>' . Nin\Html::encode($post->User) . '</b>: ' . Nin\Html::encode($post->Message) . '<br>';
+}
 ```
 
-And copy over the default `.htaccess` file from the Nin repository. Visiting `example.com` should now give an error, since you didn't create any controllers yet:
+These model classes can also be located in separate files inside of a `models` folder, and they will be autoloaded when they're needed.
 
-```
-nf error: Controller does not exist (Details: "/var/www/html/controllers/index.php")
-```
+# Using controllers
+You have again 2 choices for controllers; single file or multiple files.
 
-By default, Nin will use `index/index` as a standard route. Routing works as `controller/action`. What this means, is that you could create `controllers/foo.php`, and put this code in:
+To create controller classes, make a folder `controllers` in the same directory as the `index.php` is located. Inside of this folder, we can make a file `IndexController.php`:
 
 ```PHP
 <?php
-class FooController extends Controller
-{
-  public function actionBar()
-  {
-    echo 'Hey!';
+class IndexController extends Controller {
+  public function actionIndex() {
+    echo 'This is the index page!';
   }
 }
 ```
 
-Navigating to `example.com/foo/bar` will now echo `Hey!`. So, to handle the default case of `index/index`, create `controllers/index.php`, make the class `IndexController`, and add the `actionIndex()` function.
+By default, Nin's routing will use `index/index` as the standard route. Routing works as `controller/action`. This means that if you create a controller called `FooController` containing a function `actionBar()`, Nin will be able to instantiate a `FooController` and call `actionBar()` when a user visits `foo/bar`.
 
-You can also do the following inside of an action:
+Note that the use of files for controllers again is optional. It is possible to have a single `index.php` file with controller classes defined inline. You will however need to call an extra function `nf_begin_routing()` for the actual routing to begin.
+
+What follows is a very minimalistic page that supports an index page as well as a `foo/bar` route:
+
+```PHP
+<?php
+include('vendor/codecat/nin/nf.php')
+nf_begin(__DIR__);
+
+class IndexController extends Nin\Controller {
+  public function actionIndex() {
+    echo 'This is the index!';
+  }
+}
+
+class FooController extends Nin\Controller {
+  public function actionBar() {
+    echo 'This is Foo/Bar!';
+  }
+}
+
+nf_begin_routing();
+```
+
+# Using views
+You can also do the following inside of a controller's action function:
 
 ```PHP
 $this->render('foo');

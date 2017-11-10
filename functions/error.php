@@ -15,21 +15,20 @@ function nf_error($num, $details = '')
 		case 4: $error = nf_t('Controller class does not have the right name'); break;
 		case 5: $error = nf_t('Action does not exist'); break;
 		case 6: $error = nf_t('Action requires parameters not given'); break;
-		case 7: $error = nf_t('Failed to connect to SQL database'); break;
+		case 7: $error = nf_t('Failed to connect to database'); break;
 		case 8: $error = nf_t('Class could not be found'); break;
 		case 9: $error = nf_t('Table does not have a primary key'); break;
-		case 10: $error = nf_t('SQL query failed'); break;
+		case 10: $error = nf_t('Database query failed'); break;
 		case 11: $error = nf_t('ListView tried to render without a provider'); break;
+		case 12: $error = nf_t('Database context class does not exist'); break;
+		case 13: $error = nf_t('Cache class does not exist'); break;
+		case 14: $error = nf_t('A required module is not installed'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
 	}
 
-	//TODO: Deprecate this and use nf_hook() for this!
-	if($nf_cfg['error']['hook'] !== false) {
-		$hook = $nf_cfg['error']['hook'];
-		$hook($error);
-	} else {
+	if(nf_hook('error', array($num, $details, $error)) === null) {
 		echo nf_t('nf error:') . ' ' . $error . '<br>';
 	}
 }
@@ -86,7 +85,7 @@ function nf_php_exception($e)
 	};
 
 	$sl = function($i, $func, $args, $fn, $l) use($gl) {
-		echo '<tr style="background: #fdd;"><td style="border-top: 1px solid #faa;">' . $i . ' - ';
+		echo '<tr style="background: #fdd;"><td style="border-top: 1px solid #faa;">';
 		if($func) {
 			echo htmlentities($func) . '(';
 			for($j = 0; $j < count($args); $j++) {
@@ -136,7 +135,11 @@ function nf_php_exception($e)
 		}
 	};
 	echo '<table style="margin: 3em;" cellpadding="7" cellspacing="0">';
-	echo '<tr bgcolor="#faa"><td><b>Exception:</b> ' . htmlentities($e->getMessage()) . '</td></tr>';
+	echo '<tr bgcolor="#faa"><td><b>' . get_class($e) . ':</b> ' . htmlentities($e->getMessage());
+	if(is_a($e, 'ParseError')) {
+		echo '<br>in <b>' . $e->getFile() . '</b> on line <b>' . $e->getLine() . '</b>';
+	}
+	echo '</td></tr>';
 	$trace = $e->getTrace();
 	for($i = 0; $i < count($trace); $i++) {
 		$func = false;
