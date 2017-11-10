@@ -10,7 +10,7 @@ Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. I
 Anything that breaks these promises should be considered a bug.
 
 # How does it work?
-By relying on moden PHP features, we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
+By relying on modern PHP features, we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
 
 Nin can be used in various ways. One of those ways is via its MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
 
