@@ -163,7 +163,7 @@ function nf_begin_page($controllername, $actionname, $parts)
 				if(file_exists($filename_lower)) {
 					include($filename_lower);
 				} else {
-					nf_error_routing(3, $filename);
+					nf_error_routing(3, substr($filename, strlen($nf_www_dir) + 1));
 					return;
 				}
 			}
