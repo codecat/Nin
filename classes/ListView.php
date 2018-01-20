@@ -88,6 +88,9 @@ class ListView
 	function renderPagingButtons()
 	{
 		$pages = ceil($this->total / $this->perpage);
+		if($pages == 1) {
+			return;
+		}
 		echo '<div class="nf-pagebuttons">';
 		if($this->page > 1) {
 			echo '<a class="nf-pagebutton nf-previous" href="' . $this->getPagingUrl($this->page - 1) . '">&lt;</a>';
