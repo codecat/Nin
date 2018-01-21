@@ -107,7 +107,7 @@ class ListView
 	function renderPagingButtons()
 	{
 		$pages = ceil($this->total / $this->perpage);
-		if($pages == 1) {
+		if($pages <= 1) {
 			return;
 		}
 		echo '<div class="nf-pagebuttons">';
