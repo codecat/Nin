@@ -25,7 +25,7 @@ class ArrayProvider extends Provider
 
 	public function count()
 	{
-		return count($array);
+		return count($this->array);
 	}
 
 	public function getNext()
