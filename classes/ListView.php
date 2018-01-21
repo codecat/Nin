@@ -4,6 +4,7 @@ namespace Nin;
 
 class ListView
 {
+	public $id = '';
 	public $provider = null;
 	public $filter = null;
 	public $page = 1;
@@ -97,11 +98,11 @@ class ListView
 	function getPagingUrl($page)
 	{
 		$qs = $_SERVER['QUERY_STRING'];
-		$qs = preg_replace('/(&?page=[0-9]+|page=[0-9]+&?)/', '', $qs);
+		$qs = preg_replace('/(&?page' . $this->id . '=[0-9]+|page' . $this->id . '=[0-9]+&?)/', '', $qs);
 		if($qs == '') {
-			return '?page=' . $page;
+			return '?page' . $this->id . '=' . $page;
 		}
-		return '?' . $qs . '&page=' . $page;
+		return '?' . $qs . '&page' . $this->id . '=' . $page;
 	}
 
 	function renderPagingButtons()
