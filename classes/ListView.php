@@ -64,15 +64,34 @@ class ListView
 		global $nf_module;
 		global $nf_current_controllername;
 
-		$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'];
-		if($view[0] == '/') {
-			$inc_path .= $view . '.php';
+		if (is_callable($view)) {
+			$r = new \ReflectionFunction($view);
+			$params = $r->getParameters();
+			$args = array();
+			foreach ($params as $param) {
+				if ($param->getName() == 'item') {
+					$args[] = $item;
+				} else if (isset($options[$param->getName()])) {
+					$args[] = $options[$param->getName()];
+				} else if ($param->isDefaultValueAvailable()) {
+					$args[] = $param->getDefaultValue();
+				} else {
+					nf_error(6, $param->getName());
+					return;
+				}
+			}
+			call_user_func_array($view, $args);
 		} else {
-			$inc_path .= $nf_module . $nf_current_controllername . '/' . $view . '.php';
-		}
+			$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'];
+			if($view[0] == '/') {
+				$inc_path .= $view . '.php';
+			} else {
+				$inc_path .= $nf_module . $nf_current_controllername . '/' . $view . '.php';
+			}
 
-		extract($options);
-		include($inc_path);
+			extract($options);
+			include($inc_path);
+		}
 	}
 
 	function getPagingUrl($page)
