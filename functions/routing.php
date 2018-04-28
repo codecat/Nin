@@ -60,8 +60,9 @@ function nf_handle_uri($uri)
 	$action = $nf_cfg['index']['action'];
 
 	$partcount = count($parts);
+	$lastpart = 0;
 
-	for($i=0; $i<$partcount; $i++) {
+	for ($i = 0; $i < $partcount; $i++) {
 		$part = $parts[$i];
 
 		// Check if the part is a folder (that means there's a module)
@@ -71,18 +72,21 @@ function nf_handle_uri($uri)
 			continue;
 		}
 
-		//Otherwise, it /should/ exist as a controller
+		// Otherwise, it /should/ exist as a controller
 		$controller = strtolower($part);
 		// And, if it exists, the part that comes after that as the action
 		if($i + 1 != $partcount) {
 			$action = strtolower($parts[$i + 1]);
 		}
+		$lastpart = $i + 1;
 		// Now get ready to begin the page
 		break;
 	}
 
+	$urlparams = array_slice($parts, $lastpart + 1);
+
 	$nf_module = $module;
-	nf_begin_page($controller, $action, $parts);
+	nf_begin_page($controller, $action, $parts, $urlparams);
 }
 
 /**
@@ -122,7 +126,7 @@ function nf_handle_routing_rules($uri)
  * Begin the given page by controller name and action name.
  * This gets called from nf_handle_uri().
  */
-function nf_begin_page($controllername, $actionname, $parts)
+function nf_begin_page($controllername, $actionname, $parts, $urlparams)
 {
 	global $nf_www_dir;
 	global $nf_cfg;
@@ -204,9 +208,11 @@ function nf_begin_page($controllername, $actionname, $parts)
 	$r = new ReflectionClass($classname);
 	$m = $r->getMethod($functionname);
 
+	$args = $urlparams;
+
 	$params = $m->getParameters();
-	$args = array();
-	foreach($params as $param) {
+	for ($i = count($urlparams); $i < count($params); $i++) {
+		$param = $params[$i];
 		if(isset($_REQUEST[$param->getName()])) {
 			$args[] = $_REQUEST[$param->getName()];
 		} else {
