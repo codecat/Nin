@@ -44,12 +44,13 @@ function nf_t($str, $params = array())
 	global $nf_i18n;
 
 	$ret = @$nf_i18n[$str];
-	if($ret !== null) {
-		foreach($params as $k => $v) {
-			$ret = str_replace($k, $v, $ret);
-		}
-		return $ret;
+	if($ret === null) {
+		$ret = $str;
 	}
 
-	return $str;
+	foreach($params as $k => $v) {
+		$ret = str_replace($k, $v, $ret);
+	}
+
+	return $ret;
 }
