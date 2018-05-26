@@ -78,12 +78,17 @@ class MySQL extends QueryBuilder
 			return '';
 		}
 		$query = 'UPDATE ' . $this->table . ' SET';
+		$count = 0;
 		for($i = 0; $i < count($this->set); $i++) {
 			$set = $this->set[$i];
-			if($i > 0) {
+			if($set[1] === null) {
+				continue;
+			}
+			if($count > 0) {
 				$query .= ',';
 			}
 			$query .= ' `' . $set[0] . '`=' . $this->encode($set[1]);
+			$count++;
 		}
 		$query .= $this->buildWhere();
 		return $query . ';';
