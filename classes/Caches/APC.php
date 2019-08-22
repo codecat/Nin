@@ -19,18 +19,20 @@ class APC extends Cache
 			exit;
 		}
 
-		$this->prefix = $options['prefix'];
+		if (array_key_exists('prefix', $options)) {
+			$this->prefix = $options['prefix'];
+		}
 	}
 
 	public function set($key, $value, $ttl = 0)
 	{
-		apc_store($this->$prefix . $key, $value, $ttl);
+		apc_store($this->prefix . $key, $value, $ttl);
 	}
 
 	public function get($key)
 	{
 		$ok = false;
-		$ret = apc_fetch($this->$prefix . $key, $ok);
+		$ret = apc_fetch($this->prefix . $key, $ok);
 		if(!$ok) {
 			return null;
 		}
@@ -44,6 +46,6 @@ class APC extends Cache
 
 	public function delete($key)
 	{
-		apc_delete($this->$prefix . $key);
+		apc_delete($this->prefix . $key);
 	}
 }
