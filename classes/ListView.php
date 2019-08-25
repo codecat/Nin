@@ -117,15 +117,16 @@ class ListView
 		}
 		$separatedLeft = false;
 		$separatedRight = false;
+		echo '<ul class="nf-pagebutton-list">';
 		for($i=1; $i<=$pages; $i++) {
 			if(!$separatedLeft && $i > 4 && $i - $this->page <= -4) {
-				echo '<span class="nf-pagebutton-separator">...</span>';
+				echo '<li><span class="nf-pagebutton-separator">...</span></li>';
 				$i = $this->page - 4;
 				$separatedLeft = true;
 				continue;
 			}
 			if(!$separatedRight && $i - $this->page >= 4) {
-				echo '<span class="nf-pagebutton-separator">...</span>';
+				echo '<li><span class="nf-pagebutton-separator">...</span></li>';
 				$i = $pages - 4;
 				$separatedRight = true;
 				continue;
@@ -134,8 +135,9 @@ class ListView
 			if($i == $this->page) {
 				$classname .= ' nf-current';
 			}
-			echo '<a class="' . $classname . '" href="' . $this->getPagingUrl($i) . '">' . $i . '</a>';
+			echo '<li><a class="' . $classname . '" href="' . $this->getPagingUrl($i) . '">' . $i . '</a></li>';
 		}
+		echo '</ul>';
 		if($this->page < $pages) {
 			echo '<a class="nf-pagebutton nf-next" href="' . $this->getPagingUrl($this->page + 1) . '">&gt;</a>';
 		}
