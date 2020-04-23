@@ -1,14 +1,6 @@
 <?php
 
 return array(
-	// Htaccess warning
-	'Warning:' => 'Waarschuwing:',
-	'.htaccess does not exist.' => '.htaccess bestaat niet.',
-	'Nin was able to create it automatically for you. Refresh for it to take effect.' => 'Het is Nin gelukt om automatisch het bestand aan te maken. Herlaad de pagina om het effect te zien.',
-	'Nin was not able to automatically create the file.' => 'Het is Nin niet gelukt om automatisch het bestand aan te maken.',
-	'Please copy it manually from:' => 'Kopieer het handmatig van:',
-	'To ignore this warning and stop this behavior, set \'no_htaccess\' in the config to true.' => 'Om deze waarschuwing te negeren en dit te stoppen, zet \'no_htaccess\' in de config naar true.',
-
 	// Error messages
 	'Unknown' => 'Onbekend',
 	'Invalid controller name' => 'Invalide controller naam',

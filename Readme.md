@@ -37,13 +37,9 @@ include('vendor/codecat/nin/nf.php');
 nf_begin(__DIR__);
 ```
 
-**Note:** For Nginx, you do not have to copy the `.htaccess` file. Instead, copy the contents inside of `nginx.conf`, and paste them inside the `server { }` block. You should also pass `no_htaccess` in `nf_begin`, like so:
+**Nginx note:** You do not have to copy the `.htaccess` file. Instead, copy the contents inside of `nginx.conf`, and paste them inside the `server { }` block.
 
-```PHP
-nf_begin(__DIR__, array(
-  'no_htaccess' => true
-));
-```
+**Docker note:** You don't need to have the `.htaccess` file, as this is handled automatically by the server config inside the docker image.
 
 # The most minimalistic example
 After calling `nf_begin`, you're all set. Since every feature is optional, you can make a page with only a single `index.php` file. For example, to display a list of posts from a table in a MySQL database, your php file could be as small as this:
@@ -155,7 +151,7 @@ If you create a layout file at `views/layout.php`, you can use that as a wrapper
 Nin is also available as [a docker image](https://hub.docker.com/r/codecatt/nin). Here's a quick example on how to use Nin in your Dockerfile:
 
 ```
-FROM codecatt/nin
+FROM codecatt/nin:1.3
 COPY . /var/www/html
 ```
 
@@ -165,7 +161,10 @@ And then in your `index.php` you include Nin like this:
 include('../nin/nf.php');
 ```
 
+Note that you do not need to do anything in `.htaccess` to get the router to work, as this is automatically handled by the Docker image.
+
 There are several tags available:
 
-* `latest`: The current master branch.
-* `1.2`: The latest 1.2 version.
+* `1.3`: The latest 1.3.x version.
+* `1.2`: The latest 1.2.x version.
+* `latest`: The current code available on the master branch.
