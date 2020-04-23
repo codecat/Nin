@@ -150,3 +150,22 @@ If you create a layout file at `views/layout.php`, you can use that as a wrapper
   </body>
 </html>
 ```
+
+# Docker
+Nin is also available as [a docker image](https://hub.docker.com/r/codecatt/nin). Here's a quick example on how to use Nin in your Dockerfile:
+
+```
+FROM codecatt/nin
+COPY . /var/www/html
+```
+
+And then in your `index.php` you include Nin like this:
+
+```PHP
+include('../nin/nf.php');
+```
+
+There are several tags available:
+
+* `latest`: The current master branch.
+* `1.2`: The latest 1.2 version.
