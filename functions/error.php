@@ -158,7 +158,7 @@ function nf_php_exception($e)
 function nf_php_fatal()
 {
 	$error = error_get_last();
-	if($error['type'] == E_ERROR) {
+	if($error && $error['type'] == E_ERROR) {
 		nf_php_error($error['type'], $error['message'], $error['file'], $error['line']);
 	}
 }
