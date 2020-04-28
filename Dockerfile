@@ -11,6 +11,10 @@ RUN (echo "<Directory /var/www/html>"; \
      ) > nin.conf
 RUN a2enconf nin
 
+# Enable APCu
+RUN pecl install APCu \
+			&& docker-php-ext-enable apcu
+
 # Enable mod_rewrite
 RUN a2enmod rewrite
 
