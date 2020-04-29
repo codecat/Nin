@@ -79,4 +79,19 @@ class Controller
 		header('Location: ' . $url);
 		exit;
 	}
+
+	public function cache($etag)
+	{
+		header('Etag: ' . $etag);
+		header('Cache-Control: public');
+
+		if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+			return;
+		}
+
+		if (trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+			header('HTTP/1.1 304 Not Modified');
+			exit;
+		}
+	}
 }
