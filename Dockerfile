@@ -15,6 +15,9 @@ RUN a2enconf nin
 RUN pecl install APCu \
 			&& docker-php-ext-enable apcu
 
+# Enable MySQLi
+RUN docker-php-ext-install mysqli
+
 # Enable mod_rewrite
 RUN a2enmod rewrite
 
