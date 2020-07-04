@@ -239,11 +239,19 @@ class Model
 		$pk = $this->_data[$pk_col];
 
 		if($v[0] == BELONGS_TO) {
+			if(!$this->_loaded) {
+				return false;
+			}
+
 			$their_classname = $v[1];
 			$my_column = $v[2];
 			$obj = $their_classname::findByPk($this->$my_column);
 
 		} elseif($v[0] == HAS_MANY) {
+			if (!$this->_loaded) {
+				return array();
+			}
+
 			$their_classname = $v[1];
 			$their_column = $v[2];
 			$options = array();
@@ -253,6 +261,10 @@ class Model
 			$obj = $their_classname::findAllByAttributes(array($their_column => $pk), $options);
 
 		} elseif($v[0] == HAS_ONE) {
+			if (!$this->_loaded) {
+				return false;
+			}
+
 			$their_classname = $v[1];
 			$their_column = $v[2];
 			$obj = $their_classname::findByAttributes(array($their_column => $pk));
