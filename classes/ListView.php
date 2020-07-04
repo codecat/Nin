@@ -15,7 +15,7 @@ class ListView
 	public $total = 0;
 	public $rendered = 0;
 
-	public function __construct($provider, $controller)
+	public function __construct($provider, $controller = null)
 	{
 		$this->provider = $provider;
 		$this->controller = $controller;
