@@ -6,6 +6,7 @@ class ListView
 {
 	public $id = '';
 	public $provider = null;
+	public $controller = null;
 	public $filter = null;
 	public $page = 1;
 	public $perpage = 0;
@@ -14,9 +15,10 @@ class ListView
 	public $total = 0;
 	public $rendered = 0;
 
-	public function __construct($provider)
+	public function __construct($provider, $controller)
 	{
 		$this->provider = $provider;
+		$this->controller = $controller;
 	}
 
 	public function render($view, $options = array())
