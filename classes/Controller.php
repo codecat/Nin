@@ -78,6 +78,8 @@ class Controller
 		$ext = substr($inc_path, strrpos($inc_path, '.'));
 		if ($ext == '.php') {
 			$renderer = new \Nin\Renderers\PhpRenderer($this);
+		} else {
+			$renderer = nf_hook_one('viewrenderer', array($this, $inc_path, $ext));
 		}
 
 		if ($renderer === null) {

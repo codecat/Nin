@@ -28,6 +28,7 @@ function nf_begin_internal($dir, $options)
 	}
 
 	nf_autoloader_initialize();
+	nf_plugins_initialize();
 	nf_i18n_initialize();
 	nf_db_initialize();
 	nf_cache_initialize();
@@ -38,7 +39,7 @@ function nf_begin_internal($dir, $options)
 		$nf_uri = $uri_part;
 	}
 
-	$rethookuri = nf_hook('uri', array($nf_uri));
+	$rethookuri = nf_hook_one('uri', array($nf_uri));
 	if($rethookuri !== null) {
 		$nf_uri = $rethookuri;
 	}

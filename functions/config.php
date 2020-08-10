@@ -59,6 +59,9 @@ $nf_cfg = array(
 		'enabled' => true,
 	),
 
+	// Plugins
+	'plugins' => array(),
+
 	// Additional parameters
 	'params' => array()
 );

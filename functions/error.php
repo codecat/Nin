@@ -24,12 +24,13 @@ function nf_error($num, $details = '')
 		case 13: $error = nf_t('Cache class does not exist'); break;
 		case 14: $error = nf_t('A required module is not installed'); break;
 		case 15: $error = nf_t('A suitable renderer could not be found for the view'); break;
+		case 16: $error = nf_t('Plugin was not found'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
 	}
 
-	if(nf_hook('error', array($num, $details, $error)) === null) {
+	if(nf_hook_one('error', array($num, $details, $error)) === null) {
 		echo nf_t('nf error:') . ' ' . $error . '<br>';
 	}
 }

@@ -155,7 +155,7 @@ function nf_begin_page($controllername, $actionname, $parts, $urlparams)
 	$functionname = 'action' . ucfirst($actionname);
 
 	$retbeforehookmod = false;
-	$retbeforehook = nf_hook('before-action', array($actionname));
+	$retbeforehook = nf_hook_one('before-action', array($actionname));
 	if($retbeforehook !== null) {
 		if($retbeforehook === false) {
 			return;
