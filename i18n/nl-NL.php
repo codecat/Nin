@@ -17,6 +17,7 @@ return array(
 	'Database context class does not exist' => 'Database context class bestaat niet',
 	'Cache class does not exist' => 'Cache class bestaat niet',
 	'A required module is not installed' => 'Een benodigde module is niet geinstalleerd',
+	'A suitable renderer could not be found for the view' => 'Een passende renderer kon niet gevonden worden voor de view',
 	'Details:' => 'Details:',
 	'nf error:' => 'nf fout:',
 	'Error was:' => 'Error was:',

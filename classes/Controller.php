@@ -63,14 +63,30 @@ class Controller
 		$inc_folder = strtolower(substr(get_class($this), 0, -strlen('Controller')));
 		$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'];
 		if($view[0] == '/') {
-			$inc_path .= $view . '.php';
+			$inc_path .= $view;
 		} else {
-			$inc_path .= $nf_module . $inc_folder . '/' . $view . '.php';
+			$inc_path .= $nf_module . $inc_folder . '/' . $view;
+		}
+
+		$basename = basename($inc_path);
+		if (strpos($basename, '.') === false) {
+			$inc_path .= '.php';
+		}
+
+		$renderer = null;
+
+		$ext = substr($inc_path, strrpos($inc_path, '.'));
+		if ($ext == '.php') {
+			$renderer = new \Nin\Renderers\PhpRenderer($this);
+		}
+
+		if ($renderer === null) {
+			nf_error(15, $ext);
+			return '';
 		}
 
 		ob_start();
-		extract($options);
-		include($inc_path);
+		$renderer->render($inc_path, $options);
 		return ob_get_clean();
 	}
 
