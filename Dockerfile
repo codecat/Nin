@@ -12,8 +12,7 @@ RUN (echo "<Directory /var/www/html>"; \
 RUN a2enconf nin
 
 # Enable APCu
-RUN pecl install APCu \
-			&& docker-php-ext-enable apcu
+RUN pecl install APCu && docker-php-ext-enable apcu
 
 # Enable MySQLi
 RUN docker-php-ext-install mysqli
