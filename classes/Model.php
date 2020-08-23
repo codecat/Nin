@@ -235,9 +235,6 @@ class Model
 		}
 		$obj = false;
 
-		$pk_col = static::findPrimaryKey();
-		$pk = $this->_data[$pk_col];
-
 		if($v[0] == BELONGS_TO) {
 			if(!$this->_loaded) {
 				return false;
@@ -252,6 +249,9 @@ class Model
 				return array();
 			}
 
+			$pk_col = static::findPrimaryKey();
+			$pk = $this->_data[$pk_col];
+
 			$their_classname = $v[1];
 			$their_column = $v[2];
 			$options = array();
@@ -264,6 +264,9 @@ class Model
 			if (!$this->_loaded) {
 				return false;
 			}
+
+			$pk_col = static::findPrimaryKey();
+			$pk = $this->_data[$pk_col];
 
 			$their_classname = $v[1];
 			$their_column = $v[2];
