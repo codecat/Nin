@@ -23,38 +23,7 @@ class ListView
 
 	public function render($view, $options = array())
 	{
-		if($this->provider === null) {
-			nf_error(11);
-			return;
-		}
-
-		$this->total = -1;
-		$this->rendered = 0;
-
-		$this->provider->begin();
-		while($obj = $this->provider->getNext()) {
-			$filter = $this->filter;
-			if($filter !== null && !$filter($obj)) {
-				continue;
-			}
-
-			$this->total++;
-
-			if($this->perpage != 0) {
-				if($this->total < ($this->page - 1) * $this->perpage) {
-					continue;
-				}
-				if($this->rendered >= $this->perpage) {
-					break;
-				}
-			}
-
-			$this->renderOne($view, $obj, $options);
-			$this->rendered++;
-		}
-		$this->total = $this->provider->count();
-		$this->provider->end();
-
+		$this->renderItems($view, $options);
 		if($this->perpage != 0 && $this->renderPaging) {
 			$this->renderPagingButtons();
 		}
@@ -105,6 +74,41 @@ class ListView
 			return '?page' . $this->id . '=' . $page;
 		}
 		return '?' . $qs . '&page' . $this->id . '=' . $page;
+	}
+
+	function renderItems($view, $options = array())
+	{
+		if($this->provider === null) {
+			nf_error(11);
+			return;
+		}
+
+		$this->total = -1;
+		$this->rendered = 0;
+
+		$this->provider->begin();
+		while($obj = $this->provider->getNext()) {
+			$filter = $this->filter;
+			if($filter !== null && !$filter($obj)) {
+				continue;
+			}
+
+			$this->total++;
+
+			if($this->perpage != 0) {
+				if($this->total < ($this->page - 1) * $this->perpage) {
+					continue;
+				}
+				if($this->rendered >= $this->perpage) {
+					break;
+				}
+			}
+
+			$this->renderOne($view, $obj, $options);
+			$this->rendered++;
+		}
+		$this->total = $this->provider->count();
+		$this->provider->end();
 	}
 
 	function renderPagingButtons()
