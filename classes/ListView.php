@@ -109,38 +109,51 @@ class ListView
 
 	function renderPagingButtons()
 	{
-		$pages = ceil($this->total / $this->perpage);
-		if($pages <= 1) {
+		$showAround = 4;
+
+		$numPages = ceil($this->total / $this->perpage);
+		if ($numPages <= 1) {
 			return;
 		}
+
+		$index = $this->page - 1;
+		$start = $index - $showAround;
+		$end = $index + $showAround;
+
+		$pages = array(0);
+		for ($i = $start; $i <= $end; $i++) {
+			if ($i == $start && $i > 1) {
+				$pages[] = '...';
+			}
+			if ($i > 0 && $i < $numPages - 1) {
+				$pages[] = $i;
+			}
+			if ($i == $end && $i < $numPages - 2) {
+				$pages[] = '...';
+			}
+		}
+		if ($numPages > 1) {
+			$pages[] = $numPages - 1;
+		}
+
 		echo '<div class="nf-pagebuttons">';
-		if($this->page > 1) {
+		if ($index > 0) {
 			echo '<a class="nf-pagebutton nf-previous" href="' . $this->getPagingUrl($this->page - 1) . '">&lt;</a>';
 		}
-		$separatedLeft = false;
-		$separatedRight = false;
 		echo '<ul class="nf-pagebutton-list">';
-		for($i=1; $i<=$pages; $i++) {
-			if(!$separatedLeft && $i > 4 && $i - $this->page <= -4) {
+		foreach ($pages as $i) {
+			if ($i === '...') {
 				echo '<li><span class="nf-pagebutton-separator">...</span></li>';
-				$i = $this->page - 4;
-				$separatedLeft = true;
-				continue;
+			} else {
+				$classname = 'nf-pagebutton';
+				if($i == $index) {
+					$classname .= ' nf-current';
+				}
+				echo '<li><a class="' . $classname . '" href="' . $this->getPagingUrl($i + 1) . '">' . ($i + 1) . '</a></li>';
 			}
-			if(!$separatedRight && $i - $this->page >= 4) {
-				echo '<li><span class="nf-pagebutton-separator">...</span></li>';
-				$i = $pages - 4;
-				$separatedRight = true;
-				continue;
-			}
-			$classname = 'nf-pagebutton';
-			if($i == $this->page) {
-				$classname .= ' nf-current';
-			}
-			echo '<li><a class="' . $classname . '" href="' . $this->getPagingUrl($i) . '">' . $i . '</a></li>';
 		}
 		echo '</ul>';
-		if($this->page < $pages) {
+		if ($index < $numPages - 1) {
 			echo '<a class="nf-pagebutton nf-next" href="' . $this->getPagingUrl($this->page + 1) . '">&gt;</a>';
 		}
 		echo '</div>';
