@@ -1,6 +1,6 @@
 FROM php:7-apache
 
-MAINTAINER Melissa Geels
+LABEL MAINTAINER="Melissa Geels"
 
 # Enable routing using the default .htaccess as a template
 WORKDIR /etc/apache2/conf-available
@@ -16,6 +16,9 @@ RUN pecl install APCu && docker-php-ext-enable apcu
 
 # Enable MySQLi
 RUN docker-php-ext-install mysqli
+
+# Enable opcache to improve performance
+RUN docker-php-ext-enable opcache
 
 # Enable mod_rewrite
 RUN a2enmod rewrite
