@@ -19,7 +19,6 @@ class PhpRenderer extends Renderer
 			extract($options);
 			include($inc_path);
 		};
-		$func->bindTo($this->controller, $this->controller);
-		$func($inc_path, $options);
+		$func->call($this->controller, $inc_path, $options);
 	}
 }
