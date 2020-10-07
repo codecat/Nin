@@ -41,7 +41,7 @@ class MySQL extends QueryBuilder
 			if($i > 0) {
 				$ret .= ' AND';
 			}
-			$ret .= ' `' . $key . '`=' . $this->encode($value);
+			$ret .= ' `' . $key . '`' . $oper . $this->encode($value);
 		}
 
 		return $ret;
