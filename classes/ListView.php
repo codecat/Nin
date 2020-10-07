@@ -115,6 +115,10 @@ class ListView
 	{
 		$showAround = 4;
 
+		if ($this->perpage == 0) {
+			return;
+		}
+
 		$numPages = ceil($this->total / $this->perpage);
 		if ($numPages <= 1) {
 			return;
