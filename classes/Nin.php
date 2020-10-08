@@ -6,8 +6,8 @@ class Nin
 {
 	public static $user_class = 'User';
 	public static $session_prefix = 'nin_';
-	public static $date_format = 'M jS';
-	public static $date_format_year = ', Y';
+	public static $date_format = 'r';
+	public static $date_format_year = '';
 
 	public static $current_user = null;
 
