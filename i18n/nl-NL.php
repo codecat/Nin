@@ -41,4 +41,5 @@ return array(
 	'day' => 'dag',
 	'days' => 'dagen',
 	'ago' => 'geleden',
+	'in' => 'in',
 );

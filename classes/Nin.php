@@ -98,54 +98,49 @@ class Nin
 	public static function timeFormat($epoch)
 	{
 		$ret = date(Nin::$date_format, intval($epoch));
-		if(date('Y') != date('Y', $epoch)) {
+		if(date('Y') != date('Y', $epoch) && Nin::$date_format_year != '') {
 			return $ret .= date(Nin::$date_format_year, $epoch);
 		}
 		return $ret;
 	}
 
-	public static function timeAgo($oldTime, $tags = true)
+	public static function relativeTime($time, $tags = true, $uppercase = false)
 	{
-		$timeCalc = 0;
-		$strOldTime = $oldTime;
-		if(preg_match("/^[0-9]+$/", $oldTime)) {
-			$timeCalc = time() - intval($oldTime);
-			$strOldTime = Nin::timeFormat($oldTime);
-		} else {
-			$timeCalc = time() - strtotime($oldTime);
+		if(preg_match("/^[0-9]+$/", $time)) {
+			$time = intval($time);
+		} elseif (!is_int($time)) {
+			$time = strtotime($time);
 		}
 
-		$timeType = 's';
-		if($timeCalc >= 60) {
-			$timeType = 'm';
-		}
-		if($timeCalc >= (60*60)) {
-			$timeType = 'h';
-		}
-		if($timeCalc >= (60*60*24)) {
-			$timeType = 'd';
-		}
-
-		if($timeType == "s") {
-			$timeCalc = Nin::multiple($timeCalc, nf_t('second'), nf_t('seconds')) . ' ' . nf_t('ago');
-		}
-		if($timeType == "m") {
-			$mins = round($timeCalc/60);
-			$timeCalc = Nin::multiple($mins, nf_t('minute'), nf_t('minutes')) . ' ' . nf_t('ago');
-		}
-		if($timeType == "h") {
-			$hrs = round($timeCalc/60/60);
-			$timeCalc = Nin::multiple($hrs, nf_t('hour'), nf_t('hours')) . ' ' . nf_t('ago');
-		}
-		if($timeType == "d") {
+		$ret = '';
+		$timeCalc = abs(time() - $time);
+		if ($timeCalc >= (60*60*24)) {
 			$days = round($timeCalc/60/60/24);
-			$timeCalc = Nin::multiple($days, nf_t('day'), nf_t('days')) . ' ' . nf_t('ago');
-		}
-		if($tags) {
-			return "<span title=\"" . $strOldTime . "\">" . $timeCalc . "</span>";
+			$ret = Nin::multiple($days, nf_t('day'), nf_t('days'));
+		} elseif ($timeCalc >= (60*60)) {
+			$hrs = round($timeCalc/60/60);
+			$ret = Nin::multiple($hrs, nf_t('hour'), nf_t('hours'));
+		} elseif ($timeCalc >= 60) {
+			$mins = round($timeCalc/60);
+			$ret = Nin::multiple($mins, nf_t('minute'), nf_t('minutes'));
 		} else {
-			return $timeCalc;
+			$ret = Nin::multiple($timeCalc, nf_t('second'), nf_t('seconds'));
 		}
+
+		if ($time <= time()) {
+			$ret .= ' ' . nf_t('ago');
+		} else {
+			$ret = nf_t('in') . ' ' . $ret;
+		}
+
+		if ($uppercase) {
+			$ret = ucfirst($ret);
+		}
+
+		if ($tags) {
+			return "<span title=\"" . Nin::timeFormat($time) . "\">" . $ret . "</span>";
+		}
+		return $ret;
 	}
 
 	public static function multiple($count, $verb, $verbs, $verbonly = false)
