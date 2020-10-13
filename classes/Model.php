@@ -409,7 +409,7 @@ class Model
 			$validator->arguments = array_slice($rule, 2);
 			if(!$validator->validate()) {
 				$allok = false;
-				$this->_errors[] = $validator->error;
+				$this->_errors[] = ucfirst($validator->error);
 			}
 		}
 		return $allok;
