@@ -49,7 +49,13 @@ class MySQL extends QueryBuilder
 
 	private function buildSelect()
 	{
-		$query = 'SELECT * FROM ' . $this->table;
+		$query = 'SELECT ';
+		if(count($this->get) == 0) {
+			$query .= '*';
+		} else {
+			$query .= implode(',', $this->get);
+		}
+		$query .= ' FROM ' . $this->table;
 		$query .= $this->buildWhere();
 		if($this->group != '') {
 			$query .= ' GROUP BY `' . $this->group . '`';

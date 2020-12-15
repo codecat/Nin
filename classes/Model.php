@@ -20,6 +20,11 @@ class Model
 		return array();
 	}
 
+	public static function columns()
+	{
+		return array();
+	}
+
 	public static function findPrimaryKey()
 	{
 		$tablename = static::tablename();
@@ -40,6 +45,7 @@ class Model
 		return $class::findByResult(
 			nf_db_beginbuild(static::tablename())
 				->select()
+				->get(static::columns())
 				->where(static::findPrimaryKey(), $pk)
 				->execute()
 		);
@@ -51,6 +57,7 @@ class Model
 		return $class::findByResult(
 			nf_db_beginbuild(static::tablename())
 				->select()
+				->get(static::columns())
 				->where($attributes)
 				->execute()
 		);
@@ -63,6 +70,7 @@ class Model
 			static::queryOptions($options,
 				nf_db_beginbuild(static::tablename())
 					->select()
+					->get(static::columns())
 					->where($attributes)
 			)->execute()
 		);
@@ -83,6 +91,7 @@ class Model
 			static::queryOptions($options,
 				nf_db_beginbuild(static::tablename())
 					->select()
+					->get(static::columns())
 			)->execute()
 		);
 	}
@@ -148,6 +157,31 @@ class Model
 			$ret[] = $obj;
 		}
 		return $ret;
+	}
+
+	public function fetch($column)
+	{
+		$pk_col = static::findPrimaryKey();
+		$res = nf_db_beginbuild(static::tablename())
+			->select()
+			->get($column)
+			->where($pk_col, $this->_data[$pk_col])
+			->execute();
+
+		if($res->num_rows() != 1) {
+			return false;
+		}
+
+		$row = $res->fetch_assoc();
+		if(is_array($column)) {
+			foreach($column as $col) {
+				$this->_data[$col] = $row[$col];
+			}
+			return true;
+		} else {
+			$this->_data[$column] = $row[$column];
+			return $this->_data[$column];
+		}
 	}
 
 	public function beforeInsert()

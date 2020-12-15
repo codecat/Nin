@@ -11,6 +11,7 @@ abstract class QueryBuilder
 	protected $group;
 	protected $orderby;
 	protected $limit;
+	protected $get;
 	protected $set;
 	protected $insertValues;
 
@@ -28,6 +29,7 @@ abstract class QueryBuilder
 		$this->group = '';
 		$this->orderby = array();
 		$this->limit = array(-1, -1);
+		$this->get = array();
 		$this->set = array();
 		$this->insertValues = array();
 	}
@@ -84,6 +86,22 @@ abstract class QueryBuilder
 		} else {
 			$this->limit = array($start, $end);
 		}
+		return $this;
+	}
+
+	public function getArray($arr)
+	{
+		foreach($arr as $key) {
+			$this->get[] = $key;
+		}
+		return $this;
+	}
+	public function get($key)
+	{
+		if(is_array($key)) {
+			return $this->getArray($key);
+		}
+		$this->get[] = $key;
 		return $this;
 	}
 
