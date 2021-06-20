@@ -33,13 +33,14 @@ class MySQL extends QueryBuilder
 			$key = $where[0];
 			$value = $where[1];
 			$oper = $where[2];
+			$logical = $where[3];
 
 			if($key == '' || $oper == '') {
 				continue;
 			}
 
 			if($i > 0) {
-				$ret .= ' AND';
+				$ret .= ' ' . $logical;
 			}
 
 			if(is_array($value)) {

@@ -46,20 +46,20 @@ abstract class QueryBuilder
 	public function count() { $this->setMethod('COUNT'); return $this; }
 	public function findpk() { $this->setMethod('FINDPK'); return $this; }
 
-	public function whereAssoc($arr)
+	public function whereAssoc($arr, $oper = '=', $logical = 'AND')
 	{
 		foreach($arr as $k => $v) {
-			$this->where($k, $v);
+			$this->where($k, $v, $oper, $logical);
 		}
 		return $this;
 	}
-	public function where($key, $value = null, $oper = '=')
+	public function where($key, $value = null, $oper = '=', $logical = 'AND')
 	{
 		if(is_array($key)) {
-			return $this->whereAssoc($key);
+			return $this->whereAssoc($key, $oper, $logical);
 		}
 		$this->where[] = array(
-			$key, $value, $oper
+			$key, $value, $oper, $logical
 		);
 		return $this;
 	}
