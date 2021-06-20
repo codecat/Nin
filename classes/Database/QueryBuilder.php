@@ -36,7 +36,6 @@ abstract class QueryBuilder
 
 	private function setMethod($method)
 	{
-		$this->clear();
 		$this->method = $method;
 	}
 

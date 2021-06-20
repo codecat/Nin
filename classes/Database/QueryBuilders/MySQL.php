@@ -41,7 +41,19 @@ class MySQL extends QueryBuilder
 			if($i > 0) {
 				$ret .= ' AND';
 			}
-			$ret .= ' `' . $key . '`' . $oper . $this->encode($value);
+
+			if(is_array($value)) {
+				$items = '';
+				for($j = 0; $j < count($value); $j++) {
+					if ($j > 0) {
+						$items .= ',';
+					}
+					$items .= $this->encode($value[$j]);
+				}
+				$ret .= ' `' . $key . '` IN (' . $items . ')';
+			} else {
+				$ret .= ' `' . $key . '`' . $oper . $this->encode($value);
+			}
 		}
 
 		return $ret;

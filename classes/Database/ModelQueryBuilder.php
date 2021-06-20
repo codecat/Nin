@@ -25,7 +25,10 @@ class ModelQueryBuilder
 
 	public function __call($name, $arguments)
 	{
-		call_user_func_array(array($this->builder, $name), $arguments);
+		$ret = call_user_func_array(array($this->builder, $name), $arguments);
+		if ($ret !== $this->builder) {
+			return $ret;
+		}
 		return $this;
 	}
 }
