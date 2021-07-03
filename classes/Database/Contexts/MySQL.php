@@ -15,7 +15,7 @@ class MySQL extends Context
 			'username' => '',
 			'password' => '',
 			'database' => '',
-			'encoding' => 'utf8'
+			'encoding' => 'utf8mb4'
 		), $options);
 
 		if(!class_exists('mysqli')) {
