@@ -43,9 +43,9 @@ function nf_t($str, $params = array())
 {
 	global $nf_i18n;
 
-	$ret = @$nf_i18n[$str];
-	if($ret === null) {
-		$ret = $str;
+	$ret = $str;
+	if (array_key_exists($str, $nf_i18n)) {
+		$ret = $nf_i18n[$str];
 	}
 
 	foreach($params as $k => $v) {
