@@ -20,8 +20,6 @@ class Postgres extends Result
 
 	public function insert_id()
 	{
-		//TODO:
-		// INSERT INTO ... RETURNING "ID"
 		$row = pg_fetch_assoc($this->res);
 		return $row['ID'];
 	}
