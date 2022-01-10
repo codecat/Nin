@@ -15,7 +15,22 @@ class Postgres extends Result
 
 	public function fetch_assoc()
 	{
-		return pg_fetch_assoc($this->res);
+		$ret = pg_fetch_assoc($this->res);
+
+		if ($ret) {
+			$numfields = pg_num_fields($this->res);
+			for ($i = 0; $i < $numfields; $i++) {
+				$fieldname = pg_field_name($this->res, $i);
+				$fieldtype = pg_field_type($this->res, $i);
+
+				switch ($fieldtype) {
+					case 'int4': $ret[$fieldname] = intval($ret[$fieldname]); break;
+					case 'bool': $ret[$fieldname] = ($ret[$fieldname] == 't'); break;
+				}
+			}
+		}
+
+		return $ret;
 	}
 
 	public function insert_id()
