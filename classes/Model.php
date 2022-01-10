@@ -25,18 +25,9 @@ class Model
 		return array();
 	}
 
-	public static function findPrimaryKey()
+	public static function primarykey()
 	{
-		$tablename = static::tablename();
-		$res = nf_db_beginbuild($tablename)->findpk()->execute();
-		if($res !== false) {
-			$row = $res->fetch_assoc();
-			if($row) {
-				return $row['Column_name'];
-			}
-		}
-		nf_error(9, $tablename);
-		return false;
+		return 'ID';
 	}
 
 	public static function findByPk($pk)
@@ -46,7 +37,7 @@ class Model
 			nf_db_beginbuild(static::tablename())
 				->select()
 				->get(static::columns())
-				->where(static::findPrimaryKey(), $pk)
+				->where(static::primarykey(), $pk)
 				->execute()
 		);
 	}
@@ -114,7 +105,7 @@ class Model
 			if(isset($options['orderby'])) {
 				$orderby = $options['orderby'];
 			} else {
-				$orderby = static::findPrimaryKey();
+				$orderby = static::primarykey();
 			}
 			$builder->orderby($orderby, $options['order']);
 		}
@@ -161,7 +152,7 @@ class Model
 
 	public function fetch($column)
 	{
-		$pk_col = static::findPrimaryKey();
+		$pk_col = static::primarykey();
 		$res = nf_db_beginbuild(static::tablename())
 			->select()
 			->get($column)
@@ -202,7 +193,7 @@ class Model
 			->values($this->_data)
 			->execute();
 		if($res !== false) {
-			$this->_data[static::findPrimaryKey()] = $res->insert_id();
+			$this->_data[static::primarykey()] = $res->insert_id();
 			$this->_loaded = true;
 			$this->afterInsert();
 			return true;
@@ -231,7 +222,7 @@ class Model
 		foreach($this->_changed as $k) {
 			$changed[$k] = $this->_data[$k];
 		}
-		$pk_col = static::findPrimaryKey();
+		$pk_col = static::primarykey();
 		$res = nf_db_beginbuild(static::tablename())
 			->update()
 			->where($pk_col, $this->_data[$pk_col])
@@ -250,7 +241,7 @@ class Model
 		if(!$this->_loaded) {
 			return false;
 		}
-		$pk_col = static::findPrimaryKey();
+		$pk_col = static::primarykey();
 		$res = nf_db_beginbuild(static::tablename())
 			->delete()
 			->where($pk_col, $this->_data[$pk_col])
@@ -283,7 +274,7 @@ class Model
 				return array();
 			}
 
-			$pk_col = static::findPrimaryKey();
+			$pk_col = static::primarykey();
 			$pk = $this->_data[$pk_col];
 
 			$their_classname = $v[1];
@@ -299,7 +290,7 @@ class Model
 				return false;
 			}
 
-			$pk_col = static::findPrimaryKey();
+			$pk_col = static::primarykey();
 			$pk = $this->_data[$pk_col];
 
 			$their_classname = $v[1];

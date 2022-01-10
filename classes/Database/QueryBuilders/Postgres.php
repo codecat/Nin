@@ -4,7 +4,7 @@ namespace Nin\Database\QueryBuilders;
 
 use Nin\Database\QueryBuilder;
 
-class MySQL extends QueryBuilder
+class Postgres extends QueryBuilder
 {
 	private function encode($o)
 	{
@@ -51,9 +51,9 @@ class MySQL extends QueryBuilder
 					}
 					$items .= $this->encode($value[$j]);
 				}
-				$ret .= ' `' . $key . '` IN (' . $items . ')';
+				$ret .= ' "' . $key . '" IN (' . $items . ')';
 			} else {
-				$ret .= ' `' . $key . '`' . $oper . $this->encode($value);
+				$ret .= ' "' . $key . '"' . $oper . $this->encode($value);
 			}
 		}
 
@@ -63,16 +63,16 @@ class MySQL extends QueryBuilder
 	private function buildSelect()
 	{
 		$query = 'SELECT ';
+		if($this->group != '') {
+			$query .= 'DISTINCT ON("' . $this->group . '") ';
+		}
 		if(count($this->get) == 0) {
 			$query .= '*';
 		} else {
 			$query .= implode(',', $this->get);
 		}
-		$query .= ' FROM ' . $this->table;
+		$query .= ' FROM "' . $this->table . '"';
 		$query .= $this->buildWhere();
-		if($this->group != '') {
-			$query .= ' GROUP BY `' . $this->group . '`';
-		}
 		for($i = 0; $i < count($this->orderby); $i++) {
 			if($i == 0) {
 				$query .= ' ORDER BY ';
@@ -80,13 +80,19 @@ class MySQL extends QueryBuilder
 				$query .= ',';
 			}
 			$order = $this->orderby[$i];
-			$query .= '`' . $order[0] . '`';
+			$query .= '"' . $order[0] . '"';
 			if(strcasecmp($order[1], 'DESC') == 0) {
 				$query .= ' DESC';
 			}
 		}
 		if($this->limit[0] >= 0 && $this->limit[1] >= 0) {
-			$query .= ' LIMIT ' . $this->limit[0] . ',' . $this->limit[1];
+			$start = $this->limit[0];
+			$end = $this->limit[1];
+			$num = $end - $start;
+			$query .= ' LIMIT ' . $num;
+			if ($start > 0) {
+				$query .= ' OFFSET ' . $start;
+			}
 		}
 		return $query . ';';
 	}
@@ -106,7 +112,7 @@ class MySQL extends QueryBuilder
 			if($count > 0) {
 				$query .= ',';
 			}
-			$query .= ' `' . $set[0] . '`=' . $this->encode($set[1]);
+			$query .= ' "' . $set[0] . '"=' . $this->encode($set[1]);
 			$count++;
 		}
 		$query .= $this->buildWhere();
@@ -130,7 +136,7 @@ class MySQL extends QueryBuilder
 					if($j > 0) {
 						$query .= ',';
 					}
-					$query .= $keys[$j];
+					$query .= '"' . $keys[$j] . '"';
 				}
 				$query .= ') VALUES ';
 			}
@@ -146,6 +152,13 @@ class MySQL extends QueryBuilder
 				$query .= $this->encode($vals[$j]);
 			}
 			$query .= ')';
+		}
+		if ($this->insertReturning) {
+			if (is_string($this->insertReturning)) {
+				$query .= ' RETURNING "' . $this->insertReturning . '"';
+			} else {
+				$query .= ' RETURNING *';
+			}
 		}
 		return $query . ';';
 	}

@@ -14,6 +14,7 @@ abstract class QueryBuilder
 	protected $get;
 	protected $set;
 	protected $insertValues;
+	protected $insertReturning = "ID";
 
 	public function __construct($context, $table)
 	{
@@ -44,7 +45,6 @@ abstract class QueryBuilder
 	public function insert() { $this->setMethod('INSERT'); return $this; }
 	public function delete() { $this->setMethod('DELETE'); return $this; }
 	public function count() { $this->setMethod('COUNT'); return $this; }
-	public function findpk() { $this->setMethod('FINDPK'); return $this; }
 
 	public function whereAssoc($arr, $oper = '=', $logical = 'AND')
 	{
@@ -126,6 +126,11 @@ abstract class QueryBuilder
 	{
 		$this->insertValues[] = $arr;
 		return $this;
+	}
+
+	public function returning($value = true)
+	{
+		$this->insertReturning = $value;
 	}
 
 	public function execute()
