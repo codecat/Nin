@@ -156,4 +156,12 @@ class Nin
 		}
 		return $count . ' ' . $verbs;
 	}
+
+	public static function ip($allow_forwarded_for = true)
+	{
+		if ($allow_forwarded_for && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
+		return $_SERVER['REMOTE_ADDR'];
+	}
 }
