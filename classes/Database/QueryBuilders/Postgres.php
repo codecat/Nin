@@ -10,6 +10,8 @@ class Postgres extends QueryBuilder
 	{
 		if(is_string($o)) {
 			return "'" . $this->context->real_escape_string($o) . "'";
+		} elseif(is_bool($o)) {
+			return $o ? 'true' : 'false';
 		} elseif(is_float($o)) {
 			return str_replace(',', '.', strval(floatval($o)));
 		} elseif(is_numeric($o)) {
