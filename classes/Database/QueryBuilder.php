@@ -81,9 +81,9 @@ abstract class QueryBuilder
 	public function limit($start, $end = null)
 	{
 		if($end === null) {
-			$this->limit = array(0, $start);
+			$this->limit = array(0, intval($start));
 		} else {
-			$this->limit = array($start, $end);
+			$this->limit = array(intval($start), intval($end));
 		}
 		return $this;
 	}
