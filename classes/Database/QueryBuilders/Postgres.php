@@ -71,7 +71,12 @@ class Postgres extends QueryBuilder
 		if(count($this->get) == 0) {
 			$query .= '*';
 		} else {
-			$query .= implode(',', $this->get);
+			for ($i = 0; $i < count($this->get); $i++) {
+				if ($i > 0) {
+					$query .= ',';
+				}
+				$query .= '"' . $this->get[$i] . '"';
+			}
 		}
 		$query .= ' FROM "' . $this->table . '"';
 		$query .= $this->buildWhere();
