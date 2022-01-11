@@ -90,29 +90,31 @@ function nf_php_exception($e)
 		echo '<tr style="background: #fdd;"><td style="border-top: 1px solid #faa;">';
 		if($func) {
 			echo htmlentities($func) . '(';
-			for($j = 0; $j < count($args); $j++) {
-				echo '<code>';
-				$arg = $args[$j];
-				if(is_string($arg)) {
-					echo '"';
-					if(strlen($arg) > 50) {
-						echo htmlentities(addslashes(substr($arg, 0, 47))) . '...';
+			if ($args !== false) {
+				for($j = 0; $j < count($args); $j++) {
+					echo '<code>';
+					$arg = $args[$j];
+					if(is_string($arg)) {
+						echo '"';
+						if(strlen($arg) > 50) {
+							echo htmlentities(addslashes(substr($arg, 0, 47))) . '...';
+						} else {
+							echo htmlentities(addslashes($arg));
+						}
+						echo '"';
+					} elseif(is_array($arg)) {
+						echo 'array(' . count($arg) . ')';
+					} elseif(is_bool($arg)) {
+						echo $arg ? 'true' : 'false';
+					} elseif(is_integer($arg)) {
+						echo $arg;
 					} else {
-						echo htmlentities(addslashes($arg));
+						echo gettype($arg);
 					}
-					echo '"';
-				} elseif(is_array($arg)) {
-					echo 'array(' . count($arg) . ')';
-				} elseif(is_bool($arg)) {
-					echo $arg ? 'true' : 'false';
-				} elseif(is_integer($arg)) {
-					echo $arg;
-				} else {
-					echo gettype($arg);
-				}
-				echo '</code>';
-				if($j != count($args) - 1) {
-					echo ', ';
+					echo '</code>';
+					if($j != count($args) - 1) {
+						echo ', ';
+					}
 				}
 			}
 			echo ') ';
