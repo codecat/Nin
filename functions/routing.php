@@ -72,10 +72,15 @@ function nf_handle_routing_rules($uri)
 	foreach($nf_cfg['routing']['rules'] as $regex => $route) {
 		$matches = false;
 		if(preg_match($regex, $uri, $matches)) {
+			$action = '';
 			$keys = array();
 			foreach($matches as $k => $v) {
 				if(is_string($k)) {
-					$keys[$k] = $v;
+					if($k == '_action') {
+						$action = $v;
+					} else {
+						$keys[$k] = $v;
+					}
 				}
 			}
 			$_GET = array_merge($_GET, $keys);
@@ -85,6 +90,9 @@ function nf_handle_routing_rules($uri)
 				foreach($matches as $k => $v) {
 					$ret = str_replace('$' . $k, $v, $ret);
 				}
+			}
+			if ($action != '') {
+				$ret .= '/' . $action;
 			}
 			return $ret;
 		}
