@@ -15,6 +15,9 @@ function nf_db_initialize()
 	if(isset($nf_cfg['mysql'])) {
 		$nf_cfg['db']['class'] = 'MySQL';
 		$nf_cfg['db']['options'] = $nf_cfg['mysql'];
+	} elseif(isset($nf_cfg['postgres'])) {
+		$nf_cfg['db']['class'] = 'Postgres';
+		$nf_cfg['db']['options'] = $nf_cfg['postgres'];
 	}
 
 	$class_name = $nf_cfg['db']['class'];
