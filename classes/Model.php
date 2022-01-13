@@ -94,29 +94,35 @@ class Model
 
 	public static function queryOptions($options, $builder)
 	{
-		if(count($options) == 0) {
-			return $builder;
-		}
-		if(isset($options['group'])) {
-			$builder->group($options['group']);
-		}
-		if(isset($options['order'])) {
-			$orderby = '';
+		// By default, we always want to sort by primary key ascending
+		// Doing this will make sure PostgreSQL's behavior is the same as MySQL's behavior
+		$order = 'asc';
+		$orderby = static::primarykey();
+
+		if(count($options) > 0) {
+			if(isset($options['group'])) {
+				$builder->group($options['group']);
+			}
+
+			if(isset($options['order'])) {
+				$order = $options['order'];
+			}
 			if(isset($options['orderby'])) {
 				$orderby = $options['orderby'];
-			} else {
-				$orderby = static::primarykey();
 			}
-			$builder->orderby($orderby, $options['order']);
-		}
-		if(isset($options['limit'])) {
-			$l = $options['limit'];
-			if(is_int($l)) {
-				$builder->limit($l);
-			} elseif(is_array($l)) {
-				$builder->limit(intval($l[0]), intval($l[1]));
+
+			if(isset($options['limit'])) {
+				$l = $options['limit'];
+				if(is_int($l)) {
+					$builder->limit($l);
+				} elseif(is_array($l)) {
+					$builder->limit(intval($l[0]), intval($l[1]));
+				}
 			}
 		}
+
+		$builder->orderby($orderby, $order);
+
 		return $builder;
 	}
 
