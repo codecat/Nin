@@ -25,6 +25,7 @@ function nf_error($num, $details = '')
 		case 14: $error = nf_t('A required module is not installed'); break;
 		case 15: $error = nf_t('A suitable renderer could not be found for the view'); break;
 		case 16: $error = nf_t('Plugin was not found'); break;
+		case 17: $error = nf_t('Controller requires parameters not given'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
@@ -52,6 +53,8 @@ function nf_error_routing($num, $details = '')
 	$nf_uri_fallback = true;
 
 	if(!$nf_cfg['routing']['preferRules']) {
+		var_dump($nf_uri);
+
 		$uri = nf_handle_routing_rules($nf_uri);
 		if($uri !== $nf_uri) {
 			$nf_uri = $uri;

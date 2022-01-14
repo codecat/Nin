@@ -54,10 +54,9 @@ function nf_handle_uri($uri)
 		break;
 	}
 
-	$urlparams = array_slice($parts, $lastpart + 1);
-
 	$nf_module = $module;
-	nf_begin_page($controller, $action, $parts, $urlparams);
+
+	nf_begin_page($controller, $action, $parts, $lastpart);
 }
 
 /**
@@ -105,7 +104,7 @@ function nf_handle_routing_rules($uri)
  * Begin the given page by controller name and action name.
  * This gets called from nf_handle_uri().
  */
-function nf_begin_page($controllername, $actionname, $parts, $urlparams)
+function nf_begin_page($controllername, $actionname, $parts, $lastpart)
 {
 	global $nf_www_dir;
 	global $nf_cfg;
@@ -119,11 +118,6 @@ function nf_begin_page($controllername, $actionname, $parts, $urlparams)
 	}
 
 	$nf_current_controllername = $controllername;
-
-	if(!preg_match($nf_cfg['validation']['regex_actions'], $actionname)) {
-		nf_error_routing(2);
-		return;
-	}
 
 	$folder = $nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $nf_module;
 	if(!file_exists($folder) && !$nf_using_controllers) {
@@ -157,8 +151,51 @@ function nf_begin_page($controllername, $actionname, $parts, $urlparams)
 		nf_error_routing(4, $classname);
 		return;
 	}
-	$controller = new $classname;
+
+	$controller = false;
+
+	$ctorParams = array();
+	$r = new ReflectionClass($classname);
+	$cm = $r->getConstructor();
+	if($cm) {
+		$ctorParams = $cm->getParameters();
+	}
+
+	if(count($ctorParams) == 0) {
+		$controller = new $classname;
+	} else {
+		$args = array();
+		for($i = 0; $i < count($ctorParams); $i++) {
+			$param = $ctorParams[$i];
+			$j = $lastpart + $i;
+			if($j < count($parts)) {
+				$args[] = $parts[$j];
+			} else {
+				if($param->isDefaultValueAvailable()) {
+					$args[] = $param->getDefaultValue();
+				} else {
+					nf_error(17, $param->getName());
+					return;
+				}
+			}
+		}
+		$lastpart += count($ctorParams);
+
+		if($lastpart >= count($parts)) {
+			$actionname = $nf_cfg['index']['action'];
+		} else {
+			$actionname = $parts[$lastpart];
+		}
+
+		$controller = $r->newInstanceArgs($args);
+	}
+
 	$controller->uri_parts = $parts;
+
+	if(!preg_match($nf_cfg['validation']['regex_actions'], $actionname)) {
+		nf_error_routing(2);
+		return;
+	}
 
 	$functionname = 'action' . ucfirst($actionname);
 
@@ -187,6 +224,7 @@ function nf_begin_page($controllername, $actionname, $parts, $urlparams)
 	$r = new ReflectionClass($classname);
 	$m = $r->getMethod($functionname);
 
+	$urlparams = array_slice($parts, $lastpart + 1);
 	$args = $urlparams;
 
 	$params = $m->getParameters();
