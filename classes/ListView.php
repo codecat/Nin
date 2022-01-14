@@ -33,7 +33,6 @@ class ListView
 	{
 		global $nf_www_dir;
 		global $nf_cfg;
-		global $nf_module;
 		global $nf_current_controllername;
 
 		if (is_callable($view)) {
@@ -58,7 +57,7 @@ class ListView
 			if($view[0] == '/') {
 				$inc_path .= $view . '.php';
 			} else {
-				$inc_path .= $nf_module . $nf_current_controllername . '/' . $view . '.php';
+				$inc_path .= $nf_current_controllername . '/' . $view . '.php';
 			}
 
 			extract($options);

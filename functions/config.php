@@ -16,13 +16,14 @@ $nf_cfg = [
 
 	// Routing configuration
 	'routing' => [
+		'notfound' => false,
 		'preferRules' => true,
 		'rules' => []
 	],
 
 	// Index pages
 	'index' => [
-		'controller' => 'index',
+		'controller' => '',
 		'action' => 'index'
 	],
 

@@ -36,23 +36,8 @@ function nf_autoload($classname)
 	global $nf_www_dir;
 	global $nf_dir;
 	global $nf_cfg;
-	global $nf_module;
-	global $nf_using_controllers;
 
-	if(!$nf_using_controllers && $classname == 'Nin\\Controller') {
-		$nf_using_controllers = true;
-	}
-
-	$parse = explode('/', trim($nf_module, '/'));
 	$paths = ['/'];
-	$pathStart = '/';
-	for($i=0; $i<count($parse); $i++) {
-		if(empty($parse[$i])) {
-			continue;
-		}
-		$paths[] = $pathStart . $parse[$i] . '/';
-		$pathStart .= $parse[$i] . '/';
-	}
 
 	// Use manual path lookups when not using namespaces
 	if(strstr($classname, '\\') !== false) {
@@ -65,6 +50,15 @@ function nf_autoload($classname)
 			}
 		}
 	} else {
+		// Look for controllers
+		foreach($paths as $module) {
+			$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['controllers'] . $module, $classname);
+			if($filename !== false) {
+				include($filename);
+				return;
+			}
+		}
+
 		// Look for models
 		foreach($paths as $module) {
 			$filename = nf_autoload_find($nf_www_dir . '/' . $nf_cfg['paths']['models'] . $module, $classname);

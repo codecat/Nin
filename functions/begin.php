@@ -10,7 +10,6 @@ function nf_begin_internal($dir, $options)
 	global $nf_uri_original;
 	global $nf_cfg;
 	global $nf_dir;
-	global $nf_using_controllers;
 
 	$nf_www_dir = $dir;
 

@@ -14,7 +14,7 @@ function nf_error($num, $details = '')
 		case 3: $error = nf_t('Controller or module does not exist'); break;
 		case 4: $error = nf_t('Controller class does not have the right name'); break;
 		case 5: $error = nf_t('Action does not exist'); break;
-		case 6: $error = nf_t('Action requires parameters not given'); break;
+		case 6: $error = nf_t('Begin call requires parameters not given'); break;
 		case 7: $error = nf_t('Failed to connect to database'); break;
 		case 8: $error = nf_t('Class could not be found'); break;
 		case 9: $error = nf_t('Table does not have a primary key'); break;
@@ -26,9 +26,10 @@ function nf_error($num, $details = '')
 		case 15: $error = nf_t('A suitable renderer could not be found for the view'); break;
 		case 16: $error = nf_t('Plugin was not found'); break;
 		case 17: $error = nf_t('Controller requires parameters not given'); break;
+		case 18: $error = nf_t('Route does not exist'); break;
 	}
 	if($details != '') {
-		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
+		$error .= ' (' . nf_t('Details:') . ' "' . Nin\Html::encode($details) . '")';
 	}
 
 	if(nf_hook_one('error', [$num, $details, $error]) === null) {
@@ -53,14 +54,16 @@ function nf_error_routing($num, $details = '')
 	$nf_uri_fallback = true;
 
 	if(!$nf_cfg['routing']['preferRules']) {
-		var_dump($nf_uri);
-
-		$uri = nf_handle_routing_rules($nf_uri);
-		if($uri !== $nf_uri) {
-			$nf_uri = $uri;
-			nf_handle_uri($nf_uri);
+		$routeaction = nf_handle_routing_rules($nf_uri);
+		if($routeaction !== false) {
+			nf_begin_page($routeaction[0], $routeaction[1]);
 			return;
 		}
+	}
+
+	if($nf_cfg['routing']['notfound'] !== false) {
+		nf_begin_page($nf_cfg['routing']['notfound'], ['uri' => $nf_uri]);
+		return;
 	}
 
 	nf_error($num, $details);

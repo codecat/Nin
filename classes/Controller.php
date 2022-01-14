@@ -5,7 +5,6 @@ namespace Nin;
 class Controller
 {
 	public $layout = 'views/layout.php';
-	public $uri_parts = [];
 	public $files_css = [];
 	public $files_js = [];
 
@@ -58,14 +57,13 @@ class Controller
 	{
 		global $nf_www_dir;
 		global $nf_cfg;
-		global $nf_module;
 
 		$inc_folder = strtolower(substr(get_class($this), 0, -strlen('Controller')));
 		$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'];
 		if($view[0] == '/') {
 			$inc_path .= $view;
 		} else {
-			$inc_path .= $nf_module . $inc_folder . '/' . $view;
+			$inc_path .= '/' . $inc_folder . '/' . $view;
 		}
 
 		$basename = basename($inc_path);

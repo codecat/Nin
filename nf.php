@@ -6,7 +6,6 @@ $nf_www_dir = '';
 $nf_uri = '';
 $nf_uri_original = '';
 $nf_uri_fallback = false;
-$nf_using_controllers = false;
 
 // Include dependencies
 include('functions/define.php');
