@@ -26,7 +26,7 @@ $nf_cfg = [
 
 	// Index pages
 	'index' => [
-		'controller' => '',
+		'controller' => 'IndexController',
 		'action' => 'index',
 	],
 
