@@ -81,7 +81,12 @@ function nf_config_initialize($options)
 			$nf_cfg[$k] = $v;
 			continue;
 		}
-		$nf_cfg[$k] = array_merge($nf_cfg[$k], $v);
+
+		if(is_array($v)) {
+			$nf_cfg[$k] = array_merge($nf_cfg[$k], $v);
+		} else {
+			$nf_cfg[$k] = $v;
+		}
 	}
 }
 
