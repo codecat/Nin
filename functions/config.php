@@ -21,13 +21,13 @@ $nf_cfg = [
 	'routing' => [
 		'notfound' => false,
 		'preferRules' => true,
-		'rules' => []
+		'rules' => [],
 	],
 
 	// Index pages
 	'index' => [
 		'controller' => '',
-		'action' => 'index'
+		'action' => 'index',
 	],
 
 	// Validation
@@ -55,7 +55,7 @@ $nf_cfg = [
 	// Internationalization
 	'i18n' => [
 		'languages' => ['en-US'],
-		'language' => 'en-US'
+		'language' => 'en-US',
 	],
 
 	// Debugging
@@ -67,7 +67,7 @@ $nf_cfg = [
 	'plugins' => [],
 
 	// Additional parameters
-	'params' => []
+	'params' => [],
 ];
 
 /**
