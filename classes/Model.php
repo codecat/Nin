@@ -4,25 +4,25 @@ namespace Nin;
 
 class Model
 {
-	public $_data = array();
-	public $_changed = array();
+	public $_data = [];
+	public $_changed = [];
 	public $_loaded = false;
-	public $_relationalrows = array();
-	public $_errors = array();
+	public $_relationalrows = [];
+	public $_errors = [];
 
 	public function relations()
 	{
-		return array();
+		return [];
 	}
 
 	public function rules()
 	{
-		return array();
+		return [];
 	}
 
 	public static function columns()
 	{
-		return array();
+		return [];
 	}
 
 	public static function primarykey()
@@ -54,7 +54,7 @@ class Model
 		);
 	}
 
-	public static function findAllByAttributes($attributes, $options = array())
+	public static function findAllByAttributes($attributes, $options = [])
 	{
 		$class = get_called_class();
 		return $class::findAllByResult(
@@ -75,7 +75,7 @@ class Model
 			->executeCount();
 	}
 
-	public static function findAll($options = array())
+	public static function findAll($options = [])
 	{
 		$class = get_called_class();
 		return $class::findAllByResult(
@@ -144,10 +144,10 @@ class Model
 	public static function findAllByResult($res)
 	{
 		if($res === false) {
-			return array();
+			return [];
 		}
 		$class = get_called_class();
-		$ret = array();
+		$ret = [];
 		while($row = $res->fetch_assoc()) {
 			$obj = new $class();
 			$obj->loadRow($row);
@@ -224,7 +224,7 @@ class Model
 			return true;
 		}
 		$this->beforeSave();
-		$changed = array();
+		$changed = [];
 		foreach($this->_changed as $k) {
 			$changed[$k] = $this->_data[$k];
 		}
@@ -235,7 +235,7 @@ class Model
 			->set($changed)
 			->execute();
 		if($res !== false) {
-			$this->_changed = array();
+			$this->_changed = [];
 			$this->afterSave();
 			return true;
 		}
@@ -277,7 +277,7 @@ class Model
 
 		} elseif($v[0] == HAS_MANY) {
 			if (!$this->_loaded) {
-				return array();
+				return [];
 			}
 
 			$pk_col = static::primarykey();
@@ -285,11 +285,11 @@ class Model
 
 			$their_classname = $v[1];
 			$their_column = $v[2];
-			$options = array();
+			$options = [];
 			if(count($v) >= 4) {
 				$options = $v[3];
 			}
-			$obj = $their_classname::findAllByAttributes(array($their_column => $pk), $options);
+			$obj = $their_classname::findAllByAttributes([$their_column => $pk], $options);
 
 		} elseif($v[0] == HAS_ONE) {
 			if (!$this->_loaded) {
@@ -301,7 +301,7 @@ class Model
 
 			$their_classname = $v[1];
 			$their_column = $v[2];
-			$obj = $their_classname::findByAttributes(array($their_column => $pk));
+			$obj = $their_classname::findByAttributes([$their_column => $pk]);
 		}
 
 		$this->_relationalrows[$k] = $obj;
@@ -417,7 +417,7 @@ class Model
 	{
 		$rules = $this->rules();
 		$allok = true;
-		$this->_errors = array();
+		$this->_errors = [];
 		foreach($rules as $rule) {
 			$keys = explode(',', $rule[0]);
 			for($i = 0; $i < count($keys); $i++) {

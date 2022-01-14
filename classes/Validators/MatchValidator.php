@@ -19,7 +19,7 @@ class MatchValidator extends Validator
 				throw new Exception('Wrong regex pattern for key ' . $key);
 			} elseif($result === 0) {
 				$allok = false;
-				$this->error .= nf_t('$key does not match pattern.', array('$key' => $key)) . "\n";
+				$this->error .= nf_t('$key does not match pattern.', ['$key' => $key]) . "\n";
 			}
 		}
 		return $allok;

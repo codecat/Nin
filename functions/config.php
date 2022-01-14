@@ -1,8 +1,8 @@
 <?php
 
-$nf_cfg = array(
+$nf_cfg = [
 	// Paths to places
-	'paths' => array(
+	'paths' => [
 		'base' => '/',
 		'controllers' => 'controllers',
 		'views' => 'views',
@@ -12,59 +12,59 @@ $nf_cfg = array(
 		'validators' => 'validators',
 		'assets' => 'assets',
 		'logs' => 'logs',
-	),
+	],
 
 	// Routing configuration
-	'routing' => array(
+	'routing' => [
 		'preferRules' => true,
-		'rules' => array()
-	),
+		'rules' => []
+	],
 
 	// Index pages
-	'index' => array(
+	'index' => [
 		'controller' => 'index',
 		'action' => 'index'
-	),
+	],
 
 	// Validation
-	'validation' => array(
+	'validation' => [
 		'regex_controllers' => '/^[a-z0-9\\-_]+$/',
 		'regex_actions' => '/^[a-z0-9_]+$/',
 		'parameters_exclusive' => true,
-	),
+	],
 
 	// Database information
-	'db' => array(
+	'db' => [
 		'class' => 'Dummy',
-		'options' => array(),
-	),
+		'options' => [],
+	],
 
 	// Caching information
-	'cache' => array(
+	'cache' => [
 		'class' => 'Dummy',
-		'options' => array(),
-	),
+		'options' => [],
+	],
 
 	// Hooks
-	'hooks' => array(),
+	'hooks' => [],
 
 	// Internationalization
-	'i18n' => array(
-		'languages' => array('en-US'),
+	'i18n' => [
+		'languages' => ['en-US'],
 		'language' => 'en-US'
-	),
+	],
 
 	// Debugging
-	'debug' => array(
+	'debug' => [
 		'enabled' => true,
-	),
+	],
 
 	// Plugins
-	'plugins' => array(),
+	'plugins' => [],
 
 	// Additional parameters
-	'params' => array()
-);
+	'params' => []
+];
 
 /**
  * Called by nf_begin() to merge the given options with $nf_cfg.

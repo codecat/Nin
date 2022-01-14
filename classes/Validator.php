@@ -5,9 +5,9 @@ namespace Nin;
 class Validator
 {
 	public $model = null;
-	public $keys = array();
+	public $keys = [];
 	public $value = '';
-	public $arguments = array();
+	public $arguments = [];
 
 	public $error = '';
 

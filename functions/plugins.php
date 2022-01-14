@@ -1,6 +1,6 @@
 <?php
 
-$nf_plugins = array();
+$nf_plugins = [];
 
 /**
  * Initialize any plugins defined in the configuration.
@@ -26,9 +26,9 @@ function nf_plugins_initialize()
 
 		$info = require_once($path . '/plugin.php');
 
-		$nf_plugins[] = array(
+		$nf_plugins[] = [
 			'id' => basename($plugin),
 			'info' => $info,
-		);
+		];
 	}
 }

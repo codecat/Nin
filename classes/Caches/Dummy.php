@@ -6,7 +6,7 @@ use Nin\Cache;
 
 class Dummy extends Cache
 {
-	private $memory = array();
+	private $memory = [];
 
 	public function __construct($options)
 	{
@@ -14,7 +14,7 @@ class Dummy extends Cache
 
 	public function set($key, $value, $ttl = 0)
 	{
-		$this->memory[$key] = array($value, time() + $ttl);
+		$this->memory[$key] = [$value, time() + $ttl];
 	}
 
 	public function get($key)
@@ -31,7 +31,7 @@ class Dummy extends Cache
 
 	public function clear()
 	{
-		$this->memory = array();
+		$this->memory = [];
 	}
 
 	public function delete($key)

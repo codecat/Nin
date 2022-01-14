@@ -41,7 +41,7 @@ function nf_begin_internal($dir, $options)
 	}
 	$nf_uri_original = $nf_uri;
 
-	$rethookuri = nf_hook_one('uri', array($nf_uri));
+	$rethookuri = nf_hook_one('uri', [$nf_uri]);
 	if($rethookuri !== null) {
 		$nf_uri = $rethookuri;
 	}

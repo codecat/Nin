@@ -12,7 +12,7 @@ class RequiredValidator extends Validator
 
 		foreach($this->keys as $key) {
 			if(empty($this->model->$key)) {
-				$this->error .= nf_t('$key is required.', array('$key' => $key)) . "\n";
+				$this->error .= nf_t('$key is required.', ['$key' => $key]) . "\n";
 				$allok = false;
 			}
 		}

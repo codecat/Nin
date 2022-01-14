@@ -31,7 +31,7 @@ function nf_error($num, $details = '')
 		$error .= ' (' . nf_t('Details:') . ' "' . $details . '")';
 	}
 
-	if(nf_hook_one('error', array($num, $details, $error)) === null) {
+	if(nf_hook_one('error', [$num, $details, $error]) === null) {
 		echo nf_t('nf error:') . ' ' . $error . '<br>';
 	}
 }
@@ -106,7 +106,7 @@ function nf_php_exception($e)
 						}
 						echo '"';
 					} elseif(is_array($arg)) {
-						echo 'array(' . count($arg) . ')';
+						echo '[..' . count($arg) . ']';
 					} elseif(is_bool($arg)) {
 						echo $arg ? 'true' : 'false';
 					} elseif(is_integer($arg)) {

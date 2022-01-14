@@ -19,7 +19,7 @@ function nf_handle_uri($uri)
 		$nf_uri = $uri = nf_handle_routing_rules($uri);
 	}
 
-	$parts = array();
+	$parts = [];
 	$token = strtok($uri, '/');
 	while($token !== false) {
 		$parts[] = $token;
@@ -72,7 +72,7 @@ function nf_handle_routing_rules($uri)
 		$matches = false;
 		if(preg_match($regex, $uri, $matches)) {
 			$action = '';
-			$keys = array();
+			$keys = [];
 			foreach($matches as $k => $v) {
 				if(is_string($k)) {
 					if($k == '_action') {
@@ -154,7 +154,7 @@ function nf_begin_page($controllername, $actionname, $parts, $lastpart)
 
 	$controller = false;
 
-	$ctorParams = array();
+	$ctorParams = [];
 	$r = new ReflectionClass($classname);
 	$cm = $r->getConstructor();
 	if($cm) {
@@ -164,7 +164,7 @@ function nf_begin_page($controllername, $actionname, $parts, $lastpart)
 	if(count($ctorParams) == 0) {
 		$controller = new $classname;
 	} else {
-		$args = array();
+		$args = [];
 		for($i = 0; $i < count($ctorParams); $i++) {
 			$param = $ctorParams[$i];
 			$j = $lastpart + $i;
@@ -200,7 +200,7 @@ function nf_begin_page($controllername, $actionname, $parts, $lastpart)
 	$functionname = 'action' . ucfirst($actionname);
 
 	$retbeforehookmod = false;
-	$retbeforehook = nf_hook_one('before-action', array($actionname));
+	$retbeforehook = nf_hook_one('before-action', [$actionname]);
 	if($retbeforehook !== null) {
 		if($retbeforehook === false) {
 			return;
@@ -241,5 +241,5 @@ function nf_begin_page($controllername, $actionname, $parts, $lastpart)
 			}
 		}
 	}
-	call_user_func_array(array($controller, $functionname), $args);
+	call_user_func_array([$controller, $functionname], $args);
 }

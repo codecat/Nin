@@ -9,7 +9,7 @@ class Html
 		return htmlentities($str, ENT_QUOTES, 'UTF-8');
 	}
 
-	private static function maketag($tagname, $void = true, $options = array())
+	private static function maketag($tagname, $void = true, $options = [])
 	{
 		$ret = '<' . $tagname;
 		foreach($options as $k => $v) {
@@ -30,26 +30,26 @@ class Html
 		return $ret;
 	}
 
-	public static function activeText($model, $key, $options = array())
+	public static function activeText($model, $key, $options = [])
 	{
-		return Html::maketag('input', true, array_merge(array(
+		return Html::maketag('input', true, array_merge([
 			'type' => 'text',
 			'name' => get_class($model) . '[' . $key . ']',
 			'value' => $model->$key
-		), $options));
+		], $options));
 	}
 
-	public static function activeTextarea($model, $key, $options = array())
+	public static function activeTextarea($model, $key, $options = [])
 	{
-		$ret = Html::maketag('textarea', true, array_merge(array(
+		$ret = Html::maketag('textarea', true, array_merge([
 			'name' => get_class($model) . '[' . $key . ']'
-		), $options));
+		], $options));
 		$ret .= $model->$key;
 		$ret .= '</textarea>';
 		return $ret;
 	}
 
-	public static function activeRadio($model, $key, $values = array(), $options = array())
+	public static function activeRadio($model, $key, $values = [], $options = [])
 	{
 		$ret = '';
 		foreach($values as $k => $v) {
@@ -57,34 +57,34 @@ class Html
 			if($model->$key !== false && $model->$key == $k) {
 				$checked = 'checked';
 			}
-			$ret .= '<label>' . Html::maketag('input', true, array_merge(array(
+			$ret .= '<label>' . Html::maketag('input', true, array_merge([
 				'type' => 'radio',
 				'name' => get_class($model) . '[' . $key . ']',
 				'value' => $k,
 				$checked
-			), $options)) . ' ' . $v . '</label>' . "\n";
+			], $options)) . ' ' . $v . '</label>' . "\n";
 		}
 		return $ret;
 	}
 
-	public static function activeDate($model, $key, $format, $options = array())
+	public static function activeDate($model, $key, $format, $options = [])
 	{
 		$date = '';
 		if($model->$key) {
 			$date = date($format, strtotime($model->$key));
 		}
-		return Html::maketag('input', true, array_merge(array(
+		return Html::maketag('input', true, array_merge([
 			'type' => 'text',
 			'name' => get_class($model) . '[' . $key . ']',
 			'value' => $date
-		), $options));
+		], $options));
 	}
 
-	public static function activeCombo($model, $key, $values = array(), $options = array())
+	public static function activeCombo($model, $key, $values = [], $options = [])
 	{
-		$ret = Html::maketag('select', true, array_merge(array(
+		$ret = Html::maketag('select', true, array_merge([
 			'name' => get_class($model) . '[' . $key . ']'
-		), $options));
+		], $options));
 		foreach($values as $k => $v) {
 			$selected = '';
 			if(is_int($k)) {
@@ -103,22 +103,22 @@ class Html
 		return $ret;
 	}
 
-	public static function activeCheck($model, $key, $options = array(), $on = '1', $off = '0')
+	public static function activeCheck($model, $key, $options = [], $on = '1', $off = '0')
 	{
 		$checked = '';
 		if($model->$key == $on) {
 			$checked = 'checked';
 		}
 		$fieldname = get_class($model) . '[' . $key . ']';
-		return Html::maketag('input', true, array(
+		return Html::maketag('input', true, [
 			'type' => 'hidden',
 			'name' => $fieldname,
 			'value' => $off,
-		)) . Html::maketag('input', true, array_merge(array(
+		]) . Html::maketag('input', true, array_merge([
 			'type' => 'checkbox',
 			'name' => $fieldname,
 			'value' => $on,
 			$checked
-		), $options));
+		], $options));
 	}
 }

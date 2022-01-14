@@ -23,7 +23,7 @@ include('functions/db.php');
 include('functions/cache.php');
 include('functions/common.php');
 
-function nf_begin($dir, $options = array())
+function nf_begin($dir, $options = [])
 {
 	global $nf_dir;
 	$nf_dir = __DIR__;

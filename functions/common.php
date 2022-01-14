@@ -1,6 +1,6 @@
 <?php
 
-function nf_xcopy($src, $dst, $ignore = array())
+function nf_xcopy($src, $dst, $ignore = [])
 {
 	$dir = opendir($src);
 	@mkdir($dst);

@@ -47,12 +47,12 @@ After calling `nf_begin`, you're all set. Since every feature is optional, you c
 ```PHP
 <?php
 include('vendor/codecat/nin/nf.php');
-nf_begin(__DIR__, array(
-  'mysql' => array(
+nf_begin(__DIR__, [
+  'mysql' => [
     'username' => 'root',
     'database' => 'nin'
-  )
-));
+  ]
+]);
 
 class Post extends Nin\Model {
   public static function tablename() { return 'posts'; }
@@ -117,10 +117,10 @@ This will render the `foo` view, located at `views/controller/view.php`. So if t
 You can also pass parameters to the `render()` function, like so:
 
 ```PHP
-$this->render('foo', array(
+$this->render('foo', [
   'bar' => 'hello ',
   'foobar' => 'world'
-));
+]);
 ```
 
 Your view can then use these parameters as if the keys in the array were PHP variables:

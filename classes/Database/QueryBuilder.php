@@ -26,13 +26,13 @@ abstract class QueryBuilder
 	public function clear()
 	{
 		$this->method = '';
-		$this->where = array();
+		$this->where = [];
 		$this->group = '';
-		$this->orderby = array();
-		$this->limit = array(-1, -1);
-		$this->get = array();
-		$this->set = array();
-		$this->insertValues = array();
+		$this->orderby = [];
+		$this->limit = [-1, -1];
+		$this->get = [];
+		$this->set = [];
+		$this->insertValues = [];
 	}
 
 	private function setMethod($method)
@@ -58,9 +58,9 @@ abstract class QueryBuilder
 		if(is_array($key)) {
 			return $this->whereAssoc($key, $oper, $logical);
 		}
-		$this->where[] = array(
+		$this->where[] = [
 			$key, $value, $oper, $logical
-		);
+		];
 		return $this;
 	}
 
@@ -72,18 +72,18 @@ abstract class QueryBuilder
 
 	public function orderby($key, $sort = 'ASC')
 	{
-		$this->orderby[] = array(
+		$this->orderby[] = [
 			$key, $sort
-		);
+		];
 		return $this;
 	}
 
 	public function limit($start, $end = null)
 	{
 		if($end === null) {
-			$this->limit = array(0, intval($start));
+			$this->limit = [0, intval($start)];
 		} else {
-			$this->limit = array(intval($start), intval($end));
+			$this->limit = [intval($start), intval($end)];
 		}
 		return $this;
 	}
@@ -116,9 +116,9 @@ abstract class QueryBuilder
 		if(is_array($key)) {
 			return $this->setAssoc($key);
 		}
-		$this->set[] = array(
+		$this->set[] = [
 			$key, $value
-		);
+		];
 		return $this;
 	}
 

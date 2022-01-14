@@ -10,12 +10,12 @@ class Postgres extends Context
 
 	public function __construct($options)
 	{
-		$options = array_merge(array(
+		$options = array_merge([
 			'hostname' => 'localhost',
 			'username' => 'postgres',
 			'password' => '',
 			'database' => 'postgres',
-		), $options);
+		], $options);
 
 		$this->connection = pg_connect(
 			'host=' . $options['hostname'] .

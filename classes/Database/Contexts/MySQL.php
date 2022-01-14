@@ -10,13 +10,13 @@ class MySQL extends Context
 
 	public function __construct($options)
 	{
-		$options = array_merge(array(
+		$options = array_merge([
 			'hostname' => 'localhost',
 			'username' => '',
 			'password' => '',
 			'database' => '',
 			'encoding' => 'utf8mb4'
-		), $options);
+		], $options);
 
 		if(!class_exists('mysqli')) {
 			nf_error(14, 'MySQLi');

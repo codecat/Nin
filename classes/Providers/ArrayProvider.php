@@ -6,7 +6,7 @@ use Nin\Provider;
 
 class ArrayProvider extends Provider
 {
-	public $array = array();
+	public $array = [];
 	public $iterator = 0;
 
 	public function __construct($array)

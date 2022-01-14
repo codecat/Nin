@@ -3,12 +3,12 @@
 /**
  * Call a hook set in the config or a plugin with the given name and parameters.
  */
-function nf_hook($name, $params = array())
+function nf_hook($name, $params = [])
 {
 	global $nf_cfg;
 	global $nf_plugins;
 
-	$ret = array();
+	$ret = [];
 
 	if (isset($nf_cfg['hooks'])) {
 		if (isset($nf_cfg['hooks'][$name])) {

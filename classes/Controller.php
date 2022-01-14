@@ -5,9 +5,9 @@ namespace Nin;
 class Controller
 {
 	public $layout = 'views/layout.php';
-	public $uri_parts = array();
-	public $files_css = array();
-	public $files_js = array();
+	public $uri_parts = [];
+	public $files_css = [];
+	public $files_js = [];
 
 	public function beforeAction($action)
 	{
@@ -16,7 +16,7 @@ class Controller
 
 	public function displayError($error)
 	{
-		$this->render('/error', array('error' => $error));
+		$this->render('/error', ['error' => $error]);
 	}
 
 	public function registerCSS($filename)
@@ -41,7 +41,7 @@ class Controller
 		return $ret;
 	}
 
-	public function render($view, $options = array())
+	public function render($view, $options = [])
 	{
 		global $nf_www_dir;
 		$content = $this->renderPartial($view, $options);
@@ -54,7 +54,7 @@ class Controller
 		}
 	}
 
-	public function renderPartial($view, $options = array())
+	public function renderPartial($view, $options = [])
 	{
 		global $nf_www_dir;
 		global $nf_cfg;
@@ -79,7 +79,7 @@ class Controller
 		if ($ext == '.php') {
 			$renderer = new \Nin\Renderers\PhpRenderer($this);
 		} else {
-			$renderer = nf_hook_one('viewrenderer', array($this, $inc_path, $ext));
+			$renderer = nf_hook_one('viewrenderer', [$this, $inc_path, $ext]);
 		}
 
 		if ($renderer === null) {

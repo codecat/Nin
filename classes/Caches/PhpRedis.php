@@ -10,14 +10,14 @@ class PhpRedis extends Cache
 
 	public function __construct($options)
 	{
-		$options = array_merge(array(
+		$options = array_merge([
 			'host' => '127.0.0.1',
 			'port' => 6379,
 			'timeout' => 0.0,
 			'retry_interval' => 0,
 			'password' => '',
 			'database' => 0,
-		), $options);
+		], $options);
 
 		if(!class_exists('Redis')) {
 			nf_error(14, 'phpredis');

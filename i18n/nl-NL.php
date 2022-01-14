@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	// Error messages
 	'Unknown' => 'Onbekend',
 	'Invalid controller name' => 'Invalide controller naam',
@@ -42,4 +42,4 @@ return array(
 	'days' => 'dagen',
 	'ago' => 'geleden',
 	'in' => 'in',
-);
+];

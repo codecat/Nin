@@ -10,9 +10,9 @@ class APC extends Cache
 
 	public function __construct($options)
 	{
-		$options = array_merge(array(
+		$options = array_merge([
 			'prefix' => 'nin_'
-		), $options);
+		], $options);
 
 		if(!function_exists('apc_store')) {
 			nf_error(14, 'APC');

@@ -21,7 +21,7 @@ class ListView
 		$this->controller = $controller;
 	}
 
-	public function render($view, $options = array())
+	public function render($view, $options = [])
 	{
 		$this->renderItems($view, $options);
 		if($this->perpage != 0 && $this->renderPaging) {
@@ -29,7 +29,7 @@ class ListView
 		}
 	}
 
-	function renderOne($view, $item, $options = array())
+	function renderOne($view, $item, $options = [])
 	{
 		global $nf_www_dir;
 		global $nf_cfg;
@@ -39,7 +39,7 @@ class ListView
 		if (is_callable($view)) {
 			$r = new \ReflectionFunction($view);
 			$params = $r->getParameters();
-			$args = array();
+			$args = [];
 			foreach ($params as $param) {
 				if ($param->getName() == 'item') {
 					$args[] = $item;
@@ -76,7 +76,7 @@ class ListView
 		return '?' . $qs . '&page' . $this->id . '=' . $page;
 	}
 
-	function renderItems($view, $options = array())
+	function renderItems($view, $options = [])
 	{
 		if($this->provider === null) {
 			nf_error(11);
@@ -128,7 +128,7 @@ class ListView
 		$start = $index - $showAround;
 		$end = $index + $showAround;
 
-		$pages = array(0);
+		$pages = [0];
 		for ($i = $start; $i <= $end; $i++) {
 			if ($i == $start && $i > 1) {
 				$pages[] = '...';

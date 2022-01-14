@@ -44,7 +44,7 @@ function nf_autoload($classname)
 	}
 
 	$parse = explode('/', trim($nf_module, '/'));
-	$paths = array('/');
+	$paths = ['/'];
 	$pathStart = '/';
 	for($i=0; $i<count($parse); $i++) {
 		if(empty($parse[$i])) {
