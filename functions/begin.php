@@ -7,6 +7,7 @@ function nf_begin_internal($dir, $options)
 {
 	global $nf_www_dir;
 	global $nf_uri;
+	global $nf_uri_original;
 	global $nf_cfg;
 	global $nf_dir;
 	global $nf_using_controllers;
@@ -38,6 +39,7 @@ function nf_begin_internal($dir, $options)
 	if($uri_part) {
 		$nf_uri = $uri_part;
 	}
+	$nf_uri_original = $nf_uri;
 
 	$rethookuri = nf_hook_one('uri', array($nf_uri));
 	if($rethookuri !== null) {
