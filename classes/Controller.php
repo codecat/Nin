@@ -5,6 +5,7 @@ namespace Nin;
 class Controller
 {
 	public $layout = 'views/layout.php';
+	public $title = '';
 	public $files_css = [];
 	public $files_js = [];
 
@@ -29,6 +30,16 @@ class Controller
 		$this->files_js[] = $filename;
 	}
 
+	public function getTitle()
+	{
+		global $nf_cfg;
+		$ret = Html::encode($nf_cfg['name']);
+		if ($this->title != '') {
+			$ret .= ' - ' . Html::encode($this->title);
+		}
+		return $ret;
+	}
+
 	public function getHead()
 	{
 		$ret = '';
@@ -47,6 +58,7 @@ class Controller
 		$content = $this->renderPartial($view, $options);
 		$fnmlayout = $nf_www_dir . '/' . $this->layout;
 		if(file_exists($fnmlayout)) {
+			$title = $this->getTitle();
 			$head = $this->getHead();
 			include($fnmlayout);
 		} else {

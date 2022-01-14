@@ -1,6 +1,9 @@
 <?php
 
 $nf_cfg = [
+	// Website title
+	'name' => 'Nin',
+
 	// Paths to places
 	'paths' => [
 		'base' => '/',
