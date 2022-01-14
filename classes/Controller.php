@@ -13,8 +13,9 @@ class Controller
 		return $action;
 	}
 
-	public function displayError($error)
+	public function displayError($error, $code = 500)
 	{
+		header('HTTP/1.1 ' . $code);
 		$this->render('/error', ['error' => $error]);
 	}
 
