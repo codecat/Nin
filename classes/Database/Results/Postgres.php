@@ -24,8 +24,15 @@ class Postgres extends Result
 				$fieldtype = pg_field_type($this->res, $i);
 
 				switch ($fieldtype) {
-					case 'int4': $ret[$fieldname] = intval($ret[$fieldname]); break;
-					case 'bool': $ret[$fieldname] = ($ret[$fieldname] == 't'); break;
+					case 'int2':
+					case 'int4':
+					case 'int8':
+						$ret[$fieldname] = intval($ret[$fieldname]);
+						break;
+
+					case 'bool':
+						$ret[$fieldname] = ($ret[$fieldname] == 't');
+						break;
 				}
 			}
 		}
