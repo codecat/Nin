@@ -143,6 +143,18 @@ class Nin
 		return $ret;
 	}
 
+	public static function sizeText($size)
+	{
+		if ($size < 1000) {
+			return $size . ' B';
+		} elseif ($size < 1000 * 1000) {
+			return round($size / 1000, 1) . ' KB';
+		} elseif ($size < 1000 * 1000 * 1000) {
+			return round($size / 1000 / 1000, 1) . ' MB';
+		}
+		return round($size / 1000 / 1000 / 1000, 1) . ' GB';
+	}
+
 	public static function multiple($count, $verb, $verbs, $verbonly = false)
 	{
 		if($count == 1) {
