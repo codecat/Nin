@@ -15,7 +15,7 @@ class ListView
 	public $total = 0;
 	public $rendered = 0;
 
-	public function __construct($provider, $controller = null)
+	public function __construct(Provider $provider, Controller $controller = null)
 	{
 		$this->provider = $provider;
 		$this->controller = $controller;
@@ -33,7 +33,6 @@ class ListView
 	{
 		global $nf_www_dir;
 		global $nf_cfg;
-		global $nf_current_controllername;
 
 		if (is_callable($view)) {
 			$r = new \ReflectionFunction($view);
@@ -53,15 +52,16 @@ class ListView
 			}
 			call_user_func_array($view, $args);
 		} else {
-			$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'];
-			if($view[0] == '/') {
-				$inc_path .= $view . '.php';
+			if ($this->controller) {
+				echo $this->controller->renderPartial($view, array_merge($options, [
+					'item' => $item,
+				]));
 			} else {
-				$inc_path .= $nf_current_controllername . '/' . $view . '.php';
-			}
+				$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'] . '/' . $view . '.php';
 
-			extract($options);
-			include($inc_path);
+				extract($options);
+				include($inc_path);
+			}
 		}
 	}
 
