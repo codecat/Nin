@@ -6,14 +6,12 @@ use Nin\Provider;
 
 class QueryProvider extends Provider
 {
-	public $class;
 	public $query;
 	public $result;
 
-	public function __construct($class, $query)
+	public function __construct($builder)
 	{
-		$this->class = $class;
-		$this->query = $query;
+		$this->query = $builder->build();
 	}
 
 	public function begin()
@@ -36,13 +34,6 @@ class QueryProvider extends Provider
 			return null;
 		}
 
-		$row = $this->result->fetch_assoc();
-		if(!$row) {
-			return null;
-		}
-
-		$ret = new $this->class();
-		$ret->loadRow($row);
-		return $ret;
+		return $this->result->fetch_assoc();
 	}
 }

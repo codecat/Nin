@@ -7,7 +7,7 @@ class ModelQueryBuilder
 	public $class;
 	public $builder;
 
-	public function __construct($class)
+	public function __construct(string $class)
 	{
 		$this->class = $class;
 		$this->builder = nf_db_beginbuild($class::tablename());

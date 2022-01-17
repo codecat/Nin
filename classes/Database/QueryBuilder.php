@@ -90,7 +90,10 @@ abstract class QueryBuilder
 
 	public function page($num, $count = 25)
 	{
-		return $this->limit($num * $count, $count);
+		$start = $num * $count;
+		$end = $start + $count;
+		$this->limit = [$start, $end];
+		return $this;
 	}
 
 	public function getArray($arr)

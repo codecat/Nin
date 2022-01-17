@@ -2,22 +2,20 @@
 
 namespace Nin;
 
-class ListView
+abstract class ListView
 {
 	public $id = '';
-	public $provider = null;
 	public $controller = null;
 	public $filter = null;
 	public $page = 1;
-	public $perpage = 0;
+	public $perpage = 25;
 	public $renderPaging = true;
 
 	public $total = 0;
 	public $rendered = 0;
 
-	public function __construct(Provider $provider, Controller $controller = null)
+	public function __construct(Controller $controller = null)
 	{
-		$this->provider = $provider;
 		$this->controller = $controller;
 	}
 
@@ -29,7 +27,7 @@ class ListView
 		}
 	}
 
-	function renderOne($view, $item, $options = [])
+	private function renderOne($view, $item, $options = [])
 	{
 		global $nf_www_dir;
 		global $nf_cfg;
@@ -65,7 +63,7 @@ class ListView
 		}
 	}
 
-	function getPagingUrl($page)
+	private function getPagingUrl($page)
 	{
 		$qs = $_SERVER['QUERY_STRING'];
 		$qs = preg_replace('/(&?page' . $this->id . '=[0-9]+|page' . $this->id . '=[0-9]+&?)/', '', $qs);
@@ -75,42 +73,7 @@ class ListView
 		return '?' . $qs . '&page' . $this->id . '=' . $page;
 	}
 
-	function renderItems($view, $options = [])
-	{
-		if($this->provider === null) {
-			nf_error(11);
-			return;
-		}
-
-		$this->total = -1;
-		$this->rendered = 0;
-
-		$this->provider->begin();
-		while($obj = $this->provider->getNext()) {
-			$filter = $this->filter;
-			if($filter !== null && !$filter($obj)) {
-				continue;
-			}
-
-			$this->total++;
-
-			if($this->perpage != 0) {
-				if($this->total < ($this->page - 1) * $this->perpage) {
-					continue;
-				}
-				if($this->rendered >= $this->perpage) {
-					break;
-				}
-			}
-
-			$this->renderOne($view, $obj, $options);
-			$this->rendered++;
-		}
-		$this->total = $this->provider->count();
-		$this->provider->end();
-	}
-
-	function renderPagingButtons()
+	public function renderPagingButtons()
 	{
 		$showAround = 4;
 
@@ -165,4 +128,6 @@ class ListView
 		}
 		echo '</div>';
 	}
+
+	public abstract function renderItems($view, $options = []);
 }
