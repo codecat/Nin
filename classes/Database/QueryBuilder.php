@@ -88,6 +88,11 @@ abstract class QueryBuilder
 		return $this;
 	}
 
+	public function page($num, $count = 25)
+	{
+		return $this->limit($num * $count, $count);
+	}
+
 	public function getArray($arr)
 	{
 		foreach($arr as $key) {
