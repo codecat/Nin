@@ -14,9 +14,10 @@ abstract class ListView
 	public $total = 0;
 	public $rendered = 0;
 
-	public function __construct(Controller $controller = null)
+	public function __construct(int $page, Controller $controller = null)
 	{
 		$this->controller = $controller;
+		$this->page = $page;
 	}
 
 	public function render($view, $options = [])

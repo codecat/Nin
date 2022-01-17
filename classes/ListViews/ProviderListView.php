@@ -8,9 +8,9 @@ class ProviderListView extends ListView
 {
 	protected $provider;
 
-	public function __construct(Controller $controller, Provider $provider)
+	public function __construct(Controller $controller, int $page, Provider $provider)
 	{
-		parent::__construct($controller);
+		parent::__construct($page, $controller);
 		$this->provider = $provider;
 	}
 

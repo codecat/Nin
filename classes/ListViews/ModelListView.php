@@ -10,9 +10,9 @@ class ModelListView extends ListView
 {
 	protected $builder;
 
-	public function __construct(Controller $controller, ModelQueryBuilder $builder)
+	public function __construct(Controller $controller, int $page, ModelQueryBuilder $builder)
 	{
-		parent::__construct($controller);
+		parent::__construct($page, $controller);
 
 		$this->builder = $builder;
 
