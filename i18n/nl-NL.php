@@ -40,6 +40,10 @@ return [
 	'hours' => 'uur',
 	'day' => 'dag',
 	'days' => 'dagen',
+	'month' => 'maand',
+	'months' => 'maanden',
+	'year' => 'jaar',
+	'years' => 'jaar',
 	'ago' => 'geleden',
 	'in' => 'in',
 ];

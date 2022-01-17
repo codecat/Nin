@@ -114,7 +114,13 @@ class Nin
 
 		$ret = '';
 		$timeCalc = abs(time() - $time);
-		if ($timeCalc >= (60*60*24)) {
+		if ($timeCalc >= (60*60*24*365)) {
+			$years = round($timeCalc/60/60/24/365);
+			$ret = Nin::multiple($years, nf_t('year'), nf_t('years'));
+		} elseif ($timeCalc >= (60*60*24*30.4375)) {
+			$months = round($timeCalc/60/60/24/30.4375);
+			$ret = Nin::multiple($months, nf_t('month'), nf_t('months'));
+		} elseif ($timeCalc >= (60*60*24)) {
 			$days = round($timeCalc/60/60/24);
 			$ret = Nin::multiple($days, nf_t('day'), nf_t('days'));
 		} elseif ($timeCalc >= (60*60)) {
