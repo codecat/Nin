@@ -113,8 +113,18 @@ function nf_begin_get_callparams(?ReflectionFunctionAbstract $r, $params)
 
 		if($arg->hasType()) {
 			switch($arg->getType()->getName()) {
-				case 'int': $argvalue = intval($argvalue); break;
-				case 'string': $argvalue = strval($argvalue); break;
+				case 'int':
+					$argvalue = intval($argvalue);
+					break;
+
+				case 'string':
+					if (is_array($argvalue) || is_object($argvalue)) {
+						$argvalue = '';
+					} else {
+						$argvalue = strval($argvalue);
+					}
+					break;
+
 				case 'bool':
 					if($argvalue == 'false') {
 						$argvalue = false;
