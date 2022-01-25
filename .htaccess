@@ -13,6 +13,7 @@ RedirectMatch 403 ^/validators/.*\.php$
 RedirectMatch 403 ^/plugins/.*\.php$
 RedirectMatch 403 ^/vendor/.*\.php$
 RedirectMatch 403 ^/logs/.*\.log$
+RedirectMatch 403 ^/internal/.*$
 
 # Uncomment this to enable PHP errors
 #php_flag display_startup_errors on
