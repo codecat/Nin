@@ -34,7 +34,7 @@ class Model
 	{
 		$class = get_called_class();
 		return $class::findByResult(
-			nf_db_beginbuild(static::tablename())
+			static::beginQuery()
 				->select()
 				->get(static::columns())
 				->where(static::primarykey(), $pk)
@@ -46,7 +46,7 @@ class Model
 	{
 		$class = get_called_class();
 		return $class::findByResult(
-			nf_db_beginbuild(static::tablename())
+			static::beginQuery()
 				->select()
 				->get(static::columns())
 				->where($attributes)
@@ -59,7 +59,7 @@ class Model
 		$class = get_called_class();
 		return $class::findAllByResult(
 			static::queryOptions($options,
-				nf_db_beginbuild(static::tablename())
+				static::beginQuery()
 					->select()
 					->get(static::columns())
 					->where($attributes)
@@ -69,7 +69,7 @@ class Model
 
 	public static function countByAttributes($attributes)
 	{
-		return nf_db_beginbuild(static::tablename())
+		return static::beginQuery()
 			->count()
 			->where($attributes)
 			->executeCount();
@@ -80,7 +80,7 @@ class Model
 		$class = get_called_class();
 		return $class::findAllByResult(
 			static::queryOptions($options,
-				nf_db_beginbuild(static::tablename())
+				static::beginQuery()
 					->select()
 					->get(static::columns())
 			)->execute()
@@ -159,7 +159,7 @@ class Model
 	public function fetch($column)
 	{
 		$pk_col = static::primarykey();
-		$res = nf_db_beginbuild(static::tablename())
+		$res = static::beginQuery()
 			->select()
 			->get($column)
 			->where($pk_col, $this->_data[$pk_col])
@@ -194,12 +194,12 @@ class Model
 	public function insert()
 	{
 		$this->beforeInsert();
-		$res = nf_db_beginbuild(static::tablename())
+		$res = static::beginQuery()
 			->insert()
 			->values($this->_data)
 			->execute();
 		if($res !== false) {
-			$this->_data[static::primarykey()] = $res->insert_id();
+			$this->_data[static::primarykey()] = $res->insert_id(static::primarykey());
 			$this->_loaded = true;
 			$this->afterInsert();
 			return true;
@@ -229,7 +229,7 @@ class Model
 			$changed[$k] = $this->_data[$k];
 		}
 		$pk_col = static::primarykey();
-		$res = nf_db_beginbuild(static::tablename())
+		$res = static::beginQuery()
 			->update()
 			->where($pk_col, $this->_data[$pk_col])
 			->set($changed)
@@ -248,7 +248,7 @@ class Model
 			return false;
 		}
 		$pk_col = static::primarykey();
-		$res = nf_db_beginbuild(static::tablename())
+		$res = static::beginQuery()
 			->delete()
 			->where($pk_col, $this->_data[$pk_col])
 			->execute();

@@ -20,7 +20,7 @@ class MySQL extends Result
 		return $this->res->fetch_assoc();
 	}
 
-	public function insert_id()
+	public function insert_id($key = 'ID')
 	{
 		return $this->insert_id;
 	}

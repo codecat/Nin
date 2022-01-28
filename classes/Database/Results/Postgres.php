@@ -40,10 +40,10 @@ class Postgres extends Result
 		return $ret;
 	}
 
-	public function insert_id()
+	public function insert_id($key = 'ID')
 	{
 		$row = pg_fetch_assoc($this->res);
-		return $row['ID'];
+		return $row[$key];
 	}
 
 	public function num_rows()

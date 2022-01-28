@@ -11,6 +11,7 @@ class ModelQueryBuilder
 	{
 		$this->class = $class;
 		$this->builder = nf_db_beginbuild($class::tablename());
+		$this->builder->returning($class::primarykey());
 	}
 
 	public function findAll()
