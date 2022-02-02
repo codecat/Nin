@@ -163,6 +163,27 @@ function nf_php_exception($e)
 		$sl(1 + $i, $func, $args, $fnm, $ln);
 	}
 	echo '</table>';
+
+	echo "<!--\nException in plain text:\n";
+	echo get_class($e) . ': ' . $e->getMessage() . "\n";
+	echo 'in ' . $e->getFile() . ' on line ' . $e->getLine() . "\n";
+	for($i = 0; $i < count($trace); $i++) {
+		$func = '';
+		$fnm = '';
+		$ln = '';
+		if(isset($trace[$i]['function'])) { $func = $trace[$i]['function']; }
+		if(isset($trace[$i]['file'])) { $fnm = $trace[$i]['file']; }
+		if(isset($trace[$i]['line'])) { $ln = $trace[$i]['line']; }
+		echo "\t" . $func;
+		if ($fnm !== '') {
+			echo "\t\t" . $fnm;
+		}
+		if ($ln !== '') {
+			echo "\t\t(line " . $ln . ')';
+		}
+		echo "\n";
+	}
+	echo "-->\n";
 }
 
 function nf_php_fatal()
