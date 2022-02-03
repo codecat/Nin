@@ -103,8 +103,9 @@ class Controller
 		return ob_get_clean();
 	}
 
-	public function redirect($url)
+	public function redirect($url, $code = 302)
 	{
+		header('HTTP/1.1 ' . $code);
 		header('Location: ' . $url);
 		exit;
 	}
