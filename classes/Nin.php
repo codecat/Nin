@@ -175,10 +175,12 @@ class Nin
 		return $count . ' ' . $verbs;
 	}
 
-	public static function ip($allow_forwarded_for = true)
+	public static function ip(bool $allow_forwarded_for = true, int $forwarded_for_max = 1)
 	{
 		if ($allow_forwarded_for && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+			$parse = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+			$i = max(0, count($parse) - $forwarded_for_max);
+			return trim($parse[$i]);
 		}
 		return $_SERVER['REMOTE_ADDR'];
 	}
