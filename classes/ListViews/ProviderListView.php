@@ -4,11 +4,11 @@ namespace Nin\ListViews;
 
 use Nin\ListView;
 
-class ProviderListView extends ListView
+class ProviderListView extends \Nin\ListView
 {
 	protected $provider;
 
-	public function __construct(Controller $controller, int $page, Provider $provider)
+	public function __construct(\Nin\Controller $controller, int $page, \Nin\Provider $provider)
 	{
 		parent::__construct($page, $controller);
 		$this->provider = $provider;

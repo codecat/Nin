@@ -28,7 +28,7 @@ abstract class ListView
 		}
 	}
 
-	private function renderOne($view, $item, $options = [])
+	protected function renderOne($view, $item, $options = [])
 	{
 		global $nf_www_dir;
 		global $nf_cfg;
