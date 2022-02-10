@@ -126,6 +126,121 @@ If you create a layout file at `views/layout.php`, you can use that as a wrapper
 </html>
 ```
 
+# Using a database
+Nin supports both PostgreSQL and MySQL, but PostgreSQL is recommended. To begin using a database such as PostgreSQL with Nin, specify the database connection information as a parameter to `nf_begin`:
+
+```php
+nf_begin(__DIR__, [
+  'postgres' => [
+    'hostname' => 'localhost',
+    'password' => 'password',
+  ],
+]);
+```
+
+Once this configuration is set, you are ready to create and use models.
+
+Note that the `postgres` key above is a shortcut for the more verbose database configuration:
+
+```php
+nf_begin(__DIR__, [
+  'db' => [
+    'class' => 'Postgres',
+    'options' => [
+      'hostname' => 'localhost',
+      'password' => 'password',
+    ],
+  ],
+]);
+```
+
+The more verbose configuration allows you to implement other third party database contexts and query builders if needed.
+
+# Using models
+Models are defined as classes. Static functions are used to configure how the model behaves. For example, a user model looks like this:
+
+```php
+class User extends \Nin\Model {
+  public static function tablename() { return 'users'; }
+}
+```
+
+By default, the primary key of models is defined as `ID`, but can be changed by defining a static function `primarykey`:
+
+```php
+public static function primarykey() { return 'id'; }
+```
+
+This tells Nin that the database table containing rows of that model is called `users`.
+
+You can now use the new `User` class to do all kinds of operations. To create a new user:
+
+```php
+$user = new User();
+$user->Username = 'admin';
+$user->Password = 'hunter2';
+$user->Age = 24;
+$user->save();
+
+// Nin will automatically set the ID of the model after inserting it
+echo 'New user ID: ' . $user->ID;
+```
+
+(Sidenote: Make sure you strongly hash passwords in your database, the example above is only for demonstration purposes!)
+
+To find a user by ID:
+
+```php
+$user = User::findByPk(1);
+if (!$user) {
+  die('No user found!');
+}
+echo 'Hello, ' . $user->Username;
+```
+
+To find a user by attributes (column values):
+
+```php
+$user = User::findByAttributes([ 'Username' => 'admin' ]);
+if (!$user) {
+  die('No user found!');
+}
+echo 'Hello, ' . $user->Username;
+```
+
+You may also use `findAll` and `findAllByAttributes` to get multiple models. They return arrays and work how you would expect:
+```php
+$users = User::findAll();
+$users = User::findAllByAttributes([ 'Age' => 24 ]);
+```
+
+You can optionally pass options to `findAll` and `findAllByAttributes` as an array in the second parameter. The accepted keys are:
+
+* `group` Perform a group by query with its value
+* `order` The order to sort the objects in (`ASC` or `DESC`, by default this is `ASC`)
+* `orderby` Which column to sort the object by (by default this is the primary key)
+* `limit` Either an integer of how many items you want to get at most, or an array for a range of items
+
+Models can also have **relational** properties. For example, if a user can have multiple posts, you would define the `User` class like this:
+
+```php
+class User extends \Nin\Model {
+  public static function tablename() { return 'users'; }
+
+  public function relations() {
+    return [
+      'posts' => [ HAS_MANY, 'Post', 'Author' ],
+    ];
+  }
+}
+```
+
+You can then simply use `$user->posts` to get an object array of the model `Post`, using the post column `Author`. There are 3 types of relationships you can define:
+
+* `BELONGS_TO` finds one object using **their classname** and **my column**
+* `HAS_MANY` finds multiple objects using **their classname** and **their column**
+* `HAS_ONE` finds one object using **their classname** and **their column**
+
 # Docker
 Nin is also available as [a docker image](https://hub.docker.com/r/codecatt/nin). Here's a quick example on how to use Nin in your Dockerfile:
 
