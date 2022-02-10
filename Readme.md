@@ -261,5 +261,6 @@ There are several tags available:
 
 * `latest`: The latest version.
 * `2.0`: The latest 2.0.x version.
+* `1.6`: The latest 1.6.x version.
 * `1.3`: The latest 1.3.x version.
 * `1.2`: The latest 1.2.x version.
