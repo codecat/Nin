@@ -1,20 +1,9 @@
-**NOTE:** This readme is not updated for Nin 2.0 yet!
-
 ![](resources/Logo.png)
 
-Nin is a minimalistic PHP framework based on some of the ideas of Yii 1 and 2. It stands for "No It's Not", a play on Yii's "Yes It Is". Nin makes a few promises:
-
-* **Every feature is optional.** You don't need to use views. You don't need to use models. You don't even need to use the controller or routing system.
-* **Sensible configuration defaults.** As a result of the first promise, the entire configuration should make sense to allow for a minimalistic approach in the most common environments.
-* **The API is straight forward.** Everything in the API should be self-explanatory and obvious.
-* **Minimal amount of code required.** To work with the API, there shouldn't be too many lines of code. This helps the minimalism and simplicity of the system.
-
-Anything that breaks these promises should be considered a bug.
+Nin is a minimalistic PHP framework originally based on some of the ideas of Yii. It stands for "No It's Not", a play on Yii's "Yes It Is".
 
 # How does it work?
-By relying on modern PHP features, we can achieve some of the effects of Yii 2 while keeping the integrity of some of Yii 1's well-designed features.
-
-Nin can be used in various ways. One of those ways is via its MVC system, where `Model` and `Controller` are the key classes, and views are included PHP files.
+Nin is an MVC system, where `Nin\Model` and `Nin\Controller` are the key classes, and views are included PHP files.
 
 # Getting started
 Quickly get started with Nin by installing the dependency via Composer. You can find the package [on Packagist](https://packagist.org/packages/codecat/nin). Install it by running:
@@ -25,7 +14,7 @@ $ composer require codecat/nin
 
 You can also just download a release from Github and include Nin from somewhere else if you prefer.
 
-If you plan on using Nin's routing system, make sure you create the necessary `.htaccess` file:
+Make sure you create the necessary `.htaccess` file to make sure the routing works:
 
 ```
 $ cp vendor/codecat/nin/.htaccess .
@@ -33,8 +22,7 @@ $ cp vendor/codecat/nin/.htaccess .
 
 Then create `index.php`:
 
-```PHP
-<?php
+```php
 include('vendor/codecat/nin/nf.php');
 nf_begin(__DIR__);
 ```
@@ -44,73 +32,62 @@ nf_begin(__DIR__);
 **Docker note:** You don't need to have the `.htaccess` file, as this is handled automatically by the server config inside the docker image.
 
 # The most minimalistic example
-After calling `nf_begin`, you're all set. Since every feature is optional, you can make a page with only a single `index.php` file. For example, to display a list of posts from a table in a MySQL database, your php file could be as small as this:
-
-```PHP
-<?php
-include('vendor/codecat/nin/nf.php');
-nf_begin(__DIR__, [
-  'mysql' => [
-    'username' => 'root',
-    'database' => 'nin'
-  ]
-]);
-
-class Post extends Nin\Model {
-  public static function tablename() { return 'posts'; }
-}
-
-foreach(Post::findAll() as $post) {
-  echo '<b>' . Nin\Html::encode($post->User) . '</b>: ' . Nin\Html::encode($post->Message) . '<br>';
-}
-```
-
-These model classes can also be located in separate files inside of a `models` folder, and they will be autoloaded when they're needed.
-
-# Using controllers
-You have again 2 choices for controllers; single file or multiple files.
+After calling `nf_begin`, you automatically have 1 route: `/`. By default, it points to `IndexController.Index`. This means it will look for a class called `IndexController` and a method of that class called `actionIndex`.
 
 To create controller classes, make a folder `controllers` in the same directory as the `index.php` is located. Inside of this folder, we can make a file `IndexController.php`:
 
-```PHP
-<?php
-class IndexController extends Controller {
+```php
+class IndexController extends \Nin\Controller {
   public function actionIndex() {
     echo 'This is the index page!';
   }
 }
 ```
 
-By default, Nin's routing will use `index/index` as the standard route. Routing works as `controller/action`. This means that if you create a controller called `FooController` containing a function `actionBar()`, Nin will be able to instantiate a `FooController` and call `actionBar()` when a user visits `foo/bar`.
+Routing works as `controller.action`, where `controller` is a class name, and `action` is the action name corresponding to a method in the class prefixed with `action`. For example, `FooController.Bar` will instantiate `FooController` and call `actionBar` on it.
 
-Note that the use of files for controllers again is optional. It is possible to have a single `index.php` file with controller classes defined inline. You will however need to call an extra function `nf_begin_routing()` for the actual routing to begin.
+Routes are defined using the `nf_route` function:
 
-What follows is a very minimalistic page that supports an index page as well as a `foo/bar` route:
+```php
+nf_route('/', 'IndexController.Home');
+nf_route('/info', 'IndexController.Info');
+nf_route('/user/:username', 'UserController.Profile');
+```
 
-```PHP
-<?php
-include('vendor/codecat/nin/nf.php')
-nf_begin(__DIR__);
+The last `nf_route` call in the example above has a special parameter in its path, `:username`. This will become a parameter in your action method. So in the above example, the third route would use this controller class:
 
-class IndexController extends Nin\Controller {
-  public function actionIndex() {
-    echo 'This is the index!';
+```php
+class UserController extends \Nin\Controller {
+  public function actionProfile(string $username) {
+    // Do something with $username
   }
 }
+```
 
-class FooController extends Nin\Controller {
-  public function actionBar() {
-    echo 'This is Foo/Bar!';
+Note that you can specify a type for the method parameter as well, to automatically convert to the correct type. For example, `int $id` will ensure you're definitely getting an integer for a parameter.
+
+Action method parameters can also be set using URL parameters fetched from `$_GET`. For example, if your route was defined as simply `/user`, then you can still set `string $username` by making the URL `?username=foo`. When `username` is not provided in the URL, Nin will throw an error about a missing required parameter. You can make the parameter optional by giving the method parameter a default value, for example: `string $username = 'admin'`.
+
+Parameters will also be passed to the controller constructor, if it accepts parameters. They behave exactly like method parameters. For example, if you have a route `/user/:id/posts` pointing to `UserController.Posts`, you can use the following controller:
+
+```php
+class UserController extends \Nin\Controller {
+  private $user;
+
+  public function __construct(int $id) {
+    $this->user = User::findByPk($id);
+  }
+
+  public function actionPosts() {
+    // Do something with $this->user
   }
 }
-
-nf_begin_routing();
 ```
 
 # Using views
-You can also do the following inside of a controller's action function:
+You can also do the following inside of a controller's action method:
 
-```PHP
+```php
 $this->render('foo');
 ```
 
@@ -118,7 +95,7 @@ This will render the `foo` view, located at `views/controller/view.php`. So if t
 
 You can also pass parameters to the `render()` function, like so:
 
-```PHP
+```php
 $this->render('foo', [
   'bar' => 'hello ',
   'foobar' => 'world'
@@ -133,7 +110,7 @@ Your view can then use these parameters as if the keys in the array were PHP var
 
 If you create a layout file at `views/layout.php`, you can use that as a wrapper for your views. It will expose the `$content` variable for the rendered view. It could for example look like this:
 
-```
+```html
 <!doctype html>
 <html>
   <head>
@@ -153,13 +130,13 @@ If you create a layout file at `views/layout.php`, you can use that as a wrapper
 Nin is also available as [a docker image](https://hub.docker.com/r/codecatt/nin). Here's a quick example on how to use Nin in your Dockerfile:
 
 ```
-FROM codecatt/nin:1.3
+FROM codecatt/nin:2.0
 COPY . /var/www/html
 ```
 
 And then in your `index.php` you include Nin like this:
 
-```PHP
+```php
 include('../nin/nf.php');
 ```
 
@@ -167,6 +144,7 @@ Note that you do not need to do anything in `.htaccess` to get the router to wor
 
 There are several tags available:
 
+* `latest`: The latest version.
+* `2.0`: The latest 2.0.x version.
 * `1.3`: The latest 1.3.x version.
 * `1.2`: The latest 1.2.x version.
-* `latest`: The current code available on the master branch.
