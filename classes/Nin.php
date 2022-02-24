@@ -134,9 +134,9 @@ class Nin
 		}
 
 		if ($time <= time()) {
-			$ret .= ' ' . nf_t('ago');
+            $ret = nf_t('$formattedTime ago', ['$formattedTime' => $ret]);
 		} else {
-			$ret = nf_t('in') . ' ' . $ret;
+            $ret = nf_t('in $formattedTime', ['$formattedTime' => $ret]);
 		}
 
 		if ($uppercase) {
