@@ -44,6 +44,6 @@ return [
 	'months' => 'maanden',
 	'year' => 'jaar',
 	'years' => 'jaar',
-	'ago' => 'geleden',
-	'in' => 'in',
+	'$formattedTime ago' => '$formattedTime geleden',
+	'in $formattedTime' => 'in $formattedTime',
 ];
