@@ -16,7 +16,7 @@ return [
 	'ListView tried to render without a provider' => ' ListView hat versucht ohne einen Provider zu rendern',
 	'Database context class does not exist' => 'Datenbank Kontext Klasse existiert nicht',
 	'Cache class does not exist' => 'Cache Klasse existiert nicht',
-	'A required module is not installed' => 'Ein benötigtes Modul ist nicht installiert', //check
+	'A required module is not installed' => 'Ein benötigtes Modul ist nicht installiert',
 	'A suitable renderer could not be found for the view' => 'Ein für den View passender Renderer konnte nicht gefunden werden',
 	'Plugin was not found' => 'Plugin wurde nicht gefunden',
 	'Details:' => 'Details:',
