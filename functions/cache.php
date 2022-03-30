@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * The global cache object
+ * @var Nin\Cache|false
+ */
 $nf_cache = false;
 
 /**

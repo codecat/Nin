@@ -1,6 +1,9 @@
 <?php
 
-// Runtime database variables
+/**
+ * Global database context
+ * @var Nin\Database\Context|false
+ */
 $nf_db_context = false;
 
 /**

@@ -14,11 +14,19 @@ class ModelQueryBuilder
 		$this->builder->returning($class::primarykey());
 	}
 
+	/**
+	 * Runs the query and returns all model objects
+	 * @return \Nin\Model[]
+	 */
 	public function findAll()
 	{
 		return $this->class::findAllByResult($this->builder->execute());
 	}
 
+	/**
+	 * Runs the query and returns the first model object
+	 * @return \Nin\Model
+	 */
 	public function find()
 	{
 		return $this->class::findByResult($this->builder->execute());

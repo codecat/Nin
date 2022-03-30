@@ -184,17 +184,12 @@ function nf_handle_routing_rules($uri)
 	global $nf_cfg;
 
 	foreach($nf_cfg['routing']['rules'] as $regex => $route) {
-		$matches = false;
+		$matches = [];
 		if(preg_match($regex, $uri, $matches)) {
-			$action = '';
 			$keys = array();
 			foreach($matches as $k => $v) {
 				if(is_string($k)) {
-					if($k == '_action') {
-						$action = $v;
-					} else {
-						$keys[$k] = $v;
-					}
+					$keys[$k] = $v;
 				}
 			}
 			$params = array_merge($_GET, $keys);
