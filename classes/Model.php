@@ -30,6 +30,9 @@ class Model
 		return 'ID';
 	}
 
+	/**
+	 * @return \Nin\Model
+	 */
 	public static function findByPk($pk)
 	{
 		$class = get_called_class();
@@ -42,6 +45,9 @@ class Model
 		);
 	}
 
+	/**
+	 * @return \Nin\Model
+	 */
 	public static function findByAttributes($attributes)
 	{
 		$class = get_called_class();
@@ -54,6 +60,9 @@ class Model
 		);
 	}
 
+	/**
+	 * @return \Nin\Model[]
+	 */
 	public static function findAllByAttributes($attributes, $options = [])
 	{
 		$class = get_called_class();
@@ -75,6 +84,9 @@ class Model
 			->executeCount();
 	}
 
+	/**
+	 * @return \Nin\Model[]
+	 */
 	public static function findAll($options = [])
 	{
 		$class = get_called_class();
@@ -87,6 +99,9 @@ class Model
 		);
 	}
 
+	/**
+	 * @return \Nin\Database\ModelQueryBuilder
+	 */
 	public static function beginQuery()
 	{
 		return new \Nin\Database\ModelQueryBuilder(static::class);
@@ -126,6 +141,9 @@ class Model
 		return $builder;
 	}
 
+	/**
+	 * @return \Nin\Model
+	 */
 	public static function findByResult($res)
 	{
 		if($res === false) {
@@ -141,6 +159,9 @@ class Model
 		return $ret;
 	}
 
+	/**
+	 * @return \Nin\Model[]
+	 */
 	public static function findAllByResult($res)
 	{
 		if($res === false) {
