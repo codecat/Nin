@@ -136,7 +136,9 @@ class Model
 			}
 		}
 
-		$builder->orderby($orderby, $order);
+		if ($orderby !== false) {
+			$builder->orderby($orderby, $order);
+		}
 
 		return $builder;
 	}
