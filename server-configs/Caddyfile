@@ -1,0 +1,15 @@
+:80
+
+respond /controllers/* 403
+respond /components/* 403
+respond /models/* 403
+respond /views/* 403
+respond /i18n/* 403
+respond /validators/* 403
+respond /logs/* 403
+respond /.git/* 403
+
+root * /var/www/html
+encode gzip
+php_fastcgi 127.0.0.1:9000
+file_server

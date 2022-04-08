@@ -12,14 +12,6 @@ Quickly get started with Nin by installing the dependency via Composer. You can 
 $ composer require codecat/nin
 ```
 
-You can also just download a release from Github and include Nin from somewhere else if you prefer.
-
-Make sure you create the necessary `.htaccess` file to make sure the routing works:
-
-```
-$ cp vendor/codecat/nin/.htaccess .
-```
-
 Then create `index.php`:
 
 ```php
@@ -27,9 +19,10 @@ include('vendor/codecat/nin/nf.php');
 nf_begin(__DIR__);
 ```
 
-**Nginx note:** You do not have to copy the `.htaccess` file. Instead, copy the contents inside of `nginx.conf`, and paste them inside the `server { }` block.
+## Detailed installation
+There is also a handy Docker image you can use which has the webserver and PHP preconfigured. Scroll to the bottom of the readme to learn more.
 
-**Docker note:** You don't need to have the `.htaccess` file, as this is handled automatically by the server config inside the docker image.
+You can also download a release from Github (or the master branch) and include Nin from somewhere else if you prefer. Depending on your webserver, you might also need to configure a rewrite rule so everything points to `index.php`. Example configurations and basic instructions for popular webservers can be found in [`server-configs`](server-configs). I personally recommend [Caddy](https://caddyserver.com/) with php-fpm, since that works very well and already has proper routing to `index.php` by default.
 
 # The most minimalistic example
 After calling `nf_begin`, you automatically have 1 route: `/`. By default, it points to `IndexController.Index`. This means it will look for a class called `IndexController` and a method of that class called `actionIndex`.
@@ -242,7 +235,7 @@ You can then simply use `$user->posts` to get an object array of the model `Post
 * `HAS_ONE` finds one object using **their classname** and **their column**
 
 # Docker
-Nin is also available as [a docker image](https://hub.docker.com/r/codecatt/nin). Here's a quick example on how to use Nin in your Dockerfile:
+Nin is also available as [a docker image](https://hub.docker.com/r/codecatt/nin) based on `caddy:alpine`. Here's a quick example on how to use Nin in your Dockerfile:
 
 ```
 FROM codecatt/nin:2.0
@@ -255,7 +248,7 @@ And then in your `index.php` you include Nin like this:
 include('../nin/nf.php');
 ```
 
-Note that you do not need to do anything in `.htaccess` to get the router to work, as this is automatically handled by the Docker image.
+Note that you do not need to do any manual configuration, as this is automatically handled by the Docker image.
 
 There are several tags available:
 

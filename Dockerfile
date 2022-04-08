@@ -1,33 +1,15 @@
-FROM php:8-apache
+FROM caddy:alpine
 
 LABEL MAINTAINER="Melissa Geels"
 
-# Install Postgres
-RUN apt-get update && apt-get install -y libpq-dev && rm -rf /var/lib/apt/lists/*
-
-# Enable APCu
-RUN pecl install APCu && docker-php-ext-enable apcu
-
-# Enable MySQLi
-RUN docker-php-ext-install mysqli
-
-# Enable Postgres
-RUN docker-php-ext-install pgsql
-
-# Enable opcache to improve performance
-RUN docker-php-ext-enable opcache
-
-# Enable mod_rewrite
-RUN a2enmod rewrite
-
-# Enable routing using the default .htaccess as a template
-WORKDIR /etc/apache2/conf-available
-COPY .htaccess ./nin_template.conf
-RUN (echo "<Directory /var/www/html>"; \
-      cat nin_template.conf; \
-      echo "</Directory>" \
-     ) > nin.conf
-RUN a2enconf nin
+# Install PHP-FPM and modules that Nin supports
+RUN apk add php8-fpm php8-session php8-pgsql php8-mysqli php8-pecl-apcu php8-opcache
 
 # Copy the actual Nin code
 COPY . /var/www/nin
+
+# Copy the Caddyfile from the server-configs directory
+COPY ./server-configs/Caddyfile /etc/caddy/Caddyfile
+
+# Start php-fpm and Caddy
+CMD php-fpm8; caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
