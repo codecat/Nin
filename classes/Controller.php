@@ -8,6 +8,7 @@ class Controller
 	public $title = '';
 	public $files_css = [];
 	public $files_js = [];
+	public $views_folder = [];
 
 	public function beforeAction($action)
 	{
@@ -71,13 +72,39 @@ class Controller
 		global $nf_www_dir;
 		global $nf_cfg;
 
-		$inc_folder = strtolower(substr(get_class($this), 0, -strlen('Controller')));
+		//NOTE: I would've put this in the constructor, but sites rely on not calling the
+		//      parent constructor, so this is much easier.
+		if (count($this->views_folder) == 0) {
+			$this->views_folder[] = strtolower(substr(get_class($this), 0, -strlen('Controller')));
+		}
+
+		$inc_folder = $this->views_folder[count($this->views_folder) - 1];
+		$inc_folder_pushed = false;
+
+		$view_path = '';
+
 		$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'];
 		if($view[0] == '/') {
-			$inc_path .= $view;
+			$view_path = $view;
 		} else {
-			$inc_path .= '/' . $inc_folder . '/' . $view;
+			$view_path = '/' . $inc_folder . '/' . $view;
 		}
+
+		// Push the new folder as the current views folder, so that views can use their
+		// relative path to render partial views easier.
+		//
+		// For example:
+		//   '/foo/view'
+		//     ^^^
+		//   '/foo/bar/view'
+		//     ^^^^^^^
+		$m = [];
+		if (preg_match('/^\/?(.*)\/.*$/', $view, $m) && strlen($m[1]) > 0) {
+			array_push($this->views_folder, $m[1]);
+			$inc_folder_pushed = true;
+		}
+
+		$inc_path .= $view_path;
 
 		$basename = basename($inc_path);
 		if (strpos($basename, '.') === false) {
@@ -100,6 +127,11 @@ class Controller
 
 		ob_start();
 		$renderer->render($inc_path, $options);
+
+		if ($inc_folder_pushed) {
+			array_pop($this->views_folder);
+		}
+
 		return ob_get_clean();
 	}
 
