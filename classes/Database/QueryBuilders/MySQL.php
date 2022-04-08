@@ -86,7 +86,8 @@ class MySQL extends QueryBuilder
 			}
 		}
 		if($this->limit[0] >= 0 && $this->limit[1] >= 0) {
-			$query .= ' LIMIT ' . $this->limit[0] . ',' . $this->limit[1];
+			$num = $this->limit[1] - $this->limit[0];
+			$query .= ' LIMIT ' . $this->limit[0] . ',' . $num;
 		}
 		return $query . ';';
 	}
