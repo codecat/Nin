@@ -34,11 +34,11 @@ class Controller
 	public function getTitle()
 	{
 		global $nf_cfg;
-		$ret = Html::encode($nf_cfg['name']);
+		$name = Html::encode($nf_cfg['name']);
 		if ($this->title != '') {
-			$ret .= ' - ' . Html::encode($this->title);
+			return Html::encode($this->title) . ' - ' . $name;
 		}
-		return $ret;
+		return $name;
 	}
 
 	public function getHead()
