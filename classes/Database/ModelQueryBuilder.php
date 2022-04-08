@@ -14,6 +14,11 @@ class ModelQueryBuilder
 		$this->builder->returning($class::primarykey());
 	}
 
+	public function __clone()
+	{
+		$this->builder = clone $this->builder;
+	}
+
 	/**
 	 * Runs the query and returns all model objects
 	 * @return \Nin\Model[]
