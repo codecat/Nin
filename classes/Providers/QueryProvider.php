@@ -25,6 +25,10 @@ class QueryProvider extends Provider
 
 	public function count()
 	{
+		if (!$this->result) {
+			return 0;
+		}
+
 		return $this->result->num_rows();
 	}
 

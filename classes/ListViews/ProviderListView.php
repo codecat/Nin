@@ -12,6 +12,7 @@ class ProviderListView extends \Nin\ListView
 	{
 		parent::__construct($page, $controller);
 		$this->provider = $provider;
+		$this->total = $this->provider->count();
 	}
 
 	function renderItems($view, $options = [])
