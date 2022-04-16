@@ -92,7 +92,7 @@ function nf_php_exception($e)
 		return $ls[$l-1];
 	};
 
-	$sl = function($i, $func, $args, $fn, $l) use($gl) {
+	$sl = function($func, $args, $fn, $l) use($gl) {
 		echo '<tr style="background: #fdd;"><td style="border-top: 1px solid #faa;">';
 		if($func) {
 			echo htmlentities($func) . '(';
@@ -160,7 +160,7 @@ function nf_php_exception($e)
 		if(isset($trace[$i]['args'])) { $args = $trace[$i]['args']; }
 		if(isset($trace[$i]['file'])) { $fnm = $trace[$i]['file']; }
 		if(isset($trace[$i]['line'])) { $ln = $trace[$i]['line']; }
-		$sl(1 + $i, $func, $args, $fnm, $ln);
+		$sl($func, $args, $fnm, $ln);
 	}
 	echo '</table>';
 
