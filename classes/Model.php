@@ -4,10 +4,10 @@ namespace Nin;
 
 class Model
 {
-	public $_data = [];
-	public $_changed = [];
-	public $_loaded = false;
-	public $_relationalrows = [];
+	protected $_data = [];
+	protected $_changed = [];
+	protected $_loaded = false;
+	protected $_relationalrows = [];
 	public $_errors = [];
 
 	public function relations()
