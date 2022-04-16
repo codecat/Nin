@@ -3,10 +3,8 @@
 /**
  * Function that is called for all handled errors.
  */
-function nf_error($num, $details = '')
+function nf_error($num, $details = '', $code = 500)
 {
-	global $nf_cfg;
-
 	$error = nf_t('Unknown');
 	switch($num) {
 		case 1: $error = nf_t('Invalid controller name'); break;
@@ -31,6 +29,7 @@ function nf_error($num, $details = '')
 		$error .= ' (' . nf_t('Details:') . ' "' . Nin\Html::encode($details) . '")';
 	}
 
+	header('HTTP/1.1 ' . $code);
 	if(nf_hook_one('error', [$num, $details, $error]) === null) {
 		echo nf_t('nf error:') . ' ' . $error . '<br>';
 	}
@@ -65,7 +64,7 @@ function nf_error_routing($num, $details = '')
 		return;
 	}
 
-	nf_error($num, $details);
+	nf_error($num, $details, 404);
 }
 
 function nf_php_error($errno, $errstr, $errfile, $errline)
@@ -83,6 +82,8 @@ function nf_php_exception($e)
 	if(error_reporting() == 0) {
 		return;
 	}
+
+	header('HTTP/1.1 500');
 
 	nf_hook('php-error', $e);
 
