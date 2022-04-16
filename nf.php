@@ -11,7 +11,6 @@ $nf_uri_fallback = false;
 include('functions/define.php');
 include('functions/config.php');
 include('functions/autoloader.php');
-include('functions/assets.php');
 include('functions/begin.php');
 include('functions/error.php');
 include('functions/routing.php');

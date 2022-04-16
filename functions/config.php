@@ -13,7 +13,6 @@ $nf_cfg = [
 		'components' => 'components',
 		'i18n' => 'i18n',
 		'validators' => 'validators',
-		'assets' => 'assets',
 		'logs' => 'logs',
 	],
 
