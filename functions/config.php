@@ -65,7 +65,7 @@ $nf_cfg = [
 
 	// Debugging
 	'debug' => [
-		'enabled' => true,
+		'enabled' => false,
 	],
 
 	// Additional parameters
