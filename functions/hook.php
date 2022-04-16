@@ -1,29 +1,17 @@
 <?php
 
 /**
- * Call a hook set in the config or a plugin with the given name and parameters.
+ * Call a hook set in the config with the given name and parameters.
  */
 function nf_hook($name, $params = [])
 {
 	global $nf_cfg;
-	global $nf_plugins;
 
 	$ret = [];
 
 	if (isset($nf_cfg['hooks'])) {
 		if (isset($nf_cfg['hooks'][$name])) {
 			$ret[] = $nf_cfg['hooks'][$name]($params);
-		}
-	}
-
-	foreach ($nf_plugins as $plugin) {
-		$info = $plugin['info'];
-		if (!isset($info['hooks'])) {
-			continue;
-		}
-
-		if (isset($info['hooks'][$name])) {
-			$ret[] = $info['hooks'][$name]($params);
 		}
 	}
 

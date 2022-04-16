@@ -10,7 +10,6 @@ $nf_uri_fallback = false;
 // Include dependencies
 include('functions/define.php');
 include('functions/config.php');
-include('functions/plugins.php');
 include('functions/autoloader.php');
 include('functions/assets.php');
 include('functions/begin.php');

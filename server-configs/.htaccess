@@ -10,7 +10,6 @@ RedirectMatch 403 ^/models/.*\.php$
 RedirectMatch 403 ^/views/.*\.php$
 RedirectMatch 403 ^/i18n/.*\.php$
 RedirectMatch 403 ^/validators/.*\.php$
-RedirectMatch 403 ^/plugins/.*\.php$
 RedirectMatch 403 ^/vendor/.*\.php$
 RedirectMatch 403 ^/logs/.*\.log$
 

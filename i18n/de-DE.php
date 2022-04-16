@@ -18,7 +18,6 @@ return [
 	'Cache class does not exist' => 'Cache Klasse existiert nicht',
 	'A required module is not installed' => 'Ein benötigtes Modul ist nicht installiert',
 	'A suitable renderer could not be found for the view' => 'Ein für den View passender Renderer konnte nicht gefunden werden',
-	'Plugin was not found' => 'Plugin wurde nicht gefunden',
 	'Details:' => 'Details:',
 	'nf error:' => 'nf Fehler:',
 	'Error was:' => 'Error war:',

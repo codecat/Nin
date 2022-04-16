@@ -28,7 +28,6 @@ function nf_begin_internal($dir, $options)
 	}
 
 	nf_autoloader_initialize();
-	nf_plugins_initialize();
 	nf_i18n_initialize();
 	nf_db_initialize();
 	nf_cache_initialize();

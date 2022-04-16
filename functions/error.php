@@ -24,7 +24,6 @@ function nf_error($num, $details = '')
 		case 13: $error = nf_t('Cache class does not exist'); break;
 		case 14: $error = nf_t('A required module is not installed'); break;
 		case 15: $error = nf_t('A suitable renderer could not be found for the view'); break;
-		case 16: $error = nf_t('Plugin was not found'); break;
 		case 17: $error = nf_t('Controller requires parameters not given'); break;
 		case 18: $error = nf_t('Route does not exist'); break;
 	}
