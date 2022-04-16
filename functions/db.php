@@ -21,6 +21,9 @@ function nf_db_initialize()
 	} elseif(isset($nf_cfg['postgres'])) {
 		$nf_cfg['db']['class'] = 'Postgres';
 		$nf_cfg['db']['options'] = $nf_cfg['postgres'];
+	} elseif(isset($nf_cfg['sqlite'])) {
+		$nf_cfg['db']['class'] = 'SQLite';
+		$nf_cfg['db']['options'] = $nf_cfg['sqlite'];
 	}
 
 	$class_name = $nf_cfg['db']['class'];
