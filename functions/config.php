@@ -32,8 +32,6 @@ $nf_cfg = [
 
 	// Validation
 	'validation' => [
-		'regex_controllers' => '/^[a-z0-9\\-_]+$/',
-		'regex_actions' => '/^[a-z0-9_]+$/',
 		'parameters_exclusive' => true,
 	],
 
