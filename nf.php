@@ -18,7 +18,6 @@ include('functions/hook.php');
 include('functions/i18n.php');
 include('functions/db.php');
 include('functions/cache.php');
-include('functions/common.php');
 
 function nf_begin($dir, $options = [])
 {
