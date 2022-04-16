@@ -25,6 +25,9 @@ function nf_begin_internal($dir, $options)
 		set_exception_handler('nf_php_exception');
 		ini_set('display_errors', 'off');
 		error_reporting(E_ALL);
+	} else {
+		ini_set('display_errors', 'off');
+		error_reporting(0);
 	}
 
 	nf_autoloader_initialize();
