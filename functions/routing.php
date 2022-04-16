@@ -17,6 +17,11 @@ function nf_handle_uri($uri)
 	global $nf_routes;
 	global $nf_uri_parts;
 
+	$params = [];
+	foreach($_GET as $k => $v) {
+		$params[$k] = $v;
+	}
+
 	$nf_uri_parts = explode('/', trim($uri, '/'));
 	$numparts = count($nf_uri_parts);
 
@@ -28,11 +33,6 @@ function nf_handle_uri($uri)
 		}
 
 		$valid = true;
-		$params = [];
-
-		foreach($_GET as $k => $v) {
-			$params[$k] = $v;
-		}
 
 		for($i = 0; $i < $numrouteparts; $i++) {
 			$p = $nf_uri_parts[$i];
@@ -54,7 +54,7 @@ function nf_handle_uri($uri)
 	}
 
 	if($uri == '/') {
-		nf_begin_page(false, []);
+		nf_begin_page(false, $params);
 		return;
 	}
 
