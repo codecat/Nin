@@ -4,7 +4,7 @@ namespace Nin;
 
 class Controller
 {
-	public $layout = 'views/layout.php';
+	public $layout = 'views/layout';
 	public $title = '';
 	public $files_css = [];
 	public $files_js = [];
@@ -56,12 +56,27 @@ class Controller
 	public function render($view, $options = [])
 	{
 		global $nf_www_dir;
+		global $nf_cfg;
+
 		$content = $this->renderPartial($view, $options);
+
 		$fnmlayout = $nf_www_dir . '/' . $this->layout;
+		if (strpos(basename($fnmlayout), '.') === false) {
+			$fnmlayout .= $nf_cfg['render']['ext'];
+		}
+
+		$renderer = $this->getRenderer($fnmlayout);
+		if ($renderer === null) {
+			nf_error(15, $fnmlayout);
+			return '';
+		}
+
 		if(file_exists($fnmlayout)) {
-			$title = $this->getTitle();
-			$head = $this->getHead();
-			include($fnmlayout);
+			$renderer->render($fnmlayout, [
+				'title' => $this->getTitle(),
+				'head' => $this->getHead(),
+				'content' => $content,
+			]);
 		} else {
 			echo $content;
 		}
@@ -106,22 +121,13 @@ class Controller
 
 		$inc_path .= $view_path;
 
-		$basename = basename($inc_path);
-		if (strpos($basename, '.') === false) {
-			$inc_path .= '.php';
+		if (strpos(basename($inc_path), '.') === false) {
+			$inc_path .= $nf_cfg['render']['ext'];
 		}
 
-		$renderer = null;
-
-		$ext = substr($inc_path, strrpos($inc_path, '.'));
-		if ($ext == '.php') {
-			$renderer = new \Nin\Renderers\PhpRenderer($this);
-		} else {
-			$renderer = nf_hook_one('viewrenderer', [$this, $inc_path, $ext]);
-		}
-
+		$renderer = $this->getRenderer($inc_path);
 		if ($renderer === null) {
-			nf_error(15, $ext);
+			nf_error(15, $inc_path);
 			return '';
 		}
 
@@ -133,6 +139,20 @@ class Controller
 		}
 
 		return ob_get_clean();
+	}
+
+	protected function getRenderer(string $path)
+	{
+		$ret = null;
+		$ext = substr($path, strrpos($path, '.'));
+		if ($ext == '.php') {
+			$ret = new \Nin\Renderers\PhpRenderer($this);
+		} elseif ($ext == '.twig') {
+			$ret = new \Nin\Renderers\TwigRenderer($this);
+		} else {
+			$ret = nf_hook_one('viewrenderer', [$this, $path, $ext]);
+		}
+		return $ret;
 	}
 
 	public function redirect($url, $code = 302)

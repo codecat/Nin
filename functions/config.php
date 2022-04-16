@@ -49,6 +49,13 @@ $nf_cfg = [
 		'options' => [],
 	],
 
+	// Rendering
+	'render' => [
+		'ext' => '.php',
+		'cache' => '/tmp/nin_render_cache',
+		'debug' => false,
+	],
+
 	// Hooks
 	'hooks' => [],
 
