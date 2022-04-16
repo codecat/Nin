@@ -83,107 +83,24 @@ function nf_php_exception($e)
 		return;
 	}
 
-	header('HTTP/1.1 500');
-
 	nf_hook('php-error', $e);
 
-	$gl = function($fn, $l) {
-		$ls = file($fn);
-		return $ls[$l-1];
-	};
-
-	$sl = function($func, $args, $fn, $l) use($gl) {
-		echo '<tr style="background: #fdd;"><td style="border-top: 1px solid #faa;">';
-		if($func) {
-			echo htmlentities($func) . '(';
-			if ($args !== false) {
-				for($j = 0; $j < count($args); $j++) {
-					echo '<code>';
-					$arg = $args[$j];
-					if(is_string($arg)) {
-						echo '"';
-						if(strlen($arg) > 50) {
-							echo htmlentities(addslashes(substr($arg, 0, 47))) . '...';
-						} else {
-							echo htmlentities(addslashes($arg));
-						}
-						echo '"';
-					} elseif(is_array($arg)) {
-						echo '[..' . count($arg) . ']';
-					} elseif(is_bool($arg)) {
-						echo $arg ? 'true' : 'false';
-					} elseif(is_integer($arg)) {
-						echo $arg;
-					} else {
-						echo gettype($arg);
-					}
-					echo '</code>';
-					if($j != count($args) - 1) {
-						echo ', ';
-					}
-				}
-			}
-			echo ') ';
-		}
-		if($fn) {
-			echo '<code>' . htmlentities($fn) . '</code> <i>(line ' . $l . ')</i></td>';
-		}
-		echo '</tr>';
-		if($fn) {
-			$line = $gl($fn, $l);
-			$trim = false;
-			$php = '';
-			if(!strstr($line, '<?php') && !strstr($line, '?>') && !strstr($line, '<?=')) {
-				$line = '<?php ' . $line;
-				$trim = true;
-			}
-			$php = highlight_string($line, true);
-			if($trim) {
-				$php = str_replace('&lt;?php&nbsp;', '', $php);
-			}
-			echo '<tr style="background: #ddf;"><td>' . $php . '</td></tr>';
-		}
-	};
-	echo '<table style="margin: 3em;" cellpadding="7" cellspacing="0">';
-	echo '<tr bgcolor="#faa"><td><b>' . get_class($e) . ':</b> ' . htmlentities($e->getMessage());
-	if(is_a($e, 'ParseError')) {
-		echo '<br>in <b>' . $e->getFile() . '</b> on line <b>' . $e->getLine() . '</b>';
-	}
-	echo '</td></tr>';
 	$trace = $e->getTrace();
-	for($i = 0; $i < count($trace); $i++) {
-		$func = false;
-		$args = false;
-		$fnm = false;
-		$ln = false;
-		if(isset($trace[$i]['function'])) { $func = $trace[$i]['function']; }
-		if(isset($trace[$i]['args'])) { $args = $trace[$i]['args']; }
-		if(isset($trace[$i]['file'])) { $fnm = $trace[$i]['file']; }
-		if(isset($trace[$i]['line'])) { $ln = $trace[$i]['line']; }
-		$sl($func, $args, $fnm, $ln);
-	}
-	echo '</table>';
 
-	echo "<!--\nException in plain text:\n";
-	echo get_class($e) . ': ' . $e->getMessage() . "\n";
-	echo 'in ' . $e->getFile() . ' on line ' . $e->getLine() . "\n";
+	echo "<pre style=\"background: #fee; color: #111; font-size: 12px; border: 1px solid #f00; padding: 5px;\">\n<b>";
+	echo get_class($e) . '</b>: ' . Nin\Html::encode($e->getMessage()) . "\n";
+	echo 'in <u>' . $e->getFile() . '</u> on line ' . $e->getLine() . "\n";
 	for($i = 0; $i < count($trace); $i++) {
-		$func = '';
-		$fnm = '';
-		$ln = '';
-		if(isset($trace[$i]['function'])) { $func = $trace[$i]['function']; }
+		$fnm = ''; $ln = '';
 		if(isset($trace[$i]['file'])) { $fnm = $trace[$i]['file']; }
 		if(isset($trace[$i]['line'])) { $ln = $trace[$i]['line']; }
-		echo "\t" . $func;
-		if ($fnm !== '') {
-			echo "\t\t" . $fnm;
-		}
+		echo "   <u>" . $fnm . '</u>';
 		if ($ln !== '') {
-			echo "\t\t(line " . $ln . ')';
+			echo ' on line ' . $ln;
 		}
 		echo "\n";
 	}
-	echo "-->\n";
+	echo '</pre>';
 }
 
 function nf_php_fatal()
