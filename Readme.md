@@ -1,4 +1,6 @@
-![](resources/Logo.png)
+<p align="center">
+  <img src="https://github.com/codecat/Nin/raw/master/resources/Logo.png">
+</p>
 
 Nin is a minimalistic PHP framework originally based on some of the ideas of Yii. It stands for "No It's Not", a play on Yii's "Yes It Is".
 
