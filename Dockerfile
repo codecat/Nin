@@ -3,7 +3,7 @@ FROM caddy:alpine
 LABEL MAINTAINER="Melissa Geels"
 
 # Install PHP-FPM and modules that Nin supports
-RUN apk add php8-fpm php8-session php8-pgsql php8-mysqli php8-pecl-apcu php8-opcache php8-mbstring
+RUN apk add php8-fpm php8-session php8-pgsql php8-mysqli php8-sqlite3 php8-pecl-apcu php8-opcache php8-mbstring
 
 # Copy the actual Nin code
 COPY . /var/www/nin
