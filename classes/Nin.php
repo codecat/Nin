@@ -175,9 +175,11 @@ class Nin
 		return $count . ' ' . $verbs;
 	}
 
-	public static function ip(bool $allow_forwarded_for = true, int $forwarded_for_max = 1)
+	public static function ip()
 	{
-		if ($allow_forwarded_for && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		global $nf_cfg;
+		$forwarded_for_max = $nf_cfg['forwarded_for_max'];
+		if ($forwarded_for_max >= 0 && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$parse = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 			$i = max(0, count($parse) - $forwarded_for_max);
 			return trim($parse[$i]);

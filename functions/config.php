@@ -16,6 +16,9 @@ $nf_cfg = [
 		'logs' => 'logs',
 	],
 
+	// IP address maximum forwarded for count (set to -1 to disable)
+	'forwarded_for_max' => 2,
+
 	// Routing configuration
 	'routing' => [
 		'notfound' => false,
