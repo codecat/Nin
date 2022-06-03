@@ -43,6 +43,11 @@ $nf_cfg = [
 		'options' => [],
 	],
 
+	// User authentication
+	'user' => [
+		'model' => 'User',
+	],
+
 	// Caching information
 	'cache' => [
 		'class' => 'Dummy',

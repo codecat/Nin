@@ -4,7 +4,6 @@ namespace Nin;
 
 class Nin
 {
-	public static $user_class = 'User';
 	public static $session_prefix = 'nin_';
 	public static $date_format = 'r';
 	public static $date_format_year = '';
@@ -57,6 +56,8 @@ class Nin
 
 	public static function user()
 	{
+		global $nf_cfg;
+
 		if(Nin::$current_user !== null) {
 			return Nin::$current_user;
 		}
@@ -64,7 +65,7 @@ class Nin
 		if($uid === false) {
 			return false;
 		}
-		$classname = Nin::$user_class;
+		$classname = $nf_cfg['user']['model'];
 		$user = $classname::findByPk($uid);
 		Nin::$current_user = $user;
 		return $user;
