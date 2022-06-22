@@ -87,6 +87,8 @@ function nf_php_exception($e)
 
 	$trace = $e->getTrace();
 
+	http_response_code(500);
+
 	echo "<pre style=\"background: #fee; color: #111; font-size: 12px; border: 1px solid #f00; padding: 5px;\">\n<b>";
 	echo get_class($e) . '</b>: ' . Nin\Html::encode($e->getMessage()) . "\n";
 	echo 'in <u>' . $e->getFile() . '</u> on line ' . $e->getLine() . "\n";
