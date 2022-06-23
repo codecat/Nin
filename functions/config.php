@@ -45,6 +45,7 @@ $nf_cfg = [
 
 	// User authentication
 	'user' => [
+		'sessions' => true,
 		'model' => 'User',
 	],
 

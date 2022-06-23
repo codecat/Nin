@@ -13,11 +13,11 @@ function nf_begin_internal($dir, $options)
 
 	$nf_www_dir = $dir;
 
-	if(session_status() == PHP_SESSION_NONE) {
+	nf_config_initialize($options);
+
+	if ($nf_cfg['user']['sessions'] && session_status() == PHP_SESSION_NONE) {
 		session_start();
 	}
-
-	nf_config_initialize($options);
 
 	if($nf_cfg['debug']['enabled']) {
 		register_shutdown_function('nf_php_fatal');
