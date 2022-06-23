@@ -133,7 +133,7 @@ class SQLite extends QueryBuilder
 					if($j > 0) {
 						$query .= ',';
 					}
-					$query .= $keys[$j];
+					$query .= '"' . $keys[$j] . '"';
 				}
 				$query .= ') VALUES ';
 			}
