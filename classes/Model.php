@@ -296,7 +296,11 @@ class Model
 
 			$their_classname = $v[1];
 			$my_column = $v[2];
-			$obj = $their_classname::findByPk($this->$my_column);
+			$their_column = $their_classname::primarykey();
+			if (count($v) >= 4) {
+				$their_column = $v[3];
+			}
+			$obj = $their_classname::findByAttributes([ $their_column => $this->$my_column ]);
 
 		} elseif($v[0] == HAS_MANY) {
 			if (!$this->_loaded) {
