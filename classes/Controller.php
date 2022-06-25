@@ -162,10 +162,11 @@ class Controller
 		exit;
 	}
 
-	public function cache($etag)
+	public function cache($etag, $hours = 24)
 	{
 		header('Etag: ' . $etag);
 		header('Cache-Control: public');
+		header('Expires: ' . date('D, j M Y H:i:s e', time() + (3600 * $hours)));
 
 		if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
 			return;
