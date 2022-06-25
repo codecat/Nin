@@ -9,6 +9,10 @@ class SQLite extends QueryBuilder
 	private function encode($o)
 	{
 		if(is_string($o)) {
+			if (str_contains($o, "\x00")) {
+				// Required for binary blobs
+				return "x'" . bin2hex($o) . "'";
+			}
 			return "'" . $this->context->real_escape_string($o) . "'";
 		} elseif(is_bool($o)) {
 			return $o ? '1' : '0';
