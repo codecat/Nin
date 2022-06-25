@@ -35,7 +35,7 @@ class SQLite extends Context
 	{
 		$ret = $this->connection->query($query);
 		if($ret === false) {
-			nf_error(10, nf_t('Error was:') . ' ' . $this->connection->error . ' - ' . nf_t('Query was:') . ' ' . $query);
+			nf_error(10, nf_t('Error was:') . ' ' . $this->connection->lastErrorMsg() . ' - ' . nf_t('Query was:') . ' ' . $query);
 		}
 		return new \Nin\Database\Results\SQLite($ret, $this->connection->lastInsertRowID());
 	}
