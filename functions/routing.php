@@ -126,7 +126,7 @@ function nf_begin_get_callparams(?ReflectionFunctionAbstract $r, $params)
 					break;
 
 				case 'bool':
-					if($argvalue == 'false') {
+					if(is_string($argvalue) && $argvalue == 'false') {
 						$argvalue = false;
 					} else {
 						$argvalue = boolval($argvalue);
