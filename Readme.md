@@ -18,7 +18,7 @@ Then create `index.php`:
 
 ```php
 include('vendor/codecat/nin/nf.php');
-nf_begin(__DIR__);
+nf_begin();
 ```
 
 ## Detailed installation
@@ -122,10 +122,10 @@ If you create a layout file at `views/layout.php`, you can use that as a wrapper
 ```
 
 # Using a database
-Nin supports both PostgreSQL and MySQL, but PostgreSQL is recommended. To begin using a database such as PostgreSQL with Nin, specify the database connection information as a parameter to `nf_begin`:
+Nin supports PostgreSQL, MySQL, and SQLite. To begin using a database such as PostgreSQL with Nin, specify the database connection information as a parameter to `nf_begin`:
 
 ```php
-nf_begin(__DIR__, [
+nf_begin([
   'postgres' => [
     'hostname' => 'localhost',
     'password' => 'password',
@@ -138,7 +138,7 @@ Once this configuration is set, you are ready to create and use models.
 Note that the `postgres` key above is a shortcut for the more verbose database configuration:
 
 ```php
-nf_begin(__DIR__, [
+nf_begin([
   'db' => [
     'class' => 'Postgres',
     'options' => [
@@ -235,6 +235,20 @@ You can then simply use `$user->posts` to get an object array of the model `Post
 * `BELONGS_TO` finds one object using **their classname** and **my column**
 * `HAS_MANY` finds multiple objects using **their classname** and **their column**
 * `HAS_ONE` finds one object using **their classname** and **their column**
+
+# Middleware
+You can set up middleware for specific routes. To do this, use the functions `nf_route_middleware_begin` and `nf_route_middleware_end` to wrap your `nf_route` calls in. For example, to require a user to be logged in for certain routes, you can do this:
+
+```php
+nf_route_middleware_begin(new Nin\Middleware\AuthSession());
+nf_route('/posts', 'PostsController.Index');
+nf_route('/users', 'UsersController.Index');
+nf_route_middleware_end();
+```
+
+When someone navigates to `/posts` or `/users` and they are not logged in (through the user session management provided through `Nin\Nin::setuid()`), the request will stop and never make it to the controller. Additionally, by default `AuthSession` will redirect the user to `/login` as well, so the user can log in.
+
+Middleware can be stacked by doing multiple calls to `nf_route_middleware_begin`. Note that you must also call `nf_route_middleware_end` the same amount of times, or Nin will throw errors.
 
 # Docker
 Nin is also available as [a docker image](https://hub.docker.com/r/codecatt/nin) based on `caddy:alpine`. Here's a quick example on how to use Nin in your Dockerfile:
