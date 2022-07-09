@@ -3,6 +3,7 @@
 namespace Nin\Database\Contexts;
 
 use Nin\Database\Context;
+use Nin\Database\SchemaColumn;
 
 class SQLite extends Context
 {
@@ -31,7 +32,7 @@ class SQLite extends Context
 		return $this->connection->escapeString($str);
 	}
 
-	public function query($query)
+	public function query(string $query)
 	{
 		$ret = $this->connection->query($query);
 		if($ret === false) {
@@ -40,8 +41,37 @@ class SQLite extends Context
 		return new \Nin\Database\Results\SQLite($ret, $this->connection->lastInsertRowID());
 	}
 
-	public function beginBuild($table)
+	public function beginBuild(string $table)
 	{
 		return new \Nin\Database\QueryBuilders\SQLite($this, $table);
+	}
+
+	public function getSchema(string $table)
+	{
+		$res = $this->query('SELECT * FROM PRAGMA_TABLE_INFO("' . $table . '");');
+		if (!$res) {
+			return false;
+		}
+		/*
+			+-----+-----------+---------+---------+------------+----+
+			| cid | name      | type    | notnull | dflt_value | pk |
+			+-----+-----------+---------+---------+------------+----+
+			| 0   | id        | INTEGER | 0       | <null>     | 1  |
+			| 1   | message   | TEXT    | 0       | <null>     | 0  |
+			| 2   | time      | INTEGER | 0       | <null>     | 0  |
+			| 3   | author_id | INTEGER | 0       | <null>     | 0  |
+			+-----+-----------+---------+---------+------------+----+
+		*/
+		$ret = [];
+		while ($row = $res->fetch_assoc()) {
+			$c = new SchemaColumn();
+			$c->name = $row['name'];
+			$c->type = strtolower($row['type']);
+			if ($c->type == 'int') {
+				$c->type = 'integer';
+			}
+			$ret[$c->name] = $c;
+		}
+		return $ret;
 	}
 }

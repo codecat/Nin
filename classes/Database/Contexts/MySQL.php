@@ -3,6 +3,7 @@
 namespace Nin\Database\Contexts;
 
 use Nin\Database\Context;
+use Nin\Database\SchemaColumn;
 
 class MySQL extends Context
 {
@@ -42,7 +43,7 @@ class MySQL extends Context
 		return $this->connection->real_escape_string($str);
 	}
 
-	public function query($query)
+	public function query(string $query)
 	{
 		$ret = $this->connection->query($query);
 		if($ret === false) {
@@ -51,8 +52,31 @@ class MySQL extends Context
 		return new \Nin\Database\Results\MySQL($ret, $this->connection->insert_id);
 	}
 
-	public function beginBuild($table)
+	public function beginBuild(string $table)
 	{
 		return new \Nin\Database\QueryBuilders\MySQL($this, $table);
+	}
+
+	public function getSchema(string $table)
+	{
+		$res = $this->query('SHOW COLUMNS FROM ' . $table . ';');
+		/*
+			+---------+--------------+------+-----+---------+----------------+
+			| Field   | Type         | Null | Key | Default | Extra          |
+			+---------+--------------+------+-----+---------+----------------+
+			| id      | int(11)      | NO   | PRI | <null>  | auto_increment |
+			| author  | varchar(255) | YES  |     | <null>  |                |
+			| message | mediumtext   | YES  |     | <null>  |                |
+			| time    | int(11)      | YES  |     | <null>  |                |
+			+---------+--------------+------+-----+---------+----------------+
+		*/
+		$ret = [];
+		while ($row = $res->fetch_assoc()) {
+			$c = new SchemaColumn();
+			$c->name = $row['Field'];
+			$c->type = strtolower($row['Type']);
+			$ret[$c->name] = $c;
+		}
+		return $ret;
 	}
 }

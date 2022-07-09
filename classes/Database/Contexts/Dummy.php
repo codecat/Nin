@@ -10,6 +10,7 @@ class Dummy extends Context
 	{
 	}
 
-	public function query($query) { return false; }
-	public function beginBuild($table) { return new \Nin\Database\QueryBuilders\Dummy($this, $table); }
+	public function query(string $query) { return false; }
+	public function beginBuild(string $table) { return new \Nin\Database\QueryBuilders\Dummy($this, $table); }
+	public function getSchema(string $table) { return false; }
 }

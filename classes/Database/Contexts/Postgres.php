@@ -3,6 +3,7 @@
 namespace Nin\Database\Contexts;
 
 use Nin\Database\Context;
+use Nin\Database\SchemaColumn;
 
 class Postgres extends Context
 {
@@ -34,7 +35,7 @@ class Postgres extends Context
 		return pg_escape_string($this->connection, $str);
 	}
 
-	public function query($query)
+	public function query(string $query)
 	{
 		$ret = pg_query($this->connection, $query);
 		if($ret === false) {
@@ -43,8 +44,34 @@ class Postgres extends Context
 		return new \Nin\Database\Results\Postgres($ret, $this->connection);
 	}
 
-	public function beginBuild($table)
+	public function beginBuild(string $table)
 	{
 		return new \Nin\Database\QueryBuilders\Postgres($this, $table);
+	}
+
+	public function getSchema(string $table)
+	{
+		$res = $this->query('SELECT * FROM information_schema.columns WHERE table_name = \'' . $table . '\';');
+		if (!$res) {
+			return false;
+		}
+		/*
+			+-------------+-------------------+
+			| column_name | data_type         |
+			|-------------+-------------------|
+			| id          | integer           |
+			| time        | bigint            |
+			| author_id   | integer           |
+			| message     | character varying |
+			+-------------+-------------------+
+		*/
+		$ret = [];
+		while ($row = $res->fetch_assoc()) {
+			$c = new SchemaColumn();
+			$c->name = $row['column_name'];
+			$c->type = strtolower($row['data_type']);
+			$ret[$c->name] = $c;
+		}
+		return $ret;
 	}
 }

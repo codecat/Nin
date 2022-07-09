@@ -179,6 +179,11 @@ class Model
 		return $ret;
 	}
 
+	public static function schema()
+	{
+		return nf_db_context()->getSchema(static::tablename());
+	}
+
 	public function fetch($column)
 	{
 		$pk_col = static::primarykey();
