@@ -23,7 +23,13 @@ function nf_db_initialize()
 		$nf_cfg['db']['options'] = $nf_cfg['postgres'];
 	} elseif(isset($nf_cfg['sqlite'])) {
 		$nf_cfg['db']['class'] = 'SQLite';
-		$nf_cfg['db']['options'] = $nf_cfg['sqlite'];
+		if (is_string($nf_cfg['sqlite'])) {
+			$nf_cfg['db']['options'] = [
+				'path' => $nf_cfg['sqlite'],
+			];
+		} else {
+			$nf_cfg['db']['options'] = $nf_cfg['sqlite'];
+		}
 	}
 
 	$class_name = $nf_cfg['db']['class'];
