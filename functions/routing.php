@@ -14,6 +14,10 @@ function nf_route_middleware_begin(Nin\Middleware $middleware)
 function nf_route_middleware_end()
 {
 	global $nf_routes_define_middleware;
+	if (count($nf_routes_define_middleware) == 0) {
+		nf_error(20);
+		exit;
+	}
 	array_pop($nf_routes_define_middleware);
 }
 
@@ -33,6 +37,12 @@ function nf_handle_uri($uri)
 {
 	global $nf_routes;
 	global $nf_uri_parts;
+	global $nf_routes_define_middleware;
+
+	if (count($nf_routes_define_middleware) > 0) {
+		nf_error(19);
+		return;
+	}
 
 	$params = [];
 	foreach($_GET as $k => $v) {

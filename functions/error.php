@@ -24,6 +24,8 @@ function nf_error($num, $details = '', $code = 500)
 		case 15: $error = nf_t('A suitable renderer could not be found for the view'); break;
 		case 17: $error = nf_t('Controller requires parameters not given'); break;
 		case 18: $error = nf_t('Route does not exist'); break;
+		case 19: $error = nf_t('Route middleware group was not closed correctly'); break;
+		case 20: $error = nf_t('Tried closing a middleware group without opening one'); break;
 	}
 	if($details != '') {
 		$error .= ' (' . nf_t('Details:') . ' "' . Nin\Html::encode($details) . '")';
