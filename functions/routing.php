@@ -3,12 +3,29 @@
 $nf_routes = [];
 $nf_uri_parts = [];
 
+$nf_routes_define_middleware = [];
+
+function nf_route_middleware_begin(Nin\Middleware $middleware)
+{
+	global $nf_routes_define_middleware;
+	array_push($nf_routes_define_middleware, $middleware);
+}
+
+function nf_route_middleware_end()
+{
+	global $nf_routes_define_middleware;
+	array_pop($nf_routes_define_middleware);
+}
+
 function nf_route($route, $action)
 {
 	global $nf_routes;
+	global $nf_routes_define_middleware;
+
 	$nf_routes[] = [
 		'route' => $route,
 		'action' => $action,
+		'middleware' => $nf_routes_define_middleware,
 	];
 }
 
@@ -48,7 +65,7 @@ function nf_handle_uri($uri)
 		}
 
 		if($valid) {
-			nf_begin_page($route['action'], $params);
+			nf_begin_route($route, $params);
 			return;
 		}
 	}
@@ -59,6 +76,18 @@ function nf_handle_uri($uri)
 	}
 
 	nf_error_routing(18, $uri);
+}
+
+function nf_begin_route($route, $params)
+{
+	$action = $route['action'];
+	foreach ($route['middleware'] as $mw) {
+		$action = $mw->exec($action);
+		if ($action === false) {
+			return;
+		}
+	}
+	nf_begin_page($action, $params);
 }
 
 function nf_begin_page($route, $params)
