@@ -98,7 +98,7 @@ class Controller
 
 		$view_path = '';
 
-		$inc_path = $nf_www_dir . '/' . $nf_cfg['paths']['views'];
+		$inc_path = $nf_www_dir . '/views';
 		if($view[0] == '/') {
 			$view_path = $view;
 		} else {

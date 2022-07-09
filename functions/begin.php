@@ -3,15 +3,11 @@
 /*
  * Begin the framework.
  */
-function nf_begin_internal($dir, $options)
+function nf_begin_internal($options)
 {
-	global $nf_www_dir;
 	global $nf_uri;
 	global $nf_uri_original;
 	global $nf_cfg;
-	global $nf_dir;
-
-	$nf_www_dir = $dir;
 
 	nf_config_initialize($options);
 
@@ -30,7 +26,6 @@ function nf_begin_internal($dir, $options)
 		error_reporting(0);
 	}
 
-	nf_autoloader_initialize();
 	nf_i18n_initialize();
 	nf_db_initialize();
 	nf_cache_initialize();

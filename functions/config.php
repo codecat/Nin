@@ -4,18 +4,6 @@ $nf_cfg = [
 	// Website title
 	'name' => 'Nin',
 
-	// Paths to places
-	'paths' => [
-		'base' => '/',
-		'controllers' => 'controllers',
-		'views' => 'views',
-		'models' => 'models',
-		'components' => 'components',
-		'i18n' => 'i18n',
-		'validators' => 'validators',
-		'logs' => 'logs',
-	],
-
 	// IP address maximum forwarded for count (set to -1 to disable)
 	'forwarded_for_max' => 2,
 

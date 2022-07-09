@@ -7,9 +7,8 @@ class Log
 	public static function check($fnm)
 	{
 		global $nf_www_dir;
-		global $nf_cfg;
 
-		$logs_path = $nf_www_dir . DIRECTORY_SEPARATOR . $nf_cfg['paths']['logs'];
+		$logs_path = $nf_www_dir . DIRECTORY_SEPARATOR . 'logs';
 
 		if(!file_exists($logs_path)) {
 			mkdir($logs_path);
