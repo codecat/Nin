@@ -2,7 +2,7 @@
 
 namespace Nin\Middleware;
 
-class SessionUser extends \Nin\Middleware
+class AuthSession extends \Nin\Middleware
 {
 	private string|bool $redirect;
 
