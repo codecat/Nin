@@ -76,14 +76,6 @@ class Model
 		);
 	}
 
-	public static function countByAttributes($attributes)
-	{
-		return static::beginQuery()
-			->count()
-			->where($attributes)
-			->executeCount();
-	}
-
 	/**
 	 * @return \Nin\Model[]
 	 */
@@ -97,6 +89,21 @@ class Model
 					->get(static::columns())
 			)->execute()
 		);
+	}
+
+	public static function countByAttributes($attributes)
+	{
+		return static::beginQuery()
+			->count()
+			->where($attributes)
+			->executeCount();
+	}
+
+	public static function countAll()
+	{
+		return static::beginQuery()
+			->count()
+			->executeCount();
 	}
 
 	/**
