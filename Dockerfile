@@ -3,7 +3,7 @@ FROM caddy:alpine
 LABEL MAINTAINER="Melissa Geels"
 
 # Install PHP-FPM and modules that Nin supports
-RUN apk add php8-fpm php8-session php8-pgsql php8-mysqli php8-sqlite3 php8-pecl-apcu php8-opcache php8-mbstring
+RUN apk add php81-fpm php81-session php81-pgsql php81-mysqli php81-sqlite3 php81-pecl-apcu php81-opcache php81-mbstring
 
 # Copy the actual Nin code
 COPY . /var/www/nin
@@ -12,4 +12,4 @@ COPY . /var/www/nin
 COPY ./server-configs/Caddyfile /etc/caddy/Caddyfile
 
 # Start php-fpm and Caddy
-CMD php-fpm8; caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+CMD php-fpm81; caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
