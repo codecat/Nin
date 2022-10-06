@@ -31,11 +31,14 @@ class MySQL extends Context
 			$options['database']
 		);
 		$this->connection->set_charset($options['encoding']);
-		$this->connection->query('SET NAMES ' . $options['encoding']);
 
 		if($this->connection->connect_errno != 0) {
 			nf_error(7);
+			return;
 		}
+
+		$this->connection->query('SET NAMES ' . $options['encoding']);
+		$this->connection->query('SET time_zone=\'' . $this->connection->real_escape_string(date('P')) . '\'');
 	}
 
 	public function real_escape_string($str)

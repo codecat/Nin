@@ -27,7 +27,10 @@ class Postgres extends Context
 
 		if(!$this->connection) {
 			nf_error(7);
+			return;
 		}
+
+		pg_query($this->connection, 'SET TIME ZONE INTERVAL \'' . pg_escape_string($this->connection, date('P')) . '\' HOUR TO MINUTE');
 	}
 
 	public function real_escape_string($str)
