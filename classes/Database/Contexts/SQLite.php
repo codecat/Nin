@@ -21,6 +21,7 @@ class SQLite extends Context
 		}
 
 		$this->connection = new \SQLite3($options['path']);
+		$this->connection->busyTimeout(1000);
 
 		if($this->connection->lastErrorCode() != 0) {
 			nf_error(7);
