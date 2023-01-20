@@ -5,6 +5,9 @@ LABEL MAINTAINER="Melissa Geels"
 # Install PHP-FPM and modules that Nin supports
 RUN apk add php81-fpm php81-session php81-pgsql php81-mysqli php81-sqlite3 php81-pecl-apcu php81-opcache php81-mbstring
 
+# Make sure php-fpm doesn't clear environment variables
+RUN printf "[www]\nclear_env = no" > /etc/php81/php-fpm.d/env.conf
+
 # Copy the actual Nin code
 COPY . /var/www/nin
 
