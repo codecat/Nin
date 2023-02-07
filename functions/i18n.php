@@ -10,7 +10,7 @@ $nf_i18n = [];
  */
 function nf_i18n_initialize()
 {
-	global $nf_www_dir;
+	global $nf_project_dir;
 	global $nf_i18n;
 	global $nf_cfg;
 
@@ -18,7 +18,7 @@ function nf_i18n_initialize()
 
 	$nf_i18n = [];
 	nf_i18n_loadtable(__DIR__ . '/i18n/' . $lang . '.php');
-	nf_i18n_loadtable($nf_www_dir . '/i18n/' . $lang . '.php');
+	nf_i18n_loadtable($nf_project_dir . '/i18n/' . $lang . '.php');
 }
 
 /**

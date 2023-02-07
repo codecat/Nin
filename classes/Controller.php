@@ -55,12 +55,12 @@ class Controller
 
 	public function render($view, $options = [])
 	{
-		global $nf_www_dir;
+		global $nf_project_dir;
 		global $nf_cfg;
 
 		$content = $this->renderPartial($view, $options);
 
-		$fnmlayout = $nf_www_dir . '/' . $this->layout;
+		$fnmlayout = $nf_project_dir . '/' . $this->layout;
 		if (strpos(basename($fnmlayout), '.') === false) {
 			$fnmlayout .= $nf_cfg['render']['ext'];
 		}
@@ -84,7 +84,7 @@ class Controller
 
 	public function renderPartial($view, $options = [])
 	{
-		global $nf_www_dir;
+		global $nf_project_dir;
 		global $nf_cfg;
 
 		//NOTE: I would've put this in the constructor, but sites rely on not calling the
@@ -98,7 +98,7 @@ class Controller
 
 		$view_path = '';
 
-		$inc_path = $nf_www_dir . '/views';
+		$inc_path = $nf_project_dir . '/views';
 		if($view[0] == '/') {
 			$view_path = $view;
 		} else {

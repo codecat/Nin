@@ -2,7 +2,7 @@
 
 // Runtime paths to framework and content
 $nf_dir = __DIR__;
-$nf_www_dir = $_SERVER['DOCUMENT_ROOT'];
+$nf_project_dir = dirname($_SERVER['DOCUMENT_ROOT']);
 $nf_uri = '';
 $nf_uri_original = '';
 $nf_uri_fallback = false;

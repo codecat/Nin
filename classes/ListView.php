@@ -30,7 +30,7 @@ abstract class ListView
 
 	protected function renderOne($view, $item, $options = [])
 	{
-		global $nf_www_dir;
+		global $nf_project_dir;
 
 		if (is_callable($view)) {
 			$r = new \ReflectionFunction($view);
@@ -55,7 +55,7 @@ abstract class ListView
 					'item' => $item,
 				]));
 			} else {
-				$inc_path = $nf_www_dir . '/views/' . $view . '.php';
+				$inc_path = $nf_project_dir . '/views/' . $view . '.php';
 
 				extract($options);
 				include($inc_path);

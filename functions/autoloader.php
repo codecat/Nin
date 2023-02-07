@@ -33,7 +33,7 @@ function nf_autoload_find($path, $classname)
  */
 function nf_autoload($classname)
 {
-	global $nf_www_dir;
+	global $nf_project_dir;
 	global $nf_dir;
 
 	$paths = ['/'];
@@ -42,7 +42,7 @@ function nf_autoload($classname)
 	if(strstr($classname, '\\') !== false) {
 		// Look for classes
 		foreach($paths as $module) {
-			$filename = nf_autoload_find($nf_www_dir . $module, $classname);
+			$filename = nf_autoload_find($nf_project_dir . $module, $classname);
 			if($filename !== false) {
 				include($filename);
 				return;
@@ -51,7 +51,7 @@ function nf_autoload($classname)
 	} else {
 		// Look for controllers
 		foreach($paths as $module) {
-			$filename = nf_autoload_find($nf_www_dir . '/controllers' . $module, $classname);
+			$filename = nf_autoload_find($nf_project_dir . '/controllers' . $module, $classname);
 			if($filename !== false) {
 				include($filename);
 				return;
@@ -60,7 +60,7 @@ function nf_autoload($classname)
 
 		// Look for models
 		foreach($paths as $module) {
-			$filename = nf_autoload_find($nf_www_dir . '/models' . $module, $classname);
+			$filename = nf_autoload_find($nf_project_dir . '/models' . $module, $classname);
 			if($filename !== false) {
 				include($filename);
 				return;
@@ -69,7 +69,7 @@ function nf_autoload($classname)
 
 		// Look for components
 		foreach($paths as $module) {
-			$filename = nf_autoload_find($nf_www_dir . '/components' . $module, $classname);
+			$filename = nf_autoload_find($nf_project_dir . '/components' . $module, $classname);
 			if($filename !== false) {
 				include($filename);
 				return;
