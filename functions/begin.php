@@ -15,7 +15,7 @@ function nf_begin_internal($options)
 		session_start();
 	}
 
-	if($nf_cfg['debug']['enabled']) {
+	if($nf_cfg['debug']) {
 		register_shutdown_function('nf_php_fatal');
 		set_error_handler('nf_php_error');
 		set_exception_handler('nf_php_exception');
