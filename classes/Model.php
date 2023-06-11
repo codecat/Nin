@@ -30,7 +30,7 @@ class Model
 		return 'ID';
 	}
 
-	public static function findByPk($pk): static
+	public static function findByPk($pk): ?static
 	{
 		$class = get_called_class();
 		return $class::findByResult(
@@ -42,7 +42,7 @@ class Model
 		);
 	}
 
-	public static function findByAttributes($attributes): static
+	public static function findByAttributes($attributes): ?static
 	{
 		$class = get_called_class();
 		return $class::findByResult(
@@ -145,16 +145,16 @@ class Model
 	}
 
 	/**
-	 * @return \Nin\Model
+	 * @return ?\Nin\Model
 	 */
 	public static function findByResult($res)
 	{
 		if($res === false) {
-			return false;
+			return null;
 		}
 		$row = $res->fetch_assoc();
 		if(!$row) {
-			return false;
+			return null;
 		}
 		$class = get_called_class();
 		$ret = new $class();
