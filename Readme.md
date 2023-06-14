@@ -17,6 +17,7 @@ $ composer require codecat/nin
 Then create `index.php`:
 
 ```php
+include 'vendor/autoload.php';
 nf_begin();
 ```
 
