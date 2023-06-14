@@ -17,7 +17,6 @@ $ composer require codecat/nin
 Then create `index.php`:
 
 ```php
-include('vendor/codecat/nin/nf.php');
 nf_begin();
 ```
 
