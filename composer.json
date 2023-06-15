@@ -9,5 +9,9 @@
             "email": "spansjh@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    {
+    "autoload": {
+        "files": ["nf.php"]
+    }
 }
