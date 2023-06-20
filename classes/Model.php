@@ -30,7 +30,10 @@ class Model
 		return 'ID';
 	}
 
-	public static function findByPk($pk): static
+	/**
+	 * @return \Nin\Model
+	 */
+	public static function findByPk($pk)
 	{
 		$class = get_called_class();
 		return $class::findByResult(
@@ -42,7 +45,10 @@ class Model
 		);
 	}
 
-	public static function findByAttributes($attributes): static
+	/**
+	 * @return \Nin\Model
+	 */
+	public static function findByAttributes($attributes)
 	{
 		$class = get_called_class();
 		return $class::findByResult(
@@ -55,9 +61,9 @@ class Model
 	}
 
 	/**
-	 * @return static[]
+	 * @return \Nin\Model[]
 	 */
-	public static function findAllByAttributes($attributes, $options = []): array
+	public static function findAllByAttributes($attributes, $options = [])
 	{
 		$class = get_called_class();
 		return $class::findAllByResult(
@@ -71,9 +77,9 @@ class Model
 	}
 
 	/**
-	 * @return static[]
+	 * @return \Nin\Model[]
 	 */
-	public static function findAll($options = []): array
+	public static function findAll($options = [])
 	{
 		$class = get_called_class();
 		return $class::findAllByResult(
@@ -85,7 +91,7 @@ class Model
 		);
 	}
 
-	public static function countByAttributes($attributes): int
+	public static function countByAttributes($attributes)
 	{
 		return static::beginQuery()
 			->count()
@@ -93,7 +99,7 @@ class Model
 			->executeCount();
 	}
 
-	public static function countAll(): int
+	public static function countAll()
 	{
 		return static::beginQuery()
 			->count()
