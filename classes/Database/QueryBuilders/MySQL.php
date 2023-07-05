@@ -15,7 +15,7 @@ class MySQL extends QueryBuilder
 		} elseif(is_numeric($o)) {
 			return intval($o);
 		} elseif(is_null($o)) {
-			return "null";
+			return 'null';
 		}
 
 		return $o;
