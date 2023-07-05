@@ -14,6 +14,8 @@ class MySQL extends QueryBuilder
 			return str_replace(',', '.', strval(floatval($o)));
 		} elseif(is_numeric($o)) {
 			return intval($o);
+		} elseif(is_null($o)) {
+			return 'null';
 		}
 
 		return $o;
