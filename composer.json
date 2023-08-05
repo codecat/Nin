@@ -11,7 +11,8 @@
     ],
     "require": {},
     {
-    "autoload": {
-        "files": ["nf.php"]
+        "autoload": {
+            "files": ["nf.php"]
+        }
     }
 }
